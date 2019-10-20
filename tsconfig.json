@@ -1,0 +1,11 @@
+{
+  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "outDir": ".build",
+    "rootDir": "./",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5"
+  }
+}

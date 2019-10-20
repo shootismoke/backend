@@ -1,0 +1,14 @@
+# Package directories
+node_modules
+
+# OS-related files
+.DS_Store
+
+# Logs
+*.log
+
+# Serverless directories
+.serverless
+
+# Secrets
+.env

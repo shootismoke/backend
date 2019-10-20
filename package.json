@@ -1,0 +1,19 @@
+{
+  "name": "@shootismoke/backend",
+  "version": "0.1.0",
+  "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+  "description": "Backend for Sh**t! I Smoke",
+  "license": "GLP-3.0",
+  "main": "index.js",
+  "private": true,
+  "repository": "https://github.com/shootismoke/backend",
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "devDependencies": {
+    "@amaurymartiny/config": "^1.0.2",
+    "serverless": "^1.54.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.6.4"
+  }
+}
