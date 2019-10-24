@@ -1,19 +1,21 @@
+import { NowRequest, NowResponse } from '@now/node';
+
+import { connectToDatabase } from '../../util';
+
 /**
  * Fetch or create a user
  */
-export async function user(event: any) {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event
-      },
-      null,
-      2
-    )
-  };
+export default async function user(
+  req: NowRequest,
+  res: NowResponse
+): Promise<void> {
+  const db = await connectToDatabase();
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+  // Select the "users" collection from the database
+  const collection = await db.collection('users');
+
+  // Select the users collection from the database
+  const users = await collection.find({}).toArray();
+
+  res.status(200).json({ users });
 }

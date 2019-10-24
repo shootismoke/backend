@@ -8,12 +8,19 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
-    "deploy": "serverless deploy"
+    "deploy": "now",
+    "start": "now dev"
+  },
+  "dependencies": {
+    "@now/node": "^1.0.2",
+    "@types/cors": "^2.8.6",
+    "@types/mongodb": "^3.3.6",
+    "cors": "^2.8.5",
+    "mongodb": "^3.3.3"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.0.2",
-    "serverless": "^1.54.0",
-    "serverless-plugin-typescript": "^1.1.9",
+    "now": "^16.4.0",
     "typescript": "^3.6.4"
   }
 }

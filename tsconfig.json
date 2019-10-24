@@ -1,11 +1,16 @@
 {
   "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "declaration": true,
+    "lib": ["esnext", "webworker"],
     "moduleResolution": "node",
     "outDir": ".build",
-    "rootDir": "./",
     "sourceMap": true,
-    "strict": true,
-    "target": "es5"
-  }
+    "target": "esnext"
+  },
+  "exclude": ["node_modules/", "dist/"],
+  "include": [
+    "./src/**/*.ts",
+    "./node_modules/@cloudflare/workers-types/index.d.ts"
+  ]
 }
