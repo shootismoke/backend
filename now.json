@@ -4,5 +4,12 @@
   "alias": ["shootismoke.now.sh"],
   "env": {
     "MONGODB_ATLAS_URI": "@reacher-mongodb-atlas-uri"
-  }
+  },
+  "routes": [
+    {
+      "src": "/api/users",
+      "methods": ["POST"],
+      "dest": "/src/users/create.ts"
+    }
+  ]
 }
