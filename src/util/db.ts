@@ -1,6 +1,8 @@
 import { Db, MongoClient } from 'mongodb';
 import { parse } from 'url';
 
+import { IUser } from '../models';
+
 // Create cached connection variable
 let cachedDb: Db | null = null;
 
@@ -39,6 +41,11 @@ export async function connectToDatabase(): Promise<Db> {
     throw new Error('Cannot find pathname in connection string');
   }
   const db = client.db(parsed.pathname.substr(1));
+
+  // Create indexes
+  // FIXME It doesn't seem clean to me to put this here
+  const Users = db.collection<IUser>('users');
+  Users.createIndex({ expoInstallationId: 1 }, { unique: true });
 
   // Cache the database connection and return the connection
   cachedDb = db;

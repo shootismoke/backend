@@ -9,7 +9,7 @@
     {
       "src": "/api/users",
       "methods": ["POST"],
-      "dest": "/src/users/create.ts"
+      "dest": "/api/users/create.ts"
     }
   ]
 }

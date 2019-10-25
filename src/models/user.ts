@@ -13,3 +13,5 @@ export const User = t.type({
   expoPushToken: t.string,
   history: t.union([t.array(HistoryItem), t.undefined])
 });
+
+export type IUser = t.TypeOf<typeof User>;

@@ -1,11 +1,8 @@
 import { NowRequest, NowResponse } from '@now/node';
-import * as t from 'io-ts';
 import { decode } from 'io-ts-promise';
 
-import { User } from '../../models';
-import { connectToDatabase } from '../../util';
-
-type IUser = t.TypeOf<typeof User>;
+import { IUser, User } from '../../src/models';
+import { connectToDatabase } from '../../src/util';
 
 /**
  * Create a user
@@ -34,18 +31,19 @@ export default async function createUser(
       {
         expoInstallationId: data.expoInstallationId
       },
+
       // Create a new document if none exists
       {
-        $set: {
+        $setOnInsert: {
           expoInstallationId: data.expoInstallationId,
           expoPushToken: data.expoPushToken
         }
       },
-      { upsert: true }
+      { returnOriginal: true, upsert: true }
     );
 
-    // We return
-    res.status(200).json(currentUser);
+    // We return the user
+    res.status(200).json(currentUser.value);
   } catch (error) {
     res.status(400).send(error.message);
   }
