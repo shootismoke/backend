@@ -32,8 +32,8 @@ export async function connectToDatabase(): Promise<Db> {
     useNewUrlParser: true
   });
 
-  // Select the database through the connection,
-  // using the database path of the connection string
+  // Select the database through the connection, using the database path of the
+  // connection string
   const parsed = parse(uri);
   if (!parsed.pathname) {
     throw new Error('Cannot find pathname in connection string');

@@ -1,7 +1,7 @@
 /**
  * Add a history item to a user
  */
-export async function history(event: any) {
+export async function addHistory(event: any) {
   return {
     statusCode: 200,
     body: JSON.stringify(

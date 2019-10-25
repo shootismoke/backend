@@ -16,6 +16,9 @@
     "@types/cors": "^2.8.6",
     "@types/mongodb": "^3.3.6",
     "cors": "^2.8.5",
+    "fp-ts": "^2.1.1",
+    "io-ts": "^2.0.1",
+    "io-ts-promise": "^2.0.1",
     "mongodb": "^3.3.3"
   },
   "devDependencies": {
