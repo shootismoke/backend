@@ -7,6 +7,11 @@
   },
   "routes": [
     {
+      "src": "/api/graphql",
+      "methods": ["GET", "POST"],
+      "dest": "/api/graphql.ts"
+    },
+    {
       "src": "/api/users",
       "methods": ["POST"],
       "dest": "/api/users/create.ts"

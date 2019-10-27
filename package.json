@@ -19,8 +19,10 @@
     "@types/express-rate-limit": "^3.3.3",
     "@types/mongodb": "^3.3.6",
     "@types/mongoose": "^5.5.23",
+    "apollo-server-micro": "^2.9.7",
     "cors": "^2.8.5",
     "express-rate-limit": "^5.0.0",
+    "graphql": "^14.5.8",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.7"
   },
