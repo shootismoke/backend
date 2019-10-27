@@ -11,7 +11,7 @@ export const userResolvers = {
     // eslint-disable-next-line
     getOrCreateUser: async (_parent: any, data: any): Promise<UserType> => {
       // Select the users collection from the database
-      const currentUser = await User.findOneAndUpdate(
+      const user = await User.findOneAndUpdate(
         {
           expoInstallationId: data.expoInstallationId
         },
@@ -26,7 +26,7 @@ export const userResolvers = {
         { new: true, runValidators: true, upsert: true }
       );
 
-      return currentUser;
+      return user;
     }
   }
 };
