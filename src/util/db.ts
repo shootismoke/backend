@@ -3,24 +3,15 @@ import { parse } from 'url';
 
 import { IUser } from '../models';
 
-// Create cached connection variable
+// Create cached connection variables
+let cachedClient: MongoClient | null;
 let cachedDb: Db | null = null;
 
-/**
- * A function for connecting to MongoDB, taking a single paramater of the
- * connection string
- * @param uri - MongoDB connection string
- */
-export async function connectToDatabase(): Promise<Db> {
-  if (!process.env.MONGODB_ATLAS_URI) {
-    throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
-  }
-  const uri = process.env.MONGODB_ATLAS_URI;
-
+export async function getMongoClient(uri: string): Promise<MongoClient> {
   // If the database connection is cached,
   // use it instead of creating a new connection
-  if (cachedDb) {
-    return cachedDb;
+  if (cachedClient) {
+    return cachedClient;
   }
 
   // If no connection is cached, create a new one
@@ -33,6 +24,29 @@ export async function connectToDatabase(): Promise<Db> {
     bufferMaxEntries: 0,
     useNewUrlParser: true
   });
+
+  cachedClient = client;
+  return client;
+}
+
+/**
+ * A function for connecting to MongoDB, taking a single paramater of the
+ * connection string
+ * @param uri - MongoDB connection string
+ */
+export async function connectToDatabase(): Promise<Db> {
+  // If the database connection is cached,
+  // use it instead of creating a new connection
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  if (!process.env.MONGODB_ATLAS_URI) {
+    throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
+  }
+  const uri = process.env.MONGODB_ATLAS_URI;
+
+  const client = await getMongoClient(uri);
 
   // Select the database through the connection, using the database path of the
   // connection string
