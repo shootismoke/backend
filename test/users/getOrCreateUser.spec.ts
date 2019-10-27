@@ -1,10 +1,7 @@
 import { client, gql, reset, teardown } from '../util';
 
 const GET_OR_CREATE_USER = gql`
-  mutation getOrCreateUser(
-    $expoInstallationId: String!
-    $expoPushToken: String!
-  ) {
+  mutation($expoInstallationId: String!, $expoPushToken: String!) {
     getOrCreateUser(
       expoInstallationId: $expoInstallationId
       expoPushToken: $expoPushToken
