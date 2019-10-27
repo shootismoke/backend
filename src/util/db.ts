@@ -7,12 +7,17 @@ import { IUser } from '../models';
 let cachedClient: MongoClient | null;
 let cachedDb: Db | null = null;
 
-export async function getMongoClient(uri: string): Promise<MongoClient> {
+export async function getMongoClient(): Promise<MongoClient> {
   // If the database connection is cached,
   // use it instead of creating a new connection
   if (cachedClient) {
     return cachedClient;
   }
+
+  if (!process.env.MONGODB_ATLAS_URI) {
+    throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
+  }
+  const uri = process.env.MONGODB_ATLAS_URI;
 
   // If no connection is cached, create a new one
   const client = await MongoClient.connect(uri, {
@@ -46,7 +51,7 @@ export async function connectToDatabase(): Promise<Db> {
   }
   const uri = process.env.MONGODB_ATLAS_URI;
 
-  const client = await getMongoClient(uri);
+  const client = await getMongoClient();
 
   // Select the database through the connection, using the database path of the
   // connection string

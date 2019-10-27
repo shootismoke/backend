@@ -10,6 +10,5 @@ services:
 install:
   - yarn install
 script:
-  - now dev & # run in daemon not to block following scripts
-  - sleep 15 # for mongodb
+  - sleep 15 # for mongodb on travis
   - yarn test:e2e

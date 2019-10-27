@@ -13,6 +13,7 @@ export function describeMongo(description: string, fn: () => void): void {
 
       const db = await connectToDatabase();
       await db.dropDatabase();
+      console.log(`Database ${MONGO_TEST_DB} dropped`);
 
       done();
     });
@@ -22,9 +23,9 @@ export function describeMongo(description: string, fn: () => void): void {
     afterAll(async done => {
       jest.setTimeout(5000);
 
-      const client = await getMongoClient(MONGO_TEST_DB);
-
+      const client = await getMongoClient();
       await client.close();
+
       done();
     });
   });

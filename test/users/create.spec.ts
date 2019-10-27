@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 
+import { BASE_URL } from '../util/constants';
 import { describeMongo } from '../util/mongo';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function post<T>(data: any): Promise<AxiosResponse<T>> {
-  return axios.post('http://localhost:3000/api/users', data);
+  return axios.post(`${BASE_URL}/api/users`, data);
 }
 
 const FAKE_ID = 'fakeId';

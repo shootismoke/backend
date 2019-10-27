@@ -10,7 +10,7 @@
   "scripts": {
     "deploy": "now",
     "start": "now dev",
-    "test:e2e": "jest"
+    "test:e2e": "./scripts/e2e.sh"
   },
   "dependencies": {
     "@now/node": "^1.0.2",
