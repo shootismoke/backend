@@ -8,4 +8,4 @@ install:
 script:
   - now dev
   - sleep 15 # for mongodb
-  - yarn test
+  - yarn test:e2e
