@@ -22,7 +22,7 @@
     "cors": "^2.8.5",
     "express-rate-limit": "^5.0.0",
     "mongodb": "^3.3.3",
-    "mongoose": "~5.4.23"
+    "mongoose": "^5.7.7"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.0.4",
