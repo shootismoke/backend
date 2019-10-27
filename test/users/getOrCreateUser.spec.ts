@@ -60,8 +60,8 @@ describe('users::getOrCreateUser', () => {
       variables: BASE_USER
     });
 
-    expect(res.errors && res.errors[0].message).toBe(
-      'E11000 duplicate key error collection: test.users index: expoPushToken_1 dup key: { expoPushToken: "456" }'
+    expect(res.errors && res.errors[0].message).toContain(
+      'E11000 duplicate key error collection: test.users index: expoPushToken_1 dup key'
     );
 
     done();
