@@ -11,5 +11,4 @@ node_modules
 .serverless
 
 # Secrets
-.env
 .env.*
