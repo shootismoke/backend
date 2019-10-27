@@ -2,9 +2,10 @@ import { gql } from 'apollo-server-micro';
 
 export const userTypeDefs = gql`
   type User {
-    _id: String
-    expoInstallationId: String
-    expoPushToken: String
+    _id: String!
+    expoInstallationId: String!
+    expoPushToken: String!
+    history: [History]!
   }
 
   extend type Query {
@@ -12,6 +13,10 @@ export const userTypeDefs = gql`
   }
 
   extend type Mutation {
-    getOrCreateUser(expoInstallationId: String!, expoPushToken: String!): User!
+    getOrCreateUser(
+      expoInstallationId: String!
+      expoPushToken: String!
+      history: [HistoryInput]
+    ): User!
   }
 `;

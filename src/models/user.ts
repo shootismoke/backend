@@ -1,11 +1,14 @@
 import { Document, model, Schema } from 'mongoose';
 
+import { HistorySchema, HistoryType } from './history';
+
 export interface UserType extends Document {
   expoInstallationId: string;
   expoPushToken: string;
+  history: HistoryType[];
 }
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   /**
    * @see https://docs.expo.io/versions/latest/sdk/constants/#constantsinstallationid
    */
@@ -18,8 +21,16 @@ const UserSchema = new Schema({
   /**
    * @see https://docs.expo.io/versions/latest/guides/push-notifications/
    */
-  expoPushToken: { required: true, type: String, unique: true }
-  // history: t.union([t.array(HistoryItem), t.undefined])
+  expoPushToken: { required: true, type: String, unique: true },
+  /**
+   * A user's history of visited stations
+   */
+  history: [
+    {
+      ref: 'History',
+      type: Schema.Types.ObjectId
+    }
+  ]
 });
 
 export const User = model<UserType>('User', UserSchema);
