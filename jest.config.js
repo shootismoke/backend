@@ -1,4 +1,4 @@
 module.exports = {
   preset: 'ts-jest',
-  setupFiles: ['test/setup.ts']
+  setupFiles: ['./test/setup.ts']
 };
