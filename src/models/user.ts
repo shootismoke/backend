@@ -1,17 +1,25 @@
-import * as t from 'io-ts';
+import { Document, model, Schema } from 'mongoose';
 
-import { HistoryItem } from './history';
+export interface UserType extends Document {
+  expoInstallationId: string;
+  expoPushToken: string;
+}
 
-export const User = t.type({
+const UserSchema = new Schema({
   /**
    * @see https://docs.expo.io/versions/latest/sdk/constants/#constantsinstallationid
    */
-  expoInstallationId: t.string,
+  expoInstallationId: {
+    index: true,
+    required: true,
+    type: String,
+    unique: true
+  },
   /**
    * @see https://docs.expo.io/versions/latest/guides/push-notifications/
    */
-  expoPushToken: t.string,
-  history: t.union([t.array(HistoryItem), t.undefined])
+  expoPushToken: { required: true, type: String, unique: true }
+  // history: t.union([t.array(HistoryItem), t.undefined])
 });
 
-export type IUser = t.TypeOf<typeof User>;
+export const User = model<UserType>('User', UserSchema);

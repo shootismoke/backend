@@ -16,10 +16,6 @@ const BASE_USER = {
 };
 
 describeMongo('users::create', () => {
-  it('should work', () => {
-    expect(true).toBe(true);
-  });
-
   it('should return an error with empty', async done => {
     try {
       await post({});

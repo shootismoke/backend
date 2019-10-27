@@ -1,7 +1,6 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { decode } from 'io-ts-promise';
 
-import { IUser, User } from '../../src/models';
+import { User } from '../../src/models';
 import { connectToDatabase } from '../../src/util';
 
 /**
@@ -12,22 +11,12 @@ export default async function createUser(
   res: NowResponse
 ): Promise<void> {
   try {
-    let data: IUser | undefined;
-    try {
-      data = await decode(User, req.body);
-    } catch (error) {
-      res.status(422).send(error.message);
+    await connectToDatabase();
 
-      return;
-    }
-
-    const db = await connectToDatabase();
-
-    // Select the "users" collection from the database
-    const Users = db.collection<IUser>('users');
+    const data = req.body || {};
 
     // Select the users collection from the database
-    const currentUser = await Users.findOneAndUpdate(
+    const currentUser = await User.findOneAndUpdate(
       {
         expoInstallationId: data.expoInstallationId
       },
@@ -39,12 +28,18 @@ export default async function createUser(
           expoPushToken: data.expoPushToken
         }
       },
-      { returnOriginal: false, upsert: true }
+      { new: true, runValidators: true, upsert: true }
     );
 
     // We return the user
-    res.status(200).json(currentUser.value);
+    res.status(200).json(currentUser);
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      res.status(422).send(error.message);
+
+      return;
+    }
+
     res.status(400).send(error.message);
   }
 }

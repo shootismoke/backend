@@ -13,7 +13,7 @@ NOW_PID=$!
 
 # Wait for mongodb to set up
 # https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
-sleep 15
+sleep 5
 
 # Run tests
 jest

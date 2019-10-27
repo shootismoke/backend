@@ -18,12 +18,11 @@
     "@types/cors": "^2.8.6",
     "@types/express-rate-limit": "^3.3.3",
     "@types/mongodb": "^3.3.6",
+    "@types/mongoose": "^5.5.23",
     "cors": "^2.8.5",
     "express-rate-limit": "^5.0.0",
-    "fp-ts": "^2.1.1",
-    "io-ts": "^2.0.1",
-    "io-ts-promise": "^2.0.1",
-    "mongodb": "^3.3.3"
+    "mongodb": "^3.3.3",
+    "mongoose": "^5.7.7"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.0.4",
