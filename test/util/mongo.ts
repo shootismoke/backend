@@ -1,4 +1,6 @@
-import { connectToDatabase, getMongoClient } from '../../src/util';
+import mongoose from 'mongoose';
+
+import { connectToDatabase } from '../../src/util';
 import { MONGO_TEST_DB } from './constants';
 
 process.env.MONGODB_ATLAS_URI = MONGO_TEST_DB;
@@ -11,8 +13,8 @@ export function describeMongo(description: string, fn: () => void): void {
     beforeAll(async done => {
       jest.setTimeout(30000);
 
-      const db = await connectToDatabase();
-      await db.dropDatabase();
+      await connectToDatabase();
+      await mongoose.connection.dropDatabase();
       console.log(`Database ${MONGO_TEST_DB} dropped`);
 
       done();
@@ -23,8 +25,7 @@ export function describeMongo(description: string, fn: () => void): void {
     afterAll(async done => {
       jest.setTimeout(5000);
 
-      const client = await getMongoClient();
-      await client.close();
+      await mongoose.connection.close();
 
       done();
     });
