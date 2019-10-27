@@ -39,7 +39,7 @@ export default async function createUser(
           expoPushToken: data.expoPushToken
         }
       },
-      { returnOriginal: true, upsert: true }
+      { returnOriginal: false, upsert: true }
     );
 
     // We return the user

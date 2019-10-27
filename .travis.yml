@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - '12'
+cache:
+  yarn: true
+  directories:
+    - node_modules
+services:
+  - mongodb
+install:
+  - yarn install
+script:
+  - sleep 15 # for mongodb on travis
+  - yarn test:e2e
