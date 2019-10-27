@@ -9,14 +9,17 @@
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
     "deploy": "now",
+    "lint": "tsc --noEmit && eslint --ext ts .",
     "start": "now dev",
     "test:e2e": "./scripts/e2e.sh"
   },
   "dependencies": {
     "@now/node": "^1.0.2",
     "@types/cors": "^2.8.6",
+    "@types/express-rate-limit": "^3.3.3",
     "@types/mongodb": "^3.3.6",
     "cors": "^2.8.5",
+    "express-rate-limit": "^5.0.0",
     "fp-ts": "^2.1.1",
     "io-ts": "^2.0.1",
     "io-ts-promise": "^2.0.1",
