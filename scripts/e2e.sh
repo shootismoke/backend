@@ -11,6 +11,10 @@ cp .env.test .env # Copy env variables
 now dev --listen 3001 & # Run now dev in background
 NOW_PID=$!
 
+# Wait for mongodb to set up
+# https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
+sleep 15
+
 # Run tests
 jest
 JEST_ERROR_CODE=$?
