@@ -1,3 +1,3 @@
-import { startApollo } from '../src/apollo';
+import { nowApollo } from '../src/apollo';
 
-export default startApollo({ path: '/api/graphql' });
+export default nowApollo({ server: { path: '/api/graphql' } });

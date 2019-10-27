@@ -9,7 +9,7 @@ export const userResolvers = {
   },
   Mutation: {
     // eslint-disable-next-line
-    createOrGetUser: async (_parent: any, data: any): Promise<UserType> => {
+    getOrCreateUser: async (_parent: any, data: any): Promise<UserType> => {
       // Select the users collection from the database
       const currentUser = await User.findOneAndUpdate(
         {

@@ -12,6 +12,6 @@ export const userTypeDefs = gql`
   }
 
   extend type Mutation {
-    createOrGetUser(expoInstallationId: String!, expoPushToken: String!): User!
+    getOrCreateUser(expoInstallationId: String!, expoPushToken: String!): User!
   }
 `;
