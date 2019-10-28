@@ -9,41 +9,41 @@ export const userResolvers = {
     }
   },
   Mutation: {
-    getOrCreateUser: async (
+    createUser: async (
       // eslint-disable-next-line
       _parent: any,
       // eslint-disable-next-line
-      data: any
-    ): Promise<UserType | null> => {
-      const user = await User.findOneAndUpdate(
-        {
-          expoInstallationId: data.expoInstallationId
-        },
-        {
-          // Create a new document if none exists
-          $setOnInsert: {
-            expoInstallationId: data.expoInstallationId,
-            expoPushToken: data.expoPushToken
-          }
-        },
-        {
-          new: true,
-          runValidators: true,
-          upsert: true
-        }
-      );
+      { input }: any
+    ): Promise<UserType> => {
+      let user = await User.findOne({
+        expoInstallationId: input.expoInstallationId
+      });
 
-      // TODO Can we not do this ?
-      if (data.expoPushToken) {
-        user.expoPushToken = data.expoPushToken;
+      if (!user) {
+        user = new User(input);
         await user.save();
       }
 
-      if (Array.isArray(data.history)) {
-        await History.insertMany(
-          data.history.map((h: HistoryType) => ({ ...h, userId: user._id }))
-        );
+      return user;
+    },
+    updateUser: async (
+      // eslint-disable-next-line
+      _parent: any,
+      // eslint-disable-next-line
+      { expoInstallationId, input }: any
+    ): Promise<UserType> => {
+      // TODO Is there some faster way to do the below, with findOneAndUpdate?
+      const user = await User.findOne({
+        expoInstallationId: expoInstallationId
+      });
+
+      if (!user) {
+        throw new Error(`No user with id ${expoInstallationId} found`);
       }
+
+      Object.assign(user, input);
+
+      await user.save({ validateBeforeSave: true });
 
       return user;
     }
