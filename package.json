@@ -8,7 +8,6 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
-    "deploy": "now --local-config now.staging.json",
     "lint": "tsc --noEmit && eslint --ext ts .",
     "start": "now dev",
     "test": "jest"
