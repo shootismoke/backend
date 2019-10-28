@@ -1,6 +1,7 @@
 {
   "name": "@shootismoke/backend",
   "version": 2,
+  "alias": ["staging.shootismoke.now.sh"],
   "env": {
     "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri"
   },
