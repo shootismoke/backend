@@ -30,15 +30,13 @@ export const userResolvers = {
       // eslint-disable-next-line
       _parent: any,
       // eslint-disable-next-line
-      { expoInstallationId, input }: any
+      { id, input }: any
     ): Promise<UserType> => {
       // TODO Is there some faster way to do the below, with findOneAndUpdate?
-      const user = await User.findOne({
-        expoInstallationId: expoInstallationId
-      });
+      const user = await User.findById(id);
 
       if (!user) {
-        throw new Error(`No user with id ${expoInstallationId} found`);
+        throw new Error(`No user with id ${id} found`);
       }
 
       Object.assign(user, input);

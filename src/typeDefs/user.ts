@@ -28,6 +28,7 @@ export const userTypeDefs = gql`
   }
 
   input UpdateUserInput {
+    expoInstallationId: String
     expoPushToken: String
     notifications: Notifications
     history: [HistoryInput]
@@ -35,6 +36,6 @@ export const userTypeDefs = gql`
 
   extend type Mutation {
     createUser(input: CreateUserInput!): User!
-    updateUser(expoInstallationId: String!, input: UpdateUserInput!): User!
+    updateUser(id: String!, input: UpdateUserInput!): User!
   }
 `;

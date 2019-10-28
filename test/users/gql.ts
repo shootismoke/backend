@@ -16,8 +16,8 @@ export const CREATE_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-  mutation($expoInstallationId: String!, $input: UpdateUserInput!) {
-    updateUser(expoInstallationId: $expoInstallationId, input: $input) {
+  mutation($id: String!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
       _id
       expoInstallationId
       expoPushToken
