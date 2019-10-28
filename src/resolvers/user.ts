@@ -1,13 +1,6 @@
-import { History, User, UserType, HistoryType } from '../models';
+import { HistoryItem, HistoryItemType, User, UserType } from '../models';
 
 export const userResolvers = {
-  Query: {
-    // eslint-disable-next-line
-    user: async (_parent: any, { id }: any): Promise<UserType | null> => {
-      const user = await User.findById(id);
-      return user;
-    }
-  },
   Mutation: {
     createUser: async (
       // eslint-disable-next-line
@@ -47,14 +40,14 @@ export const userResolvers = {
     }
   },
   User: {
-    history: async (user: UserType): Promise<HistoryType[]> => {
+    history: async (user: UserType): Promise<HistoryItemType[]> => {
       // FIXME For now, we don't expose the history of each user, for privacy
       // reasons. Think it through.
       if (process.env.NODE_ENV === 'production') {
         return [];
       }
 
-      return History.find({
+      return HistoryItem.find({
         userId: user._id
       });
     }

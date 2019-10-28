@@ -9,29 +9,23 @@ export const userTypeDefs = gql`
   }
 
   type User {
-    _id: String!
+    _id: ID!
     expoInstallationId: String!
     expoPushToken: String!
-    history: [History]!
+    history: [HistoryItem]!
     notifications: Notifications!
-  }
-
-  extend type Query {
-    user(id: ID!): User
   }
 
   input CreateUserInput {
     expoInstallationId: String!
     expoPushToken: String!
     notifications: Notifications
-    history: [HistoryInput]
   }
 
   input UpdateUserInput {
     expoInstallationId: String
     expoPushToken: String
     notifications: Notifications
-    history: [HistoryInput]
   }
 
   extend type Mutation {

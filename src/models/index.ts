@@ -1,2 +1,2 @@
-export * from './history';
+export * from './historyItem';
 export * from './user';

@@ -1,12 +1,12 @@
 import { Document, model, Schema } from 'mongoose';
 
-export interface HistoryType extends Document {
+export interface HistoryItemType extends Document {
   createdAt: Date;
   rawPm25: number;
   stationId: string;
 }
 
-export const HistorySchema = new Schema(
+export const HistoryItemSchema = new Schema(
   {
     createdAt: {
       default: Date.now,
@@ -30,4 +30,7 @@ export const HistorySchema = new Schema(
   { strict: 'throw' }
 );
 
-export const History = model<HistoryType>('history', HistorySchema);
+export const HistoryItem = model<HistoryItemType>(
+  'HistoryItem',
+  HistoryItemSchema
+);

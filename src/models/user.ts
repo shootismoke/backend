@@ -1,13 +1,13 @@
 import { Document, model, Schema } from 'mongoose';
 
-import { HistoryType } from './history';
+import { HistoryItemType } from './historyItem';
 
 const NOTIFICATIONS = ['never', 'daily', 'weekly', 'monthly'] as const;
 
 export interface UserType extends Document {
   expoInstallationId: string;
   expoPushToken: string;
-  history: HistoryType[];
+  history: HistoryItemType[];
   notifications: typeof NOTIFICATIONS[number];
 }
 
@@ -31,7 +31,7 @@ export const UserSchema = new Schema(
      */
     history: [
       {
-        ref: 'History',
+        ref: 'HistoryItem',
         type: Schema.Types.ObjectId
       }
     ],
