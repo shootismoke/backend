@@ -1,3 +1,4 @@
+import { historyItemResolvers } from './historyItem';
 import { userResolvers } from './user';
 
-export const resolvers = [userResolvers];
+export const resolvers = [historyItemResolvers, userResolvers];

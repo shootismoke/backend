@@ -1,17 +1,35 @@
 import { gql } from 'apollo-server-micro';
 
 export const userTypeDefs = gql`
-  type User {
-    _id: String
-    expoInstallationId: String
-    expoPushToken: String
+  enum Notifications {
+    never
+    daily
+    weekly
+    monthly
   }
 
-  extend type Query {
-    user(id: ID!): User
+  type User {
+    _id: ID!
+    expoInstallationId: String!
+    expoPushToken: String!
+    history: [HistoryItem]!
+    notifications: Notifications!
+  }
+
+  input CreateUserInput {
+    expoInstallationId: String!
+    expoPushToken: String!
+    notifications: Notifications
+  }
+
+  input UpdateUserInput {
+    expoInstallationId: String
+    expoPushToken: String
+    notifications: Notifications
   }
 
   extend type Mutation {
-    getOrCreateUser(expoInstallationId: String!, expoPushToken: String!): User!
+    createUser(input: CreateUserInput!): User!
+    updateUser(id: String!, input: UpdateUserInput!): User!
   }
 `;

@@ -1,32 +1,55 @@
-import { User, UserType } from '../models';
+import { HistoryItem, HistoryItemType, User, UserType } from '../models';
 
 export const userResolvers = {
-  Query: {
-    // eslint-disable-next-line
-    user: async (_parent: any, { id }: any): Promise<UserType | null> => {
-      return User.findById(id);
-    }
-  },
   Mutation: {
-    // eslint-disable-next-line
-    getOrCreateUser: async (_parent: any, data: any): Promise<UserType> => {
-      // Select the users collection from the database
-      const user = await User.findOneAndUpdate(
-        {
-          expoInstallationId: data.expoInstallationId
-        },
+    createUser: async (
+      // eslint-disable-next-line
+      _parent: any,
+      // eslint-disable-next-line
+      { input }: any
+    ): Promise<UserType> => {
+      let user = await User.findOne({
+        expoInstallationId: input.expoInstallationId
+      });
 
-        // Create a new document if none exists
-        {
-          $setOnInsert: {
-            expoInstallationId: data.expoInstallationId,
-            expoPushToken: data.expoPushToken
-          }
-        },
-        { new: true, runValidators: true, upsert: true }
-      );
+      if (!user) {
+        user = new User(input);
+        await user.save();
+      }
 
       return user;
+    },
+    updateUser: async (
+      // eslint-disable-next-line
+      _parent: any,
+      // eslint-disable-next-line
+      { id, input }: any
+    ): Promise<UserType> => {
+      // TODO Is there some faster way to do the below, with findOneAndUpdate?
+      const user = await User.findById(id);
+
+      if (!user) {
+        throw new Error(`No user with id ${id} found`);
+      }
+
+      Object.assign(user, input);
+
+      await user.save({ validateBeforeSave: true });
+
+      return user;
+    }
+  },
+  User: {
+    history: async (user: UserType): Promise<HistoryItemType[]> => {
+      // FIXME For now, we don't expose the history of each user, for privacy
+      // reasons. Think it through.
+      if (process.env.NODE_ENV === 'production') {
+        return [];
+      }
+
+      return HistoryItem.find({
+        userId: user._id
+      });
     }
   }
 };

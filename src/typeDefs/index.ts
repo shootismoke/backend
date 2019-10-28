@@ -1,8 +1,11 @@
 import { gql } from 'apollo-server-micro';
 
+import { historyItemTypeDefs } from './historyItem';
 import { userTypeDefs } from './user';
 
 const linkSchema = gql`
+  scalar Date
+
   type Query {
     _: Boolean
   }
@@ -11,4 +14,4 @@ const linkSchema = gql`
   }
 `;
 
-export const typeDefs = [linkSchema, userTypeDefs];
+export const typeDefs = [linkSchema, historyItemTypeDefs, userTypeDefs];
