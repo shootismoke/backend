@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 
-import { HistorySchema, HistoryType } from './history';
+import { HistoryType } from './history';
 
 export interface UserType extends Document {
   expoInstallationId: string;

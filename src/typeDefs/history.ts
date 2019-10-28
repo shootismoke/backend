@@ -12,8 +12,4 @@ export const historyTypeDefs = gql`
     rawPm25: Int
     stationId: String
   }
-
-  extend type Mutation {
-    addHistory(userId: String!, aqi: Int!, stationId: String!): Boolean!
-  }
 `;

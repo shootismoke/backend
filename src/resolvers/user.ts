@@ -4,25 +4,22 @@ export const userResolvers = {
   Query: {
     // eslint-disable-next-line
     user: async (_parent: any, { id }: any): Promise<UserType | null> => {
-      const user = await User.findById(id).populate('history');
+      const user = await User.findById(id);
       return user;
     }
   },
   Mutation: {
-    // eslint-disable-next-line
     getOrCreateUser: async (
+      // eslint-disable-next-line
       _parent: any,
+      // eslint-disable-next-line
       data: any
     ): Promise<UserType | null> => {
-      // Select the users collection from the database
       const user = await User.findOneAndUpdate(
         {
           expoInstallationId: data.expoInstallationId
         },
         {
-          // $push: {
-          //   history: { $each: data.history }
-          // },
           // Create a new document if none exists
           $setOnInsert: {
             expoInstallationId: data.expoInstallationId,
@@ -36,14 +33,32 @@ export const userResolvers = {
         }
       );
 
-      if (Array.isArray(data.history)) {
-        // FIXME insertMany returns the wrong type: T instead of T[]
-        const b = ((await History.insertMany(
-          data.history.map((h: HistoryType) => ({ ...h, userId: user._id }))
-        )) as unknown) as HistoryType[];
+      // TODO Can we not do this ?
+      if (data.expoPushToken) {
+        user.expoPushToken = data.expoPushToken;
+        await user.save();
       }
 
-      return User.findById(user._id).populate('author');
+      if (Array.isArray(data.history)) {
+        await History.insertMany(
+          data.history.map((h: HistoryType) => ({ ...h, userId: user._id }))
+        );
+      }
+
+      return user;
+    }
+  },
+  User: {
+    history: async (user: UserType): Promise<HistoryType[]> => {
+      // FIXME For now, we don't expose the history of each user, for privacy
+      // reasons. Think it through.
+      if (process.env.NODE_ENV === 'production') {
+        return [];
+      }
+
+      return History.find({
+        userId: user._id
+      });
     }
   }
 };

@@ -15,7 +15,7 @@ export const userTypeDefs = gql`
   extend type Mutation {
     getOrCreateUser(
       expoInstallationId: String!
-      expoPushToken: String!
+      expoPushToken: String
       history: [HistoryInput]
     ): User!
   }
