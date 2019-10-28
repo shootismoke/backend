@@ -11,5 +11,6 @@
       "src": "/api/graphql",
       "dest": "/api/graphql.ts"
     }
-  ]
+  ],
+  "scope": "shootismoke"
 }
