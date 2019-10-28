@@ -18,7 +18,7 @@ jobs:
       - run: yarn install
       - uses: paambaati/codeclimate-action@v2.2.3
         env:
-          CC_TEST_REPORTER_ID: <code_climate_reporter_id>
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: yarn test --coverage
       - name: Yarn test
