@@ -9,6 +9,6 @@ import { connect } from 'mongoose';
 export async function connectToDatabase(uri: string): Promise<void> {
   await connect(
     uri,
-    { useNewUrlParser: true }
+    { useNewUrlParser: true, useUnifiedTopology: true }
   );
 }

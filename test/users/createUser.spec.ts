@@ -93,7 +93,7 @@ describeApollo('users::createUser', client => {
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'E11000 duplicate key error collection: test-users::createUser.users index: expoPushToken_1 dup key'
+      'E11000 duplicate key error'
     );
 
     done();
