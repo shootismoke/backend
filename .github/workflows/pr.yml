@@ -16,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Yarn test
-        run: yarn install
         uses: paambaati/codeclimate-action@v2.2.3
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
