@@ -8,7 +8,8 @@ import { createServer } from '../../src/apollo';
 
 export { default as gql } from 'graphql-tag';
 
-export const MONGO_TEST_DB = 'mongodb://localhost/test';
+// process.env.MONGO_URL ends with '?', which we remove
+export const MONGO_TEST_DB = `${process.env.MONGO_URL}`.slice(0, -1);
 
 /**
  * Reset DB, and setup fresh Apollo server
