@@ -1,0 +1,15 @@
+{
+  "name": "@shootismoke/backend",
+  "version": 2,
+  "alias": ["shootismoke.now.sh"],
+  "env": {
+    "MONGODB_ATLAS_URI": "@shootismoke-prod-mongodb-atlas-uri"
+  },
+  "public": false,
+  "routes": [
+    {
+      "src": "/api/graphql",
+      "dest": "/api/graphql.ts"
+    }
+  ]
+}
