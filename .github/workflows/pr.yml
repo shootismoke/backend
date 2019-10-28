@@ -16,7 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Yarn test
-        uses: paambaati/codeclimate-action@v2.2.3
+        run: |
+          yarn install
+          yarn test
+  coverage:
+    needs: [test]
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: yarn install
+      - uses: paambaati/codeclimate-action@v2.2.4
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
