@@ -15,7 +15,7 @@ export const historyItemTypeDefs = gql`
   }
 
   input CreateHistoryItemInput {
-    provider: Provider
+    provider: Provider!
     rawPm25: Float!
     stationId: String!
     userId: ID!
