@@ -83,7 +83,7 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it("should be create'never' notifications by default", async done => {
+  it("should be create'never' notifications by default, and allow no expoPushToken", async done => {
     const { mutate } = await client;
 
     const res = await mutate({
