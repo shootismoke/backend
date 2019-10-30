@@ -15,6 +15,9 @@ const USER1_2 = {
 const USER1_3 = {
   expoInstallationId: 'id1.1'
 };
+const USER2: Partial<UserType> = {
+  expoInstallationId: 'id2'
+};
 
 describeApollo('users::updateUser', client => {
   it('should be able to change expoPushToken', async done => {
@@ -77,6 +80,31 @@ describeApollo('users::updateUser', client => {
     }
 
     expect(res.data.updateUser).toMatchObject(USER1_3);
+
+    done();
+  });
+
+  it('should validate unique expoPushToken', async done => {
+    const { mutate } = await client;
+
+    const createRes = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: USER2 }
+    });
+    if (!createRes.data) {
+      console.error(createRes);
+      return done.fail('No data in response');
+    }
+    USER2._id = createRes.data.createUser._id;
+
+    const res = await mutate({
+      mutation: UPDATE_USER,
+      variables: { id: USER2._id, input: USER1_1 }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'E11000 duplicate key error'
+    );
 
     done();
   });

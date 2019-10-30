@@ -11,19 +11,17 @@ interface DbOptions {
 }
 
 let server: ApolloServer | undefined;
+/**
+ * Create and return an Apollo server
+ *
+ * @param options - Options for DB creation
+ */
 export async function createServer(options?: DbOptions): Promise<ApolloServer> {
   if (server) {
     return server;
   }
 
-  if (options && options.uri) {
-    await connectToDatabase(options.uri);
-  } else {
-    if (!process.env.MONGODB_ATLAS_URI) {
-      throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
-    }
-    await connectToDatabase(process.env.MONGODB_ATLAS_URI);
-  }
+  await connectToDatabase(options && options.uri);
 
   server = new ApolloServer({
     typeDefs,
@@ -46,7 +44,7 @@ export function nowApollo(
   options?: Options
 ): (req: NowRequest, res: NowResponse) => Promise<void> {
   return async function(req: NowRequest, res: NowResponse): Promise<void> {
-    const server = await createServer();
+    const server = await createServer(options && options.db);
 
     server.createHandler(options && options.server)(req, res);
   };

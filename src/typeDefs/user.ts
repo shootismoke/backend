@@ -11,14 +11,14 @@ export const userTypeDefs = gql`
   type User {
     _id: ID!
     expoInstallationId: String!
-    expoPushToken: String!
+    expoPushToken: String
     history: [HistoryItem]!
     notifications: Notifications!
   }
 
   input CreateUserInput {
     expoInstallationId: String!
-    expoPushToken: String!
+    expoPushToken: String
     notifications: Notifications
   }
 

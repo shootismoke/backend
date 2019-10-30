@@ -25,7 +25,7 @@ export const UserSchema = new Schema(
     /**
      * @see https://docs.expo.io/versions/latest/guides/push-notifications/
      */
-    expoPushToken: { required: true, type: String, unique: true },
+    expoPushToken: { type: String, unique: true },
     /**
      * A user's history of visited stations
      */
