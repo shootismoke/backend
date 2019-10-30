@@ -11,8 +11,7 @@ const USER2 = {
   expoPushToken: 'token1' // Same token as USER1
 };
 const USER3 = {
-  expoInstallationId: 'id3',
-  expoPushToken: 'token3'
+  expoInstallationId: 'id3'
 };
 
 describeApollo('users::createUser', client => {
@@ -41,21 +40,6 @@ describeApollo('users::createUser', client => {
 
     expect(res.errors && res.errors[0].message).toContain(
       'Variable "$input" got invalid value {}; Field expoInstallationId of required type String! was not provided.'
-    );
-
-    done();
-  });
-
-  it('should require expoPushToken', async done => {
-    const { mutate } = await client;
-
-    const res = await mutate({
-      mutation: CREATE_USER,
-      variables: { input: { expoInstallationId: 'new' } }
-    });
-
-    expect(res.errors && res.errors[0].message).toContain(
-      'Variable "$input" got invalid value { expoInstallationId: "new" }; Field expoPushToken of required type String! was not provided.'
     );
 
     done();
@@ -99,7 +83,7 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it("should be create'never' notifications by default", async done => {
+  it("should be create'never' notifications by default, and allow no expoPushToken", async done => {
     const { mutate } = await client;
 
     const res = await mutate({
