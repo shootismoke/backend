@@ -1,15 +1,22 @@
 import { gql } from 'apollo-server-micro';
 
 export const historyItemTypeDefs = gql`
+  enum Provider {
+    aqicn
+    waqi
+  }
+
   type HistoryItem {
     _id: ID!
     createdAt: Date!
-    rawPm25: Int!
+    provider: Provider!
+    rawPm25: Float!
     stationId: String!
   }
 
   input CreateHistoryItemInput {
-    rawPm25: Int!
+    provider: Provider
+    rawPm25: Float!
     stationId: String!
     userId: ID!
   }
