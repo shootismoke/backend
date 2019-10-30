@@ -4,16 +4,45 @@ import { describeApollo } from '../util';
 import { CREATE_HISTORY_ITEM } from './gql';
 
 const USER1: Partial<UserType> = {
-  expoInstallationId: 'id1',
-  expoPushToken: 'token1'
+  expoInstallationId: 'id1'
 };
-const HISTORY_1 = {
-  rawPm25: 1,
+const HISTORY1 = {
+  provider: 'waqi',
+  rawPm25: 1.1,
   stationId: 'station1'
 };
 
 describeApollo('historyItem::createHistoryItem', client => {
-  it('should create a history item', async done => {
+  /**
+   * Test that missing required fields throw an error
+   */
+  function testRequiredFields(field: string): void {
+    it(`should require ${field}`, async done => {
+      const { mutate } = await client;
+      const correctInput = { ...HISTORY1, userId: USER1._id };
+      const {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        [field as keyof typeof correctInput]: removedValue,
+        ...rest
+      } = correctInput;
+
+      const res = await mutate({
+        mutation: CREATE_HISTORY_ITEM,
+        variables: { input: { ...rest } }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        `Variable "$input" got invalid value`
+      );
+      expect(res.errors && res.errors[0].message).toContain(
+        `Field ${field} of required type`
+      );
+
+      done();
+    });
+  }
+
+  beforeAll(async done => {
     const { mutate } = await client;
 
     const createRes = await mutate({
@@ -26,7 +55,33 @@ describeApollo('historyItem::createHistoryItem', client => {
     }
     USER1._id = createRes.data.createUser._id;
 
-    const input = { ...HISTORY_1, userId: USER1._id };
+    done();
+  });
+
+  (['provider', 'rawPm25', 'stationId', 'userId'] as const).forEach(
+    testRequiredFields
+  );
+
+  it('should only allow known providers', async done => {
+    const { mutate } = await client;
+    const input = { ...HISTORY1, provider: 'random', userId: USER1._id };
+
+    const res = await mutate({
+      mutation: CREATE_HISTORY_ITEM,
+      variables: { input }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'Variable "$input" got invalid value "random" at "input.provider"; Expected type Provider.'
+    );
+
+    done();
+  });
+
+  it('should create a history item', async done => {
+    const { mutate } = await client;
+
+    const input = { ...HISTORY1, userId: USER1._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
@@ -45,7 +100,7 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should can create twice the same history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY_1, userId: USER1._id };
+    const input = { ...HISTORY1, userId: USER1._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
