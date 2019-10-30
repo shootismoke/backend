@@ -32,7 +32,7 @@ describeApollo('historyItem::createHistoryItem', client => {
       });
 
       expect(res.errors && res.errors[0].message).toContain(
-        `Variable "$input" got invalid value `
+        `Variable "$input" got invalid value`
       );
       expect(res.errors && res.errors[0].message).toContain(
         `Field ${field} of required type`
@@ -61,6 +61,22 @@ describeApollo('historyItem::createHistoryItem', client => {
   (['provider', 'rawPm25', 'stationId', 'userId'] as const).forEach(
     testRequiredFields
   );
+
+  it('should only allow known providers', async done => {
+    const { mutate } = await client;
+    const input = { ...HISTORY1, provider: 'random', userId: USER1._id };
+
+    const res = await mutate({
+      mutation: CREATE_HISTORY_ITEM,
+      variables: { input }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'Variable "$input" got invalid value "random" at "input.provider"; Expected type Provider.'
+    );
+
+    done();
+  });
 
   it('should create a history item', async done => {
     const { mutate } = await client;
