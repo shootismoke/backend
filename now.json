@@ -3,7 +3,8 @@
   "version": 2,
   "alias": ["staging.shootismoke.now.sh"],
   "env": {
-    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri"
+    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri",
+    "WAQI_TOKEN": "@shootismoke-staging-waqi-token"
   },
   "public": false,
   "routes": [
