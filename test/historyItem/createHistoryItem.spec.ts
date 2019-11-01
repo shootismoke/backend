@@ -89,7 +89,7 @@ describeApollo('historyItem::createHistoryItem', client => {
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'Only `waqi` provider is supported for now'
+      'WAQI Error waqi|foobar_random_123: Unknown station'
     );
 
     done();

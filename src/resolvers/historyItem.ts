@@ -22,9 +22,6 @@ export const historyItemResolvers = {
       });
 
       if (!station) {
-        console.log(
-          `https://api.waqi.info/feed/@${id}/?token=${process.env.WAQI_TOKEN}`
-        );
         const response = await fetch(
           `https://api.waqi.info/feed/@${id}/?token=${process.env.WAQI_TOKEN}`
         );
@@ -34,8 +31,19 @@ export const historyItemResolvers = {
           throw new Error(`WAQI Error ${providerId}: ${data}`);
         }
 
+        if (
+          !data.attributions ||
+          !data.attributions.length ||
+          !data.attributions[0] ||
+          !data.attributions[0].name
+        ) {
+          throw new Error(
+            `WAQI Error ${providerId}: Response does not contain station name`
+          );
+        }
+
         station = await Station.create({
-          name: 'ABC',
+          name: data.attributions[0].name,
           provider,
           providerId
         });
