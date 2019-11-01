@@ -9,7 +9,7 @@
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
     "lint": "tsc --noEmit && eslint --ext ts .",
-    "start": "cd packages/microservices && now dev",
+    "start": "now dev",
     "test": "lerna run --stream test"
   },
   "workspaces": [

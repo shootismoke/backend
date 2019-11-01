@@ -8,7 +8,6 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
-    "start": "now dev",
     "test": "jest"
   },
   "dependencies": {
