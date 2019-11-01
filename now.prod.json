@@ -2,8 +2,10 @@
   "name": "@shootismoke/backend",
   "version": 2,
   "alias": ["shootismoke.now.sh"],
+  "builds": [{ "src": "/packages/microservices/**/*.ts", "use": "@now/node" }],
   "env": {
-    "MONGODB_ATLAS_URI": "@shootismoke-prod-mongodb-atlas-uri"
+    "MONGODB_ATLAS_URI": "@shootismoke-production-mongodb-atlas-uri",
+    "WAQI_TOKEN": "@shootismoke-production-waqi-token"
   },
   "public": false,
   "routes": [
