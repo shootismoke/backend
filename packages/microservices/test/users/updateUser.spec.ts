@@ -1,41 +1,24 @@
-import { UserType } from '../../src/models';
 import { describeApollo } from '../util';
-import { CREATE_USER, UPDATE_USER } from './gql';
+import { alice, bob } from '../util/users';
+import { UPDATE_USER } from './gql';
 
-const USER1: Partial<UserType> = {
-  expoInstallationId: 'id1',
-  expoPushToken: 'token1'
+const ALICE_1 = {
+  expoPushToken: 'token_alice_1'
 };
-const USER1_1 = {
-  expoPushToken: 'token1.1'
-};
-const USER1_2 = {
+const ALICE_2 = {
   notifications: 'monthly'
 };
-const USER1_3 = {
-  expoInstallationId: 'id1.1'
-};
-const USER2: Partial<UserType> = {
-  expoInstallationId: 'id2'
+const ALICE_3 = {
+  expoInstallationId: 'id_alice_1'
 };
 
 describeApollo('users::updateUser', client => {
   it('should be able to change expoPushToken', async done => {
     const { mutate } = await client;
 
-    const createRes = await mutate({
-      mutation: CREATE_USER,
-      variables: { input: USER1 }
-    });
-    if (!createRes.data) {
-      console.error(createRes);
-      return done.fail('No data in response');
-    }
-    USER1._id = createRes.data.createUser._id;
-
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: USER1._id, input: USER1_1 }
+      variables: { id: (await alice(client))._id, input: ALICE_1 }
     });
 
     if (!res.data) {
@@ -43,7 +26,7 @@ describeApollo('users::updateUser', client => {
       return done.fail('No data in response');
     }
 
-    expect(res.data.updateUser).toMatchObject(USER1_1);
+    expect(res.data.updateUser).toMatchObject(ALICE_1);
 
     done();
   });
@@ -53,7 +36,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: USER1._id, input: USER1_2 }
+      variables: { id: (await alice(client))._id, input: ALICE_2 }
     });
 
     if (!res.data) {
@@ -61,7 +44,7 @@ describeApollo('users::updateUser', client => {
       return done.fail('No data in response');
     }
 
-    expect(res.data.updateUser).toMatchObject(USER1_2);
+    expect(res.data.updateUser).toMatchObject(ALICE_2);
 
     done();
   });
@@ -71,7 +54,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: USER1._id, input: USER1_3 }
+      variables: { id: (await alice(client))._id, input: ALICE_3 }
     });
 
     if (!res.data) {
@@ -79,7 +62,7 @@ describeApollo('users::updateUser', client => {
       return done.fail('No data in response');
     }
 
-    expect(res.data.updateUser).toMatchObject(USER1_3);
+    expect(res.data.updateUser).toMatchObject(ALICE_3);
 
     done();
   });
@@ -87,19 +70,9 @@ describeApollo('users::updateUser', client => {
   it('should validate unique expoPushToken', async done => {
     const { mutate } = await client;
 
-    const createRes = await mutate({
-      mutation: CREATE_USER,
-      variables: { input: USER2 }
-    });
-    if (!createRes.data) {
-      console.error(createRes);
-      return done.fail('No data in response');
-    }
-    USER2._id = createRes.data.createUser._id;
-
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: USER2._id, input: USER1_1 }
+      variables: { id: (await bob(client))._id, input: ALICE_1 }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
