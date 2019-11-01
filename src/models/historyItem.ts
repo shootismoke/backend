@@ -17,14 +17,10 @@ export const HistoryItemSchema = new Schema(
       required: true,
       type: Schema.Types.Number
     },
-    provider: {
-      enum: ['aqicn', 'waqi'],
-      required: true,
-      type: Schema.Types.String
-    },
     stationId: {
+      ref: 'Station',
       required: true,
-      type: Schema.Types.String
+      type: Schema.Types.ObjectId
     },
     userId: {
       ref: 'User',

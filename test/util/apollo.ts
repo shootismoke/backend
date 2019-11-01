@@ -18,7 +18,6 @@ export async function reset(testName: string): Promise<ApolloServerTestClient> {
   const uri = `${MONGO_TEST_DB}-${testName}`;
   const server = await createServer({ uri });
   await mongoose.connection.dropDatabase();
-  console.log(`Database ${uri} dropped`);
 
   return createTestClient(server);
 }

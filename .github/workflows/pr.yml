@@ -16,6 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Yarn test
+        env:
+          WAQI_TOKEN: ${{ secrets.WAQI_TOKEN }}
         run: |
           yarn install
           yarn test

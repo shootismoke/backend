@@ -7,9 +7,8 @@ const USER1: Partial<UserType> = {
   expoInstallationId: 'id1'
 };
 const HISTORY1 = {
-  provider: 'waqi',
-  rawPm25: 1.1,
-  stationId: 'station1'
+  providerId: 'waqi|8374', // This is an actual real station
+  rawPm25: 1.1
 };
 
 describeApollo('historyItem::createHistoryItem', client => {
@@ -58,13 +57,11 @@ describeApollo('historyItem::createHistoryItem', client => {
     done();
   });
 
-  (['provider', 'rawPm25', 'stationId', 'userId'] as const).forEach(
-    testRequiredFields
-  );
+  (['providerId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
 
   it('should only allow known providers', async done => {
     const { mutate } = await client;
-    const input = { ...HISTORY1, provider: 'random', userId: USER1._id };
+    const input = { ...HISTORY1, providerId: 'random|2', userId: USER1._id };
 
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
@@ -72,7 +69,27 @@ describeApollo('historyItem::createHistoryItem', client => {
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'Variable "$input" got invalid value "random" at "input.provider"; Expected type Provider.'
+      'Only `waqi` provider is supported for now'
+    );
+
+    done();
+  });
+
+  it("should fail if id doesn't exist on WAQI", async done => {
+    const { mutate } = await client;
+
+    const input = {
+      ...HISTORY1,
+      providerId: 'waqi|foobar_random_123',
+      userId: USER1._id
+    };
+    const res = await mutate({
+      mutation: CREATE_HISTORY_ITEM,
+      variables: { input }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'WAQI Error waqi|foobar_random_123: Unknown station'
     );
 
     done();
