@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/api/graphql",
-      "dest": "/api/graphql.ts"
+      "dest": "/packages/microservices/api/graphql.ts"
     }
   ],
   "scope": "shootismoke"
