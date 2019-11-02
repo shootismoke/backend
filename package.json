@@ -2,7 +2,7 @@
   "name": "@shootismoke/backend",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
-  "license": "GLP-3.0",
+  "license": "GPL-3.0",
   "main": "index.js",
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
