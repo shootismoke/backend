@@ -6,7 +6,6 @@ import {
 } from '@shootismoke/graphql/src/schema';
 
 import { historyItemTypeDefs } from './historyItem';
-import { stationTypeDefs } from './station';
 import { userTypeDefs } from './user';
 
 export const typeDefs = [
@@ -14,7 +13,6 @@ export const typeDefs = [
   historyItemSchema,
   historyItemTypeDefs,
   stationSchema,
-  stationTypeDefs,
   userSchema,
   userTypeDefs
 ];

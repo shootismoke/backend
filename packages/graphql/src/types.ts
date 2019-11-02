@@ -20,14 +20,11 @@ export type Scalars = {
   Upload: any;
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
+export type CacheControlScope = 'PUBLIC' | 'PRIVATE';
 
 export type CreateHistoryItemInput = {
-  universalId: Scalars['ID'];
   rawPm25: Scalars['Float'];
+  universalId: Scalars['ID'];
   userId: Scalars['ID'];
 };
 
@@ -62,20 +59,13 @@ export type MutationCreateUserArgs = {
 };
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['String'];
+  userId: Scalars['ID'];
   input: UpdateUserInput;
 };
 
-export enum Notifications {
-  Never = 'never',
-  Daily = 'daily',
-  Weekly = 'weekly',
-  Monthly = 'monthly'
-}
+export type Notifications = 'never' | 'daily' | 'weekly' | 'monthly';
 
-export enum Provider {
-  Waqi = 'waqi'
-}
+export type Provider = 'waqi';
 
 export type Query = {
   __typename?: 'Query';
@@ -215,8 +205,8 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Mutation: ResolverTypeWrapper<{}>;
   CreateHistoryItemInput: CreateHistoryItemInput;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   CreateUserInput: CreateUserInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Notifications: Notifications;
@@ -237,8 +227,8 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   Mutation: {};
   CreateHistoryItemInput: CreateHistoryItemInput;
-  ID: Scalars['ID'];
   Float: Scalars['Float'];
+  ID: Scalars['ID'];
   CreateUserInput: CreateUserInput;
   String: Scalars['String'];
   Notifications: Notifications;
@@ -299,7 +289,7 @@ export type MutationResolvers<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateUserArgs, 'id' | 'input'>
+    RequireFields<MutationUpdateUserArgs, 'userId' | 'input'>
   >;
 }>;
 
