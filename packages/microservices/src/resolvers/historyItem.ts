@@ -1,3 +1,5 @@
+import { Resolvers, Station as IStation } from '@shootismoke/graphql/src';
+import { Document } from 'mongoose';
 import fetch from 'node-fetch';
 
 import { HistoryItem, Station } from '../models';
@@ -5,8 +7,11 @@ import { HistoryItem, Station } from '../models';
 /**
  * Fetch a station name from WAQI, and create a station in DB
  */
-// eslint-disable-next-line
-async function createStation(providerId: string, provider: string, id: string) {
+async function createStation(
+  providerId: string,
+  provider: string,
+  id: string
+): Promise<IStation & Document> {
   const response = await fetch(
     `https://api.waqi.info/feed/@${id}/?token=${process.env.WAQI_TOKEN}`
   );
@@ -34,14 +39,9 @@ async function createStation(providerId: string, provider: string, id: string) {
   });
 }
 
-export const historyItemResolvers = {
+export const historyItemResolvers: Resolvers = {
   Mutation: {
-    createHistoryItem: async (
-      // eslint-disable-next-line
-      _parent: any,
-      // eslint-disable-next-line
-      { input }: any
-    ): Promise<boolean> => {
+    createHistoryItem: async (_parent, { input }): Promise<boolean> => {
       const { providerId } = input;
       const [provider, id] = providerId.split('|');
 

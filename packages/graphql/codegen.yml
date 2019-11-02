@@ -1,0 +1,11 @@
+schema: http://localhost:3000/api/graphql
+generates:
+  ./src/index.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+config:
+  useIndexSignature: true
+hooks:
+  afterAllFileWrite:
+    - eslint --fix

@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-micro';
 
 import { historyItemTypeDefs } from './historyItem';
+import { stationTypeDefs } from './station';
 import { userTypeDefs } from './user';
 
 const linkSchema = gql`
@@ -14,4 +15,9 @@ const linkSchema = gql`
   }
 `;
 
-export const typeDefs = [linkSchema, historyItemTypeDefs, userTypeDefs];
+export const typeDefs = [
+  linkSchema,
+  historyItemTypeDefs,
+  stationTypeDefs,
+  userTypeDefs
+];

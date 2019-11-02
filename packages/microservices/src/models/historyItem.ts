@@ -1,15 +1,10 @@
+import { HistoryItem as IHistoryItem } from '@shootismoke/graphql/src';
 import { Document, model, Schema } from 'mongoose';
-
-export interface HistoryItemType extends Document {
-  createdAt: Date;
-  rawPm25: number;
-  stationId: string;
-}
 
 export const HistoryItemSchema = new Schema(
   {
     createdAt: {
-      default: Date.now,
+      default: (): number => Date.now(),
       required: true,
       type: Schema.Types.Date
     },
@@ -31,7 +26,7 @@ export const HistoryItemSchema = new Schema(
   { strict: 'throw' }
 );
 
-export const HistoryItem = model<HistoryItemType>(
+export const HistoryItem = model<IHistoryItem & Document>(
   'HistoryItem',
   HistoryItemSchema
 );

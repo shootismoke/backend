@@ -1,15 +1,7 @@
+import { User as IUser } from '@shootismoke/graphql/src';
 import { Document, model, Schema } from 'mongoose';
 
-import { HistoryItemType } from './historyItem';
-
 const NOTIFICATIONS = ['never', 'daily', 'weekly', 'monthly'] as const;
-
-export interface UserType extends Document {
-  expoInstallationId: string;
-  expoPushToken: string;
-  history: HistoryItemType[];
-  notifications: typeof NOTIFICATIONS[number];
-}
 
 export const UserSchema = new Schema(
   {
@@ -45,4 +37,4 @@ export const UserSchema = new Schema(
   { strict: 'throw' }
 );
 
-export const User = model<UserType>('User', UserSchema);
+export const User = model<IUser & Document>('User', UserSchema);

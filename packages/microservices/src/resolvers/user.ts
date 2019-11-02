@@ -1,13 +1,14 @@
-import { HistoryItem, HistoryItemType, User, UserType } from '../models';
+import {
+  HistoryItem as IHistoryItem,
+  Resolvers,
+  User as IUser
+} from '@shootismoke/graphql/src';
 
-export const userResolvers = {
+import { HistoryItem, User } from '../models';
+
+export const userResolvers: Resolvers = {
   Mutation: {
-    createUser: async (
-      // eslint-disable-next-line
-      _parent: any,
-      // eslint-disable-next-line
-      { input }: any
-    ): Promise<UserType> => {
+    createUser: async (_parent, { input }): Promise<IUser> => {
       let user = await User.findOne({
         expoInstallationId: input.expoInstallationId
       });
@@ -19,12 +20,7 @@ export const userResolvers = {
 
       return user;
     },
-    updateUser: async (
-      // eslint-disable-next-line
-      _parent: any,
-      // eslint-disable-next-line
-      { id, input }: any
-    ): Promise<UserType> => {
+    updateUser: async (_parent, { id, input }): Promise<IUser> => {
       // TODO Is there some faster way to do the below, with findOneAndUpdate?
       const user = await User.findById(id);
 
@@ -40,7 +36,7 @@ export const userResolvers = {
     }
   },
   User: {
-    history: async (user: UserType): Promise<HistoryItemType[]> => {
+    history: async (user: IUser): Promise<IHistoryItem[]> => {
       // FIXME For now, we don't expose the history of each user, for privacy
       // reasons. Think it through.
       if (process.env.NODE_ENV === 'production') {

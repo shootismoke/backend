@@ -19,8 +19,8 @@ describeApollo('historyItem::createHistoryItem', client => {
         userId: (await alice(client))._id
       };
       const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        [field as keyof typeof correctInput]: removedValue,
+        // eslint-disable-next-line
+        [field as keyof typeof correctInput]: _removedValue,
         ...rest
       } = correctInput;
 

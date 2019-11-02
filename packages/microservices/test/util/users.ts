@@ -1,13 +1,13 @@
+import { User } from '@shootismoke/graphql/src';
 import { ApolloServerTestClient } from 'apollo-server-testing';
 import pMemoize from 'p-memoize';
 
-import { UserType } from '../../src/models';
 import { CREATE_USER } from '../users/gql';
 
 function getUser(name: string) {
   return async function(
     client: Promise<ApolloServerTestClient>
-  ): Promise<UserType> {
+  ): Promise<User> {
     const { mutate } = await client;
 
     const createRes = await mutate({
