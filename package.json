@@ -8,6 +8,9 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
+    "build": "lerna run --stream build",
+    "predeploy": "yarn build",
+    "deploy": "lerna version --conventional-commits && lerna publish from-git",
     "lint": "tsc --noEmit && eslint --ext ts .",
     "start": "now dev",
     "test": "lerna run --stream test"
