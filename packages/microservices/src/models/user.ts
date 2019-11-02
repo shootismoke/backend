@@ -1,4 +1,4 @@
-import { User as IUser } from '@shootismoke/graphql/src';
+import { User as IUser } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
 const NOTIFICATIONS = ['never', 'daily', 'weekly', 'monthly'] as const;

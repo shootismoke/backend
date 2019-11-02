@@ -1,4 +1,4 @@
-import { User } from '@shootismoke/graphql/src';
+import { User } from '@shootismoke/graphql';
 import { ApolloServerTestClient } from 'apollo-server-testing';
 import pMemoize from 'p-memoize';
 

@@ -1,4 +1,4 @@
-import { Resolvers, Station as IStation } from '@shootismoke/graphql/src';
+import { Resolvers, Station as IStation } from '@shootismoke/graphql';
 import { Document } from 'mongoose';
 import fetch from 'node-fetch';
 
