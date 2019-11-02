@@ -9,7 +9,7 @@ export const historyItemTypeDefs = gql`
   }
 
   input CreateHistoryItemInput {
-    providerId: ID!
+    universalId: ID!
     rawPm25: Float!
     userId: ID!
   }

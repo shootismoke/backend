@@ -1,13 +1,9 @@
-import { UserType } from '../../src/models';
-import { CREATE_USER } from '../users/gql';
 import { describeApollo } from '../util';
+import { alice } from '../util/users';
 import { CREATE_HISTORY_ITEM } from './gql';
 
-const USER1: Partial<UserType> = {
-  expoInstallationId: 'id1'
-};
 const HISTORY1 = {
-  providerId: 'waqi|8374', // This is an actual real station
+  universalId: 'waqi|8374', // This is an actual real station
   rawPm25: 1.1
 };
 
@@ -18,10 +14,13 @@ describeApollo('historyItem::createHistoryItem', client => {
   function testRequiredFields(field: string): void {
     it(`should require ${field}`, async done => {
       const { mutate } = await client;
-      const correctInput = { ...HISTORY1, userId: USER1._id };
+      const correctInput = {
+        ...HISTORY1,
+        userId: (await alice(client))._id
+      };
       const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        [field as keyof typeof correctInput]: removedValue,
+        // eslint-disable-next-line
+        [field as keyof typeof correctInput]: _removedValue,
         ...rest
       } = correctInput;
 
@@ -41,27 +40,15 @@ describeApollo('historyItem::createHistoryItem', client => {
     });
   }
 
-  beforeAll(async done => {
-    const { mutate } = await client;
-
-    const createRes = await mutate({
-      mutation: CREATE_USER,
-      variables: { input: USER1 }
-    });
-    if (!createRes.data) {
-      console.error(createRes);
-      return done.fail('No data in response');
-    }
-    USER1._id = createRes.data.createUser._id;
-
-    done();
-  });
-
-  (['providerId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
+  (['universalId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
 
   it('should only allow known providers', async done => {
     const { mutate } = await client;
-    const input = { ...HISTORY1, providerId: 'random|2', userId: USER1._id };
+    const input = {
+      ...HISTORY1,
+      universalId: 'random|2',
+      userId: (await alice(client))._id
+    };
 
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
@@ -80,8 +67,8 @@ describeApollo('historyItem::createHistoryItem', client => {
 
     const input = {
       ...HISTORY1,
-      providerId: 'waqi|foobar_random_123',
-      userId: USER1._id
+      universalId: 'waqi|foobar_random_123',
+      userId: (await alice(client))._id
     };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
@@ -98,7 +85,7 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should create a history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: USER1._id };
+    const input = { ...HISTORY1, userId: (await alice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
@@ -117,7 +104,7 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should can create twice the same history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: USER1._id };
+    const input = { ...HISTORY1, userId: (await alice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }

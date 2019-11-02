@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable */
 
 const jestMongoDb = require('@shelf/jest-mongodb/jest-preset');
 const tsJest = require('ts-jest/jest-preset');

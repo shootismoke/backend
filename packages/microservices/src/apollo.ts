@@ -1,10 +1,10 @@
+import { NowRequest, NowResponse } from '@now/node';
 import { ApolloServer } from 'apollo-server-micro';
 import { ServerRegistration } from 'apollo-server-micro/dist/ApolloServer';
 
 import { resolvers } from './resolvers';
 import { typeDefs } from './typeDefs';
 import { connectToDatabase } from './util';
-import { NowRequest, NowResponse } from '@now/node';
 
 interface DbOptions {
   uri?: string;
@@ -23,6 +23,7 @@ export async function createServer(options?: DbOptions): Promise<ApolloServer> {
 
   await connectToDatabase(options && options.uri);
 
+  // eslint-disable-next-line require-atomic-updates
   server = new ApolloServer({
     typeDefs,
     resolvers

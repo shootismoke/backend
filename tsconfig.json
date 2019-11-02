@@ -1,16 +1,11 @@
 {
   "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": true,
-    "lib": ["esnext", "webworker"],
-    "moduleResolution": "node",
-    "outDir": ".build",
-    "sourceMap": true,
-    "target": "esnext"
-  },
-  "exclude": ["node_modules/", "dist/"],
-  "include": [
-    "./src/**/*.ts",
-    "./node_modules/@cloudflare/workers-types/index.d.ts"
-  ]
+    "paths": {
+      "@shootismoke/graphql": ["packages/graphql/src/index.ts"],
+      "@shootismoke/graphql/*": ["packages/graphql/src/*"]
+    }
+  }
 }

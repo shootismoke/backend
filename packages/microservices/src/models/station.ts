@@ -1,10 +1,5 @@
+import { Station as IStation } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
-
-export interface StationType extends Document {
-  name?: string;
-  provider: 'waqi';
-  providerId: string;
-}
 
 export const StationSchema = new Schema(
   {
@@ -17,7 +12,7 @@ export const StationSchema = new Schema(
       required: true,
       type: Schema.Types.String
     },
-    providerId: {
+    universalId: {
       index: true,
       required: true,
       type: Schema.Types.String,
@@ -27,4 +22,4 @@ export const StationSchema = new Schema(
   { strict: 'throw' }
 );
 
-export const Station = model<StationType>('Station', StationSchema);
+export const Station = model<IStation & Document>('Station', StationSchema);
