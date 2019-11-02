@@ -18,7 +18,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: (await alice(client))._id, input: ALICE_1 }
+      variables: { userId: (await alice(client))._id, input: ALICE_1 }
     });
 
     if (!res.data) {
@@ -36,7 +36,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: (await alice(client))._id, input: ALICE_2 }
+      variables: { userId: (await alice(client))._id, input: ALICE_2 }
     });
 
     if (!res.data) {
@@ -54,7 +54,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: (await alice(client))._id, input: ALICE_3 }
+      variables: { userId: (await alice(client))._id, input: ALICE_3 }
     });
 
     if (!res.data) {
@@ -72,7 +72,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { id: (await bob(client))._id, input: ALICE_1 }
+      variables: { userId: (await bob(client))._id, input: ALICE_1 }
     });
 
     expect(res.errors && res.errors[0].message).toContain(

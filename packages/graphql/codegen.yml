@@ -5,6 +5,7 @@ generates:
       - typescript
       - typescript-resolvers
 config:
+  enumsAsTypes: true
   useIndexSignature: true
 hooks:
   afterAllFileWrite:

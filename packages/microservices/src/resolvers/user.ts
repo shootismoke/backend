@@ -20,12 +20,12 @@ export const userResolvers: Resolvers = {
 
       return user;
     },
-    updateUser: async (_parent, { id, input }): Promise<IUser> => {
+    updateUser: async (_parent, { userId, input }): Promise<IUser> => {
       // TODO Is there some faster way to do the below, with findOneAndUpdate?
-      const user = await User.findById(id);
+      const user = await User.findById(userId);
 
       if (!user) {
-        throw new Error(`No user with id ${id} found`);
+        throw new Error(`No user with id ${userId} found`);
       }
 
       Object.assign(user, input);

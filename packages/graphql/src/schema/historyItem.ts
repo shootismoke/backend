@@ -9,8 +9,8 @@ export const historyItemSchema = gql`
   }
 
   input CreateHistoryItemInput {
-    universalId: ID!
     rawPm25: Float!
+    universalId: ID!
     userId: ID!
   }
 `;
