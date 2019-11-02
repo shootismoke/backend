@@ -2,7 +2,7 @@ import {
   HistoryItem as IHistoryItem,
   Resolvers,
   User as IUser
-} from '@shootismoke/graphql';
+} from '@shootismoke/graphql/src/types';
 
 import { HistoryItem, User } from '../models';
 

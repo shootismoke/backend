@@ -13,7 +13,7 @@
     "deploy": "lerna version --conventional-commits && lerna publish from-git",
     "lint": "tsc --noEmit && eslint --ext ts .",
     "start": "now dev",
-    "test": "lerna run --stream test"
+    "test": "jest"
   },
   "workspaces": [
     "packages/*"
