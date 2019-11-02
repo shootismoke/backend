@@ -15,8 +15,7 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc",
-    "generate": "graphql-codegen",
-    "test": "echo Skipped tests in @shootismoke/graphql"
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "apollo-server-micro": "^2.9.7"

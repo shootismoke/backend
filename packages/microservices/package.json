@@ -6,9 +6,6 @@
   "license": "GLP-3.0",
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "@now/node": "^1.0.2",
     "@shootismoke/graphql": "^0.1.1",
