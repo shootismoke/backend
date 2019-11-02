@@ -1,4 +1,4 @@
-import { HistoryItem as IHistoryItem } from '@shootismoke/graphql';
+import { HistoryItem as IHistoryItem } from '@shootismoke/graphql/src/types';
 import { Document, model, Schema } from 'mongoose';
 
 export const HistoryItemSchema = new Schema(
