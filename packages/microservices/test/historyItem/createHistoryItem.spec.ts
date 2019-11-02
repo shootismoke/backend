@@ -3,7 +3,7 @@ import { alice } from '../util/users';
 import { CREATE_HISTORY_ITEM } from './gql';
 
 const HISTORY1 = {
-  providerId: 'waqi|8374', // This is an actual real station
+  universalId: 'waqi|8374', // This is an actual real station
   rawPm25: 1.1
 };
 
@@ -40,13 +40,13 @@ describeApollo('historyItem::createHistoryItem', client => {
     });
   }
 
-  (['providerId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
+  (['universalId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
 
   it('should only allow known providers', async done => {
     const { mutate } = await client;
     const input = {
       ...HISTORY1,
-      providerId: 'random|2',
+      universalId: 'random|2',
       userId: (await alice(client))._id
     };
 
@@ -67,7 +67,7 @@ describeApollo('historyItem::createHistoryItem', client => {
 
     const input = {
       ...HISTORY1,
-      providerId: 'waqi|foobar_random_123',
+      universalId: 'waqi|foobar_random_123',
       userId: (await alice(client))._id
     };
     const res = await mutate({

@@ -9,6 +9,6 @@ export const stationTypeDefs = gql`
     _id: ID!
     name: String!
     provider: Provider!
-    providerId: ID!
+    universalId: ID!
   }
 `;

@@ -12,7 +12,7 @@ export const StationSchema = new Schema(
       required: true,
       type: Schema.Types.String
     },
-    providerId: {
+    universalId: {
       index: true,
       required: true,
       type: Schema.Types.String,

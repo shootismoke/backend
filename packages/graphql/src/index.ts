@@ -26,7 +26,7 @@ export enum CacheControlScope {
 }
 
 export type CreateHistoryItemInput = {
-  providerId: Scalars['ID'];
+  universalId: Scalars['ID'];
   rawPm25: Scalars['Float'];
   userId: Scalars['ID'];
 };
@@ -87,7 +87,7 @@ export type Station = {
   _id: Scalars['ID'];
   name: Scalars['String'];
   provider: Provider;
-  providerId: Scalars['ID'];
+  universalId: Scalars['ID'];
 };
 
 export type UpdateUserInput = {
@@ -317,7 +317,7 @@ export type StationResolvers<
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
-  providerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  universalId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 }>;
 
 export interface UploadScalarConfig
