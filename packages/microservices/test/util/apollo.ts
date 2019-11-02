@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 import { createServer } from '../../src/apollo';
 
-export { default as gql } from 'graphql-tag';
+export { gql } from 'apollo-server-micro';
 
 // process.env.MONGO_URL ends with '?', which we remove
 export const MONGO_TEST_DB = `${process.env.MONGO_URL}`.slice(0, -1);
