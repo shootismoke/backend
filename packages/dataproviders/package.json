@@ -1,0 +1,24 @@
+{
+  "name": "@shootismoke/dataproviders",
+  "version": "0.1.5",
+  "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+  "description": "Helpers to fetch data from air quality data providers",
+  "files": [
+    "lib/"
+  ],
+  "license": "GPL-3.0",
+  "main": "lib/",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "https://github.com/shootismoke/backend",
+  "scripts": {
+    "prebuild": "rimraf lib",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "fp-ts": "^2.1.1",
+    "io-ts": "^2.0.1",
+    "whatwg-fetch": "^3.0.0"
+  }
+}

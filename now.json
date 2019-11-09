@@ -12,6 +12,10 @@
     {
       "src": "/api/graphql",
       "dest": "/packages/microservices/api/graphql.ts"
+    },
+    {
+      "src": "/api/push",
+      "dest": "/packages/microservices/api/push/index.ts"
     }
   ],
   "scope": "shootismoke"
