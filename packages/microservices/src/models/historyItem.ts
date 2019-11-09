@@ -3,11 +3,6 @@ import { Document, model, Schema } from 'mongoose';
 
 export const HistoryItemSchema = new Schema(
   {
-    createdAt: {
-      default: (): number => Date.now(),
-      required: true,
-      type: Schema.Types.Date
-    },
     rawPm25: {
       required: true,
       type: Schema.Types.Number
@@ -23,7 +18,7 @@ export const HistoryItemSchema = new Schema(
       type: Schema.Types.ObjectId
     }
   },
-  { strict: 'throw' }
+  { strict: 'throw', timestamps: true }
 );
 
 export const HistoryItem = model<IHistoryItem & Document>(

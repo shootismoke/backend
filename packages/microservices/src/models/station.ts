@@ -19,7 +19,7 @@ export const StationSchema = new Schema(
       unique: true
     }
   },
-  { strict: 'throw' }
+  { strict: 'throw', timestamps: true }
 );
 
 export const Station = model<IStation & Document>('Station', StationSchema);

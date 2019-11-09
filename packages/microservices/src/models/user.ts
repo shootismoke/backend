@@ -1,7 +1,16 @@
 import { User as IUser } from '@shootismoke/graphql/src/types';
 import { Document, model, Schema } from 'mongoose';
 
-const NOTIFICATIONS = ['never', 'daily', 'weekly', 'monthly'] as const;
+const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'] as const;
+
+const NotificationsSchema = new Schema({
+  frequency: {
+    default: 'never',
+    enum: FREQUENCY,
+    required: true,
+    type: Schema.Types.String
+  }
+});
 
 export const UserSchema = new Schema(
   {
@@ -11,7 +20,7 @@ export const UserSchema = new Schema(
     expoInstallationId: {
       index: true,
       required: true,
-      type: String,
+      type: Schema.Types.String,
       unique: true
     },
     /**
@@ -19,13 +28,14 @@ export const UserSchema = new Schema(
      */
     expoPushToken: { type: String, unique: true },
     notifications: {
-      default: 'never',
-      enum: NOTIFICATIONS,
+      default: {
+        frequency: 'never'
+      },
       required: true,
-      type: String
+      type: NotificationsSchema
     }
   },
-  { strict: 'throw' }
+  { strict: 'throw', timestamps: true }
 );
 
 export const User = model<IUser & Document>('User', UserSchema);

@@ -10,7 +10,9 @@ export const CREATE_USER = gql`
         rawPm25
         stationId
       }
-      notifications
+      notifications {
+        frequency
+      }
     }
   }
 `;
@@ -25,7 +27,9 @@ export const UPDATE_USER = gql`
         rawPm25
         stationId
       }
-      notifications
+      notifications {
+        frequency
+      }
     }
   }
 `;

@@ -1,11 +1,8 @@
 import { NowRequest, NowResponse } from '@now/node';
 import { aqicnStation } from '@shootismoke/dataproviders/src/aqicn';
-import { promiseToTE } from '@shootismoke/dataproviders/src/util';
 import { array } from 'fp-ts/lib/Array';
 import * as E from 'fp-ts/lib/Either';
-import { pipe } from 'fp-ts/lib/pipeable';
 import * as T from 'fp-ts/lib/Task';
-import * as TE from 'fp-ts/lib/TaskEither';
 
 import { HistoryItem } from '../../src/models';
 import { connectToDatabase } from '../../src/util';
@@ -34,7 +31,7 @@ export default async function push(
       )(e)
     );
 
-    res.status(200).json(items);
+    res.status(200).json([items, correct]);
   } catch (error) {
     res.status(400).send(error.message);
   }

@@ -1,11 +1,15 @@
 import gql from 'graphql-tag';
 
 export const userSchema = gql`
-  enum Notifications {
+  enum Frequency {
     never
     daily
     weekly
     monthly
+  }
+
+  type Notifications {
+    frequency: Frequency!
   }
 
   type User {
@@ -16,15 +20,19 @@ export const userSchema = gql`
     notifications: Notifications!
   }
 
+  input NotificationsInput {
+    frequency: Frequency!
+  }
+
   input CreateUserInput {
     expoInstallationId: String!
     expoPushToken: String
-    notifications: Notifications
+    notifications: NotificationsInput
   }
 
   input UpdateUserInput {
     expoInstallationId: String
     expoPushToken: String
-    notifications: Notifications
+    notifications: NotificationsInput
   }
 `;

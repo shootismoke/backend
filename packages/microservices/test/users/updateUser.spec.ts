@@ -6,7 +6,7 @@ const ALICE_1 = {
   expoPushToken: 'token_alice_1'
 };
 const ALICE_2 = {
-  notifications: 'monthly'
+  notifications: { frequency: 'monthly' }
 };
 const ALICE_3 = {
   expoInstallationId: 'id_alice_1'

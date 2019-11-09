@@ -4,7 +4,7 @@ import { CREATE_USER } from './gql';
 const USER1 = {
   expoInstallationId: 'id1',
   expoPushToken: 'token1',
-  notifications: 'weekly'
+  notifications: { frequency: 'weekly' }
 };
 const USER2 = {
   expoInstallationId: 'id2',
@@ -83,7 +83,7 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it("should be create'never' notifications by default, and allow no expoPushToken", async done => {
+  it("should be create 'never' notifications by default, and allow no expoPushToken", async done => {
     const { mutate } = await client;
 
     const res = await mutate({
@@ -96,7 +96,7 @@ describeApollo('users::createUser', client => {
       return done.fail('No data in response');
     }
 
-    expect(res.data.createUser.notifications).toBe('never');
+    expect(res.data.createUser.notifications.frequency).toBe('never');
 
     done();
   });
