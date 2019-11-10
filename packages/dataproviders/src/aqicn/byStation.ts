@@ -6,8 +6,6 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import { decodeWith, promiseToTE } from '../util';
 import { AqicnStation, AqicnStationCodec } from './validation';
 
-export * from './validation';
-
 export function aqicnByStation(
   stationId: string
 ): TE.TaskEither<Error, AqicnStation> {

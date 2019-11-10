@@ -1,2 +1,2 @@
-export * from './fp';
 export * from './codec';
+export * from './fp';

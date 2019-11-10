@@ -85,7 +85,7 @@ const AqicnStationCodecData = t.type({
     name: t.union([t.string, t.undefined]),
     url: t.union([t.string, t.undefined])
   }),
-  dominentpol: t.string, // Should be `t.keyof(pollutants.props)`, but sometime we do get ""
+  dominentpol: t.string, // Should be `t.keyof(pollutants.props)`, but sometimes we do get ""
   iaqi: pollutants,
   idx: t.number,
   time: t.type({

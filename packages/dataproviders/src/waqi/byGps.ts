@@ -7,8 +7,6 @@ import { LatLng } from '../types';
 import { decodeWith, promiseToTE } from '../util';
 import { WaqiStation, WaqiStationCodec } from './validation';
 
-export * from './validation';
-
 export function waqiByGps(gps: LatLng): TE.TaskEither<Error, WaqiStation> {
   const { latitude, longitude } = gps;
 
