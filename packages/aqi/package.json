@@ -1,8 +1,8 @@
 {
-  "name": "@shootismoke/dataproviders",
+  "name": "@shootismoke/aqi",
   "version": "0.1.5",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
-  "description": "Helpers to fetch data from air quality data providers",
+  "description": "Easily convert between US AQI, CN AQI and raw concentrations in ug/m3",
   "files": [
     "lib/"
   ],
@@ -15,11 +15,5 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc"
-  },
-  "dependencies": {
-    "@shootismoke/aqi": "^0.1.5",
-    "fp-ts": "^2.1.1",
-    "io-ts": "^2.0.1",
-    "whatwg-fetch": "^3.0.0"
   }
 }

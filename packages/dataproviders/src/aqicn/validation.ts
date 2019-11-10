@@ -73,40 +73,34 @@ const pollutants = t.partial({
   w: pollutantValue
 });
 
-export const AqiCnStationCodec = t.type({
+const AqicnStationCodecData = t.type({
+  attributions: t.array(
+    t.type({
+      name: t.string,
+      url: t.union([t.string, t.undefined])
+    })
+  ),
+  city: t.type({
+    geo: t.tuple([t.number, t.number]),
+    name: t.union([t.string, t.undefined]),
+    url: t.union([t.string, t.undefined])
+  }),
+  dominentpol: t.keyof(pollutants.props),
+  iaqi: pollutants,
+  idx: t.number,
+  time: t.type({
+    s: t.union([t.string, t.undefined]),
+    tz: t.union([t.string, t.undefined]),
+    v: t.number
+  })
+});
+
+export const AqicnStationCodec = t.type({
   status: t.keyof({
     ok: null,
     error: null
   }),
-  data: t.union([
-    t.type({
-      attributions: t.array(
-        t.type({
-          name: t.string,
-          url: t.union([t.string, t.undefined])
-        })
-      ),
-      city: t.type({
-        geo: t.tuple([t.number, t.number]),
-        name: t.union([t.string, t.undefined]),
-        url: t.union([t.string, t.undefined])
-      }),
-      dominentpol: t.keyof(pollutants.props),
-      iaqi: pollutants,
-      idx: t.number,
-      shootISmoke: t.type({
-        cigarettes: t.number,
-        rawPm25: t.number,
-        station: t.union([t.string, t.undefined])
-      }),
-      time: t.type({
-        s: t.union([t.string, t.undefined]),
-        tz: t.union([t.string, t.undefined]),
-        v: t.number
-      })
-    }),
-    t.string
-  ])
+  data: t.union([AqicnStationCodecData, t.string])
 });
 
-export type AqiCnStation = t.TypeOf<typeof AqiCnStationCodec>;
+export type AqicnStation = t.TypeOf<typeof AqicnStationCodecData>;

@@ -1,23 +1,27 @@
-import { User } from '@shootismoke/graphql/src/types';
+import { CreateUserInput, User } from '@shootismoke/graphql/src/types';
 import { ApolloServerTestClient } from 'apollo-server-testing';
+import deepmerge from 'deepmerge';
 import pMemoize from 'p-memoize';
 
 import { CREATE_USER } from '../users/gql';
 
 function getUser(name: string) {
   return async function(
-    client: Promise<ApolloServerTestClient>
+    client: Promise<ApolloServerTestClient>,
+    additionalInputs: Partial<CreateUserInput> = {}
   ): Promise<User> {
     const { mutate } = await client;
 
+    const input = deepmerge(
+      {
+        expoInstallationId: `id_${name}`,
+        expoPushToken: `token_${name}`
+      },
+      additionalInputs
+    );
     const createRes = await mutate({
       mutation: CREATE_USER,
-      variables: {
-        input: {
-          expoInstallationId: `id_${name}`,
-          expoPushToken: `token_${name}`
-        }
-      }
+      variables: { input }
     });
 
     if (!createRes.data) {
@@ -29,5 +33,5 @@ function getUser(name: string) {
   };
 }
 
-export const alice = pMemoize(getUser('alice'));
-export const bob = pMemoize(getUser('bob'));
+export const getAlice = pMemoize(getUser('alice'));
+export const getBob = pMemoize(getUser('bob'));

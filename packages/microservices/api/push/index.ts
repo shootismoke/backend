@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { aqicnStation } from '@shootismoke/dataproviders/src/aqicn';
+import { getAqi } from '@shootismoke/dataproviders/src/getAqi';
 import { array } from 'fp-ts/lib/Array';
 import * as E from 'fp-ts/lib/Either';
 import * as T from 'fp-ts/lib/Task';
@@ -19,7 +19,7 @@ export default async function push(
 
     const tasks = Array.from(
       new Set(items.map(({ universalId }) => universalId))
-    ).map(aqicnStation);
+    ).map(getAqi);
     const responses = await array.sequence(T.task)(tasks)();
 
     const correct = responses.filter(E.isRight).map(e =>
