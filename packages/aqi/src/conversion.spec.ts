@@ -1,7 +1,6 @@
 import { aqiToRaw } from './aqiToRaw';
 import { rawToAqi } from './rawToAqi';
 import { AqiType, Pollutant } from './types';
-import { roundTo1Decimal } from './util';
 
 function testConversion(
   pollutant: Pollutant,
@@ -9,19 +8,19 @@ function testConversion(
   aqi: number,
   raw: number
 ): void {
-  it(`should convert ${pollutant} ${aqiType} AQI ${aqi} to ${raw}ug/m3`, () => {
+  it(`should convert ${aqiType} AQI ${aqi} to ${raw}ug/m3`, () => {
     // Sometimes, because of rounding, the values are not exact. We just want
     // them to be exact at +/-0.2
     expect(
-      roundTo1Decimal(Math.abs(aqiToRaw(pollutant, aqi, aqiType) - raw))
+      Math.abs(aqiToRaw(pollutant, aqi, aqiType) - raw)
     ).toBeLessThanOrEqual(0.2);
     expect(
-      roundTo1Decimal(Math.abs(rawToAqi(pollutant, raw, aqiType) - aqi))
+      Math.abs(rawToAqi(pollutant, raw, aqiType) - aqi)
     ).toBeLessThanOrEqual(0.2);
   });
 }
 
-describe('aqiToRaw', () => {
+describe('Conversion `aqiToRaw` & `rawToAqi`', () => {
   describe('pm25', () => {
     testConversion('pm25', 'US', 25, 6);
     testConversion('pm25', 'US', 39, 9.35);

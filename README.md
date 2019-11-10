@@ -5,4 +5,8 @@
 
 # @shootismoke/backend
 
-Backend of Sh\*\*t! I Smoke
+## Packages
+
+| Packages                             | NPM                                                                                                                  | Description                                                                                  |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [`@shootismoke/aqi`](./packages/aqi) | [![npm (scoped)](https://img.shields.io/npm/v/@shootismoke/aqi.svg)](https://www.npmjs.com/package/@shootismoke/aqi) | A library to convert between AQI (US or CN) value and pollutant concentration (µg/m³ or ppm) |

@@ -1,6 +1,5 @@
 /**
  * PM2.5 AQI to raw concentration linear breakpoints
-
  */
 export const US = [
   [[0, 50], [0, 12]],
@@ -24,5 +23,3 @@ export const CN = [
   [[201, 300], [250.1, 350]],
   [[201, 300], [350.1, 500]]
 ];
-
-export const unit = 'µg/m³';
