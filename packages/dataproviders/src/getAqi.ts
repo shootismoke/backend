@@ -2,7 +2,7 @@ import { aqiToRaw, rawToAqi } from '@shootismoke/aqi/src';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import { aqicnStation } from './aqicn';
+import { aqicnByStation } from './aqicn';
 
 export interface AqiInfo {
   aqiCn: number;
@@ -22,7 +22,7 @@ export function getAqi(universalId: string): TE.TaskEither<Error, AqiInfo> {
   switch (provider) {
     case 'waqi': {
       return pipe(
-        aqicnStation(stationId),
+        aqicnByStation(stationId),
         TE.map(({ iaqi }) => iaqi),
         TE.chain(({ pm25 }) =>
           pm25

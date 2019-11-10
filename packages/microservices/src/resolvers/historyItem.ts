@@ -1,6 +1,5 @@
 import { Resolvers, Station as IStation } from '@shootismoke/graphql/src/types';
 import { Document } from 'mongoose';
-import fetch from 'node-fetch';
 
 import { HistoryItem, Station } from '../models';
 
