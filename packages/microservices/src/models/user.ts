@@ -26,7 +26,7 @@ export const UserSchema = new Schema(
     /**
      * @see https://docs.expo.io/versions/latest/guides/push-notifications/
      */
-    expoPushToken: { type: String, unique: true },
+    expoPushToken: { sparse: true, type: String, unique: true },
     notifications: {
       default: {
         frequency: 'never'
