@@ -1,6 +1,6 @@
+import { pipe } from 'fp-ts/lib/pipeable';
 import * as T from 'fp-ts/lib/Task';
 import * as TE from 'fp-ts/lib/TaskEither';
-import { pipe } from 'fp-ts/lib/pipeable';
 
 import { aqicnByStation, waqiByGps } from './';
 
@@ -8,14 +8,13 @@ function testProvider<T>(
   te: TE.TaskEither<Error, T>,
   provider: 'aqicn' | 'waqi',
   fetchBy: 'gps' | 'station'
-) {
-  it(`should fetch ${provider} by ${fetchBy}`, async done => {
-    const stationId = '8374'; // This is an actual real station
-
+): void {
+  it(`should fetch ${provider} by ${fetchBy}`, done => {
     pipe(
       te,
       TE.fold(
-        () => {
+        error => {
+          console.log(error);
           done.fail();
 
           return T.of(void undefined);
