@@ -1,12 +1,11 @@
-import { describeApollo } from '../util';
-import { alice, bob } from '../util/users';
+import { describeApollo, getAlice, getBob } from '../util';
 import { UPDATE_USER } from './gql';
 
 const ALICE_1 = {
   expoPushToken: 'token_alice_1'
 };
 const ALICE_2 = {
-  notifications: 'monthly'
+  notifications: { frequency: 'monthly' }
 };
 const ALICE_3 = {
   expoInstallationId: 'id_alice_1'
@@ -18,7 +17,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await alice(client))._id, input: ALICE_1 }
+      variables: { userId: (await getAlice(client))._id, input: ALICE_1 }
     });
 
     if (!res.data) {
@@ -36,7 +35,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await alice(client))._id, input: ALICE_2 }
+      variables: { userId: (await getAlice(client))._id, input: ALICE_2 }
     });
 
     if (!res.data) {
@@ -54,7 +53,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await alice(client))._id, input: ALICE_3 }
+      variables: { userId: (await getAlice(client))._id, input: ALICE_3 }
     });
 
     if (!res.data) {
@@ -72,7 +71,7 @@ describeApollo('users::updateUser', client => {
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await bob(client))._id, input: ALICE_1 }
+      variables: { userId: (await getBob(client))._id, input: ALICE_1 }
     });
 
     expect(res.errors && res.errors[0].message).toContain(

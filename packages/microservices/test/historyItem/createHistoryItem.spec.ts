@@ -1,5 +1,4 @@
-import { describeApollo } from '../util';
-import { alice } from '../util/users';
+import { describeApollo, getAlice } from '../util';
 import { CREATE_HISTORY_ITEM } from './gql';
 
 const HISTORY1 = {
@@ -16,7 +15,7 @@ describeApollo('historyItem::createHistoryItem', client => {
       const { mutate } = await client;
       const correctInput = {
         ...HISTORY1,
-        userId: (await alice(client))._id
+        userId: (await getAlice(client))._id
       };
       const {
         // eslint-disable-next-line
@@ -47,7 +46,7 @@ describeApollo('historyItem::createHistoryItem', client => {
     const input = {
       ...HISTORY1,
       universalId: 'random|2',
-      userId: (await alice(client))._id
+      userId: (await getAlice(client))._id
     };
 
     const res = await mutate({
@@ -68,7 +67,7 @@ describeApollo('historyItem::createHistoryItem', client => {
     const input = {
       ...HISTORY1,
       universalId: 'waqi|foobar_random_123',
-      userId: (await alice(client))._id
+      userId: (await getAlice(client))._id
     };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
@@ -85,7 +84,7 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should create a history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: (await alice(client))._id };
+    const input = { ...HISTORY1, userId: (await getAlice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
@@ -104,7 +103,7 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should can create twice the same history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: (await alice(client))._id };
+    const input = { ...HISTORY1, userId: (await getAlice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }

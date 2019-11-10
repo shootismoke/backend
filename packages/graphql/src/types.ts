@@ -31,8 +31,10 @@ export type CreateHistoryItemInput = {
 export type CreateUserInput = {
   expoInstallationId: Scalars['String'];
   expoPushToken?: Maybe<Scalars['String']>;
-  notifications?: Maybe<Notifications>;
+  notifications?: Maybe<NotificationsInput>;
 };
+
+export type Frequency = 'never' | 'daily' | 'weekly' | 'monthly';
 
 export type HistoryItem = {
   __typename?: 'HistoryItem';
@@ -63,7 +65,14 @@ export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
 
-export type Notifications = 'never' | 'daily' | 'weekly' | 'monthly';
+export type Notifications = {
+  __typename?: 'Notifications';
+  frequency: Frequency;
+};
+
+export type NotificationsInput = {
+  frequency: Frequency;
+};
 
 export type Provider = 'waqi';
 
@@ -83,7 +92,7 @@ export type Station = {
 export type UpdateUserInput = {
   expoInstallationId?: Maybe<Scalars['String']>;
   expoPushToken?: Maybe<Scalars['String']>;
-  notifications?: Maybe<Notifications>;
+  notifications?: Maybe<NotificationsInput>;
 };
 
 export type User = {
@@ -209,10 +218,12 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>;
   CreateUserInput: CreateUserInput;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Notifications: Notifications;
+  NotificationsInput: NotificationsInput;
+  Frequency: Frequency;
   User: ResolverTypeWrapper<User>;
   HistoryItem: ResolverTypeWrapper<HistoryItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
+  Notifications: ResolverTypeWrapper<Notifications>;
   UpdateUserInput: UpdateUserInput;
   CacheControlScope: CacheControlScope;
   Provider: Provider;
@@ -231,10 +242,12 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'];
   CreateUserInput: CreateUserInput;
   String: Scalars['String'];
-  Notifications: Notifications;
+  NotificationsInput: NotificationsInput;
+  Frequency: Frequency;
   User: User;
   HistoryItem: HistoryItem;
   Date: Scalars['Date'];
+  Notifications: Notifications;
   UpdateUserInput: UpdateUserInput;
   CacheControlScope: CacheControlScope;
   Provider: Provider;
@@ -293,6 +306,13 @@ export type MutationResolvers<
   >;
 }>;
 
+export type NotificationsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Notifications'] = ResolversParentTypes['Notifications']
+> = ResolversObject<{
+  frequency?: Resolver<ResolversTypes['Frequency'], ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
@@ -346,6 +366,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType;
   HistoryItem?: HistoryItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Notifications?: NotificationsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Station?: StationResolvers<ContextType>;
   Upload?: GraphQLScalarType;
