@@ -6,16 +6,28 @@ import { aqicnByStation, waqiByGps } from './';
 
 function testProvider<T>(
   te: TE.TaskEither<Error, T>,
-  provider: 'aqicn' | 'waqi',
-  fetchBy: 'gps' | 'station'
+  {
+    fetchBy,
+    fetchById,
+    provider
+  }: {
+    fetchById: string;
+    provider: 'aqicn' | 'waqi';
+    fetchBy: 'gps' | 'station';
+  }
 ): void {
-  it(`should fetch ${provider} by ${fetchBy}`, done => {
+  it(`should fetch ${provider} station by ${fetchBy}: ${fetchById}`, done => {
     pipe(
       te,
       TE.fold(
         error => {
-          console.log(error);
-          done.fail();
+          if (error.message.includes('Unknown ID')) {
+            // Skip if the random stationId is an unknown station
+            done();
+
+            return T.of(void undefined);
+          }
+          done.fail(error);
 
           return T.of(void undefined);
         },
@@ -32,6 +44,36 @@ function testProvider<T>(
 }
 
 describe('data providers', () => {
-  testProvider(aqicnByStation('8374'), 'aqicn', 'station');
-  testProvider(waqiByGps({ latitude: 23, longitude: 45 }), 'waqi', 'gps');
+  // Create an array of 10 random numbers, do some basic random testing
+  // with stations
+  const randomStationIds = [];
+  while (randomStationIds.length < 10) {
+    randomStationIds.push(Math.floor(Math.random() * 1000) + 1);
+  }
+  randomStationIds
+    .map(s => `${s}`)
+    .forEach(stationId => {
+      testProvider(aqicnByStation(stationId), {
+        fetchBy: 'station',
+        fetchById: stationId,
+        provider: 'aqicn'
+      });
+    });
+
+  // Create an array of 10 random number tuples, do some basic random testing
+  // with lat/lng
+  const randomLatLng = [];
+  while (randomLatLng.length < 10) {
+    randomLatLng.push([
+      Math.floor(Math.random() * 9000) / 100,
+      Math.floor(Math.random() * 9000) / 100
+    ]);
+  }
+  randomLatLng.forEach(([latitude, longitude]) => {
+    testProvider(waqiByGps({ latitude, longitude }), {
+      fetchBy: 'gps',
+      fetchById: `[${[latitude, longitude]}]`,
+      provider: 'waqi'
+    });
+  });
 });
