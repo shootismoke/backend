@@ -21,8 +21,12 @@ function testProvider<T>(
       te,
       TE.fold(
         error => {
-          if (error.message.includes('Unknown ID')) {
+          if (
             // Skip if the random stationId is an unknown station
+            error.message.includes('Unknown ID') ||
+            // Skip if we somehow couldn't connect
+            error.message.includes('can not connect')
+          ) {
             done();
 
             return T.of(void undefined);

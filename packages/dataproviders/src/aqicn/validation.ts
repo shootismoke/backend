@@ -107,7 +107,8 @@ const AqicnStationCodecData = t.type({
 export const AqicnStationCodec = t.type({
   status: t.keyof({
     ok: null,
-    error: null
+    error: null,
+    nope: null // http://api.waqi.info/feed/geo:31.54;84.3/?token=
   }),
   data: t.union([AqicnStationCodecData, t.string, t.undefined]),
   msg: t.union([t.string, t.undefined])

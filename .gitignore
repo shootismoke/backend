@@ -1,6 +1,9 @@
 # Dist
 lib
 
+# Test-related directories
+coverage
+
 # Package directories
 node_modules
 
@@ -10,8 +13,6 @@ node_modules
 # Logs
 *.log
 
-# Serverless directories
-.serverless
 
 # Secrets
 .env

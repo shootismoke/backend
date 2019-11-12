@@ -12,7 +12,11 @@ import { AqicnStation, AqicnStationCodec } from './validation';
  * Check if the response we get from aqicn is `{"status": "error", "msg": "..."}`,
  * if yes, return an error.
  */
-function checkError({ status, data, msg }: TypeOf<typeof AqicnStationCodec>) {
+function checkError({
+  status,
+  data,
+  msg
+}: TypeOf<typeof AqicnStationCodec>): TE.TaskEither<Error, AqicnStation> {
   return status === 'ok'
     ? TE.right(data as AqicnStation)
     : TE.left(new Error(msg || (data as string)));
