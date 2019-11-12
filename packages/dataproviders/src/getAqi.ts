@@ -2,7 +2,7 @@ import { aqiToRaw, rawToAqi } from '@shootismoke/aqi/src';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import { aqicnStation } from './aqicn';
+import { aqicnByStation } from './aqicn';
 
 export interface AqiInfo {
   aqiCn: number;
@@ -22,14 +22,13 @@ export function getAqi(universalId: string): TE.TaskEither<Error, AqiInfo> {
   switch (provider) {
     case 'waqi': {
       return pipe(
-        aqicnStation(stationId),
-        TE.map(({ iaqi }) => iaqi),
-        TE.chain(({ pm25 }) =>
-          pm25
-            ? TE.right(pm25)
-            : TE.left(new Error('PM2.5 not defined in response'))
+        aqicnByStation(stationId),
+        TE.chain(({ iaqi }) =>
+          iaqi && iaqi.pm25
+            ? TE.right(iaqi.pm25.v)
+            : TE.left(new Error('iaqi not defined in response'))
         ),
-        TE.map(({ v: aqi }) => {
+        TE.map(aqi => {
           const raw = aqiToRaw('pm25', aqi);
 
           return {

@@ -12,12 +12,10 @@
     "@shootismoke/graphql": "^0.1.6",
     "@types/mongodb": "^3.3.6",
     "@types/mongoose": "^5.5.23",
-    "@types/node-fetch": "^2.5.2",
     "apollo-server-micro": "^2.9.7",
     "graphql": "^14.5.8",
     "mongodb": "^3.3.3",
-    "mongoose": "^5.7.7",
-    "node-fetch": "^2.6.0"
+    "mongoose": "^5.7.7"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.3",

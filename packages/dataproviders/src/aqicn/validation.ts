@@ -81,12 +81,21 @@ const AqicnStationCodecData = t.type({
     })
   ),
   city: t.type({
-    geo: t.tuple([t.number, t.number]),
+    geo: t.union([
+      t.tuple([
+        // Somehow, we also sometimes get strings as geo lat/lng
+        t.union([t.string, t.number]),
+        t.union([t.string, t.number])
+      ]),
+      // We also could get null
+      t.null
+    ]),
     name: t.union([t.string, t.undefined]),
     url: t.union([t.string, t.undefined])
   }),
-  dominentpol: t.keyof(pollutants.props),
-  iaqi: pollutants,
+  // Should be `t.keyof(pollutants.props)`, but sometimes we do get "" or undefined
+  dominentpol: t.union([t.string, t.undefined]),
+  iaqi: t.union([pollutants, t.undefined]),
   idx: t.number,
   time: t.type({
     s: t.union([t.string, t.undefined]),
@@ -98,9 +107,11 @@ const AqicnStationCodecData = t.type({
 export const AqicnStationCodec = t.type({
   status: t.keyof({
     ok: null,
-    error: null
+    error: null,
+    nope: null // http://api.waqi.info/feed/geo:31.54;84.3/?token=
   }),
-  data: t.union([AqicnStationCodecData, t.string])
+  data: t.union([AqicnStationCodecData, t.string, t.undefined]),
+  msg: t.union([t.string, t.undefined])
 });
 
 export type AqicnStation = t.TypeOf<typeof AqicnStationCodecData>;
