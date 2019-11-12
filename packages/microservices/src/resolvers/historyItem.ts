@@ -1,4 +1,7 @@
+import { aqicnByStation } from '@shootismoke/dataproviders/src';
 import { Resolvers, Station as IStation } from '@shootismoke/graphql/src/types';
+import * as E from 'fp-ts/lib/Either';
+import { pipe } from 'fp-ts/lib/pipeable';
 import { Document } from 'mongoose';
 
 import { HistoryItem, Station } from '../models';
@@ -11,25 +14,17 @@ async function createStation(
   provider: string,
   id: string
 ): Promise<IStation & Document> {
-  const response = await fetch(
-    `https://api.waqi.info/feed/@${id}/?token=${process.env.WAQI_TOKEN}`
+  const dataEither = await aqicnByStation(id)();
+
+  const data = pipe(
+    dataEither,
+    E.fold(
+      error => {
+        throw error;
+      },
+      data => data
+    )
   );
-  const { data, status } = await response.json();
-
-  if (status === 'error') {
-    throw new Error(`WAQI Error ${universalId}: ${data}`);
-  }
-
-  if (
-    !data.attributions ||
-    !data.attributions.length ||
-    !data.attributions[0] ||
-    !data.attributions[0].name
-  ) {
-    throw new Error(
-      `WAQI Error ${universalId}: Response does not contain station name`
-    );
-  }
 
   return Station.create({
     name: data.attributions[0].name,

@@ -24,16 +24,11 @@ export function getAqi(universalId: string): TE.TaskEither<Error, AqiInfo> {
       return pipe(
         aqicnByStation(stationId),
         TE.chain(({ iaqi }) =>
-          iaqi
-            ? TE.right(iaqi)
+          iaqi && iaqi.pm25
+            ? TE.right(iaqi.pm25.v)
             : TE.left(new Error('iaqi not defined in response'))
         ),
-        TE.chain(({ pm25 }) =>
-          pm25
-            ? TE.right(pm25)
-            : TE.left(new Error('PM2.5 not defined in response'))
-        ),
-        TE.map(({ v: aqi }) => {
+        TE.map(aqi => {
           const raw = aqiToRaw('pm25', aqi);
 
           return {
