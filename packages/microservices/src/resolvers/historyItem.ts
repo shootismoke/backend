@@ -1,7 +1,8 @@
 import { aqicnByStation } from '@shootismoke/dataproviders/src';
 import { Resolvers, Station as IStation } from '@shootismoke/graphql/src/types';
-import * as E from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
+import * as T from 'fp-ts/lib/Task';
+import * as TE from 'fp-ts/lib/TaskEither';
 import { Document } from 'mongoose';
 
 import { HistoryItem, Station } from '../models';
@@ -14,17 +15,12 @@ async function createStation(
   provider: string,
   id: string
 ): Promise<IStation & Document> {
-  const dataEither = await aqicnByStation(id)();
-
-  const data = pipe(
-    dataEither,
-    E.fold(
-      error => {
-        throw error;
-      },
-      data => data
-    )
-  );
+  const data = await pipe(
+    aqicnByStation(id),
+    TE.fold(error => {
+      throw new Error(`WAQI Error ${universalId}: ${error.message}`);
+    }, T.of)
+  )();
 
   return Station.create({
     name: data.attributions[0].name,
