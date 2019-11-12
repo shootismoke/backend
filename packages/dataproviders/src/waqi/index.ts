@@ -1,2 +1,2 @@
-export * from './byGps';
+export * from './fetchBy';
 export * from './validation';

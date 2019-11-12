@@ -23,7 +23,11 @@ export function getAqi(universalId: string): TE.TaskEither<Error, AqiInfo> {
     case 'waqi': {
       return pipe(
         aqicnByStation(stationId),
-        TE.map(({ iaqi }) => iaqi),
+        TE.chain(({ iaqi }) =>
+          iaqi
+            ? TE.right(iaqi)
+            : TE.left(new Error('iaqi not defined in response'))
+        ),
         TE.chain(({ pm25 }) =>
           pm25
             ? TE.right(pm25)

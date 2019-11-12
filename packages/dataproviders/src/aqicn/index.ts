@@ -1,3 +1,2 @@
-export * from './byGps';
-export * from './byStation';
+export * from './fetchBy';
 export * from './validation';
