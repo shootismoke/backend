@@ -1,5 +1,6 @@
 import { aqiToRaw, getUnit, rawToAqi } from '@shootismoke/aqi/src';
 
+import { pm25ToCigarettes } from '../secretSauce';
 import { NormalizedByGps } from '../types';
 import { WaqiStation } from './validation';
 
@@ -16,6 +17,7 @@ export function waqiNormalizeByGps({
   const aqiCN = rawToAqi('pm25', raw, 'CN');
 
   return {
+    dailyCigarettes: pm25ToCigarettes(raw),
     pollutants:
       // Only cater for pm25 for now
       // FIXME Cater for other pollutants too
