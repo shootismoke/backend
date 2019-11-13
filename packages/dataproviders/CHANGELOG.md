@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.8](https://github.com/shootismoke/backend/compare/v0.1.7...v0.1.8) (2019-11-13)
+
+
+### Features
+
+* **dataproviders:** Add normalized data format ([#25](https://github.com/shootismoke/backend/issues/25)) ([a7bd857](https://github.com/shootismoke/backend/commit/a7bd857603c43171f761b0c9a1e61949a828c723))
+
+
+
+
+
 ## [0.1.7](https://github.com/shootismoke/backend/compare/v0.1.6...v0.1.7) (2019-11-12)
 
 
