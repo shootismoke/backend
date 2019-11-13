@@ -1,6 +1,6 @@
 {
   "name": "@shootismoke/microservices",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
   "license": "GPL-3.0",
@@ -8,8 +8,8 @@
   "repository": "https://github.com/shootismoke/backend",
   "dependencies": {
     "@now/node": "^1.0.2",
-    "@shootismoke/dataproviders": "^0.1.8",
-    "@shootismoke/graphql": "^0.1.6",
+    "@shootismoke/dataproviders": "^0.1.9",
+    "@shootismoke/graphql": "^0.1.9",
     "@types/mongodb": "^3.3.6",
     "@types/mongoose": "^5.5.23",
     "apollo-server-micro": "^2.9.7",
