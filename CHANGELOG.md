@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.10](https://github.com/shootismoke/backend/compare/v0.1.9...v0.1.10) (2019-11-13)
+
+
+### Bug Fixes
+
+* **dataproviders:** Add conversion to cigarettes ([#27](https://github.com/shootismoke/backend/issues/27)) ([af577be](https://github.com/shootismoke/backend/commit/af577befd72d35a530fa4516337e0f70bb9c2e40))
+* **dataproviders:** Export types ([#26](https://github.com/shootismoke/backend/issues/26)) ([27c3165](https://github.com/shootismoke/backend/commit/27c31658b48f550ce72baa1e394fdec9ec65ebf7))
+
+
+
+
+
 ## [0.1.9](https://github.com/shootismoke/backend/compare/v0.1.8...v0.1.9) (2019-11-13)
 
 **Note:** Version bump only for package @shootismoke/backend
