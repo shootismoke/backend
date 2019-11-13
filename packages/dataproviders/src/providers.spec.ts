@@ -3,6 +3,7 @@ import * as T from 'fp-ts/lib/Task';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import { aqicnByGps, aqicnByStation, waqiByGps } from './';
+import { normalizedByGps } from './normalized/fetchBy';
 
 function testProvider<T>(
   te: TE.TaskEither<Error, T>,
@@ -12,7 +13,7 @@ function testProvider<T>(
     provider
   }: {
     fetchById: string;
-    provider: 'aqicn' | 'waqi';
+    provider: 'aqicn' | 'normalized' | 'waqi';
     fetchBy: 'gps' | 'station';
   }
 ): void {
@@ -88,6 +89,12 @@ describe('data providers', () => {
         fetchBy: 'gps',
         fetchById: `[${[latitude, longitude]}]`,
         provider: 'waqi'
+      });
+
+      testProvider(normalizedByGps({ latitude, longitude }), {
+        fetchBy: 'gps',
+        fetchById: `[${[latitude, longitude]}]`,
+        provider: 'normalized'
       });
     });
   });
