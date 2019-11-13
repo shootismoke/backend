@@ -9,10 +9,12 @@ import { LatLng } from './types';
 function testProvider<T>(
   te: TE.TaskEither<Error, T>,
   {
+    additionalExpects,
     fetchBy,
     fetchById,
     provider
   }: {
+    additionalExpects?: (response: T) => void;
     fetchById: string;
     provider: 'aqicn' | 'normalized' | 'waqi';
     fetchBy: 'gps' | 'station';
@@ -39,6 +41,8 @@ function testProvider<T>(
         },
         response => {
           expect(response).toBeDefined();
+
+          additionalExpects && additionalExpects(response);
 
           done();
 
@@ -91,6 +95,13 @@ describe('data providers', () => {
         });
 
         testProvider(normalizedByGps({ latitude, longitude }), {
+          additionalExpects: data => {
+            if (data.dailyCigarettes) {
+              expect(isNaN(data.dailyCigarettes)).toBe(false);
+            }
+
+            expect(Array.isArray(data.stations)).toBe(true);
+          },
           fetchBy: 'gps',
           fetchById: `[${[latitude, longitude]}]`,
           provider: 'normalized'

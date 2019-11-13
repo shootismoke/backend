@@ -23,6 +23,7 @@ export interface PollutantValue {
  * Normalized response from all data providers
  */
 export interface NormalizedByGps {
+  dailyCigarettes?: number;
   pollutants: Partial<{
     pm25: PollutantValue;
     // FIXME Use exact pollutants list
