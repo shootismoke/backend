@@ -4,6 +4,7 @@ import * as TE from 'fp-ts/lib/TaskEither';
 
 import { aqicnByGps, aqicnByStation, waqiByGps } from './';
 import { normalizedByGps } from './normalized/fetchBy';
+import { LatLng } from './types';
 
 function testProvider<T>(
   te: TE.TaskEither<Error, T>,
@@ -48,15 +49,21 @@ function testProvider<T>(
   });
 }
 
+function generateRandomLatLng(): LatLng {
+  return {
+    latitude: Math.floor(Math.random() * 9000) / 100,
+    longitude: Math.floor(Math.random() * 9000) / 100
+  };
+}
+
+function generateRandomStationId(): number {
+  return Math.floor(Math.random() * 1000) + 1;
+}
+
 describe('data providers', () => {
   describe('by station', () => {
-    // Create an array of 10 random numbers, do some basic random testing
-    // with stations
-    const randomStationIds = [];
-    while (randomStationIds.length < 10) {
-      randomStationIds.push(Math.floor(Math.random() * 1000) + 1);
-    }
-    randomStationIds
+    [...Array(10)]
+      .map(generateRandomStationId)
       .map(s => `${s}`)
       .forEach(stationId => {
         testProvider(aqicnByStation(stationId), {
@@ -68,34 +75,26 @@ describe('data providers', () => {
   });
 
   describe('by gps', () => {
-    // Create an array of 10 random number tuples, do some basic random testing
-    // with lat/lng
-    const randomLatLng = [];
-    while (randomLatLng.length < 10) {
-      randomLatLng.push([
-        Math.floor(Math.random() * 9000) / 100,
-        Math.floor(Math.random() * 9000) / 100
-      ]);
-    }
+    [...Array(10)]
+      .map(generateRandomLatLng)
+      .forEach(({ latitude, longitude }) => {
+        testProvider(aqicnByGps({ latitude, longitude }), {
+          fetchBy: 'gps',
+          fetchById: `[${[latitude, longitude]}]`,
+          provider: 'aqicn'
+        });
 
-    randomLatLng.forEach(([latitude, longitude]) => {
-      testProvider(aqicnByGps({ latitude, longitude }), {
-        fetchBy: 'gps',
-        fetchById: `[${[latitude, longitude]}]`,
-        provider: 'aqicn'
-      });
+        testProvider(waqiByGps({ latitude, longitude }), {
+          fetchBy: 'gps',
+          fetchById: `[${[latitude, longitude]}]`,
+          provider: 'waqi'
+        });
 
-      testProvider(waqiByGps({ latitude, longitude }), {
-        fetchBy: 'gps',
-        fetchById: `[${[latitude, longitude]}]`,
-        provider: 'waqi'
+        testProvider(normalizedByGps({ latitude, longitude }), {
+          fetchBy: 'gps',
+          fetchById: `[${[latitude, longitude]}]`,
+          provider: 'normalized'
+        });
       });
-
-      testProvider(normalizedByGps({ latitude, longitude }), {
-        fetchBy: 'gps',
-        fetchById: `[${[latitude, longitude]}]`,
-        provider: 'normalized'
-      });
-    });
   });
 });
