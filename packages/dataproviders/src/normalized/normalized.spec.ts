@@ -3,7 +3,7 @@ import { normalizedByGps } from './fetchBy';
 
 describe('normalized', () => {
   describe('by gps', () => {
-    [...Array(10)]
+    [...Array(2)]
       .map(generateRandomLatLng)
       .forEach(({ latitude, longitude }) => {
         testProvider(normalizedByGps({ latitude, longitude }), {

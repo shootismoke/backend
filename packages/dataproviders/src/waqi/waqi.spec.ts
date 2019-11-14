@@ -3,7 +3,7 @@ import { waqiByGps } from './fetchBy';
 
 describe('waqi', () => {
   describe('by gps', () => {
-    [...Array(10)]
+    [...Array(2)]
       .map(generateRandomLatLng)
       .forEach(({ latitude, longitude }) => {
         testProvider(waqiByGps({ latitude, longitude }), {

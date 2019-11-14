@@ -9,7 +9,7 @@ import { aqicnByGps, aqicnByStation } from './fetchBy';
 
 describe('aqicn', () => {
   describe('by station', () => {
-    [...Array(10)]
+    [...Array(2)]
       .map(generateRandomStationId)
       .map(s => `${s}`)
       .forEach(stationId => {
@@ -29,7 +29,7 @@ describe('aqicn', () => {
   });
 
   describe('by gps', () => {
-    [...Array(10)]
+    [...Array(2)]
       .map(generateRandomLatLng)
       .forEach(({ latitude, longitude }) => {
         testProvider(aqicnByGps({ latitude, longitude }), {
