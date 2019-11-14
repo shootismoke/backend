@@ -14,7 +14,21 @@ export function aqicnNormalizeByGps(data: AqicnStation): NormalizedByGps {
   const raw = aqiUS && aqiToRaw('pm25', aqiUS, 'US');
   const aqiCN = raw && rawToAqi('pm25', raw, 'CN');
 
+  const universalId = `waqi|${data.idx}`;
+
+  if (!data.city.geo) {
+    throw new Error(
+      `Cannot normalizeByGps station ${universalId}: ${JSON.stringify(data)}`
+    );
+  }
+
   return {
+    closestStation: {
+      gps: { latitude: +data.city.geo[0], longitude: +data.city.geo[1] },
+      name: data.attributions[0].name,
+      provider: 'waqi',
+      universalId
+    },
     dailyCigarettes: raw && pm25ToCigarettes(raw),
     pollutants: {
       pm25:
@@ -22,9 +36,6 @@ export function aqicnNormalizeByGps(data: AqicnStation): NormalizedByGps {
           ? { aqiCN, aqiUS, raw, unit: getUnit('pm25') }
           : undefined
     },
-    stations: data.attributions.map(({ name }) => ({
-      name,
-      provider: 'waqi'
-    }))
+    updatedAt: data.time.v
   };
 }

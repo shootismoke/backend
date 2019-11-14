@@ -17,6 +17,12 @@ export function waqiNormalizeByGps({
   const aqiCN = rawToAqi('pm25', raw, 'CN');
 
   return {
+    closestStation: {
+      gps: { latitude: data.geo[0], longitude: data.geo[1] },
+      name: data.nlo,
+      provider: 'waqi',
+      universalId: `waqi|${data.x}`
+    },
     dailyCigarettes: pm25ToCigarettes(raw),
     pollutants:
       // Only cater for pm25 for now
@@ -26,6 +32,6 @@ export function waqiNormalizeByGps({
             pm25: { aqiCN, aqiUS, raw, unit: getUnit('pm25') }
           }
         : {},
-    stations: [{ name: data.nlo, provider: 'waqi' }]
+    updatedAt: data.t
   };
 }
