@@ -1,5 +1,6 @@
 # Dist
 lib
+*.tsbuildinfo
 
 # Test-related directories
 coverage
