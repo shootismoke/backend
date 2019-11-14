@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { aqicnByStation } from '@shootismoke/dataproviders/src';
+import { aqicnByStation } from '@shootismoke/dataproviders';
 import { array } from 'fp-ts/lib/Array';
 import * as E from 'fp-ts/lib/Either';
 import * as T from 'fp-ts/lib/Task';

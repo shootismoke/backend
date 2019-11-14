@@ -1,4 +1,4 @@
-import { CreateUserInput, User } from '@shootismoke/graphql/src/types';
+import { CreateUserInput, User } from '@shootismoke/graphql';
 import { ApolloServerTestClient } from 'apollo-server-testing';
 import deepmerge from 'deepmerge';
 import pMemoize from 'p-memoize';

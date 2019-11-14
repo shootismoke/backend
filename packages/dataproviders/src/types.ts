@@ -1,5 +1,5 @@
-import { Pollutant, Unit } from '@shootismoke/aqi/src/util';
-import { Provider } from '@shootismoke/graphql/src/types';
+import { Pollutant, Unit } from '@shootismoke/aqi';
+import { Provider } from '@shootismoke/graphql';
 
 /**
  * Latitude and longitude object
@@ -19,7 +19,7 @@ export interface PollutantValue {
   unit: Unit;
 }
 
-// FIXME Use: import { Station } from '@shootismoke/graphql/src/types';
+// FIXME Use: import { Station } from '@shootismoke/graphql';
 interface Station {
   gps: LatLng;
   name: string;
