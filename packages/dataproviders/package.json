@@ -1,6 +1,6 @@
 {
   "name": "@shootismoke/dataproviders",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Helpers to fetch data from air quality data providers",
   "files": [
@@ -17,7 +17,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@shootismoke/aqi": "^0.1.9",
+    "@shootismoke/aqi": "^0.1.11",
     "@shootismoke/graphql": "^0.1.9",
     "fp-ts": "^2.1.1",
     "io-ts": "^2.0.1",
