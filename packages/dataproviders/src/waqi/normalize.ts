@@ -1,4 +1,4 @@
-import { aqiToRaw, getUnit, isPollutant, rawToAqi } from '@shootismoke/aqi/src';
+import { aqiToRaw, getUnit, isPollutant, rawToAqi } from '@shootismoke/aqi';
 
 import { pm25ToCigarettes } from '../secretSauce';
 import { NormalizedByGps } from '../types';

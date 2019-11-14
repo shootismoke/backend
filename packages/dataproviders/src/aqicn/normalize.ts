@@ -4,7 +4,7 @@ import {
   Pollutant,
   POLLUTANTS,
   rawToAqi
-} from '@shootismoke/aqi/src';
+} from '@shootismoke/aqi';
 
 import { pm25ToCigarettes } from '../secretSauce';
 import { NormalizedByGps, PollutantValue } from '../types';

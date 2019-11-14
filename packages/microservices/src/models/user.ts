@@ -1,4 +1,4 @@
-import { User as IUser } from '@shootismoke/graphql/src/types';
+import { User as IUser } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'] as const;

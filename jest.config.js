@@ -13,6 +13,11 @@ module.exports = {
     '!**/testUtil.ts', // These files are used in tests
     '!./packages/microservices/**' // These files are hard to unit test
   ],
+  moduleNameMapper: {
+    '@shootismoke/aqi(.*)$': '<rootDir>/packages/aqi/src$1',
+    '@shootismoke/dataproviders(.*)$': '<rootDir>/packages/dataproviders/src$1',
+    '@shootismoke/graphql(.*)$': '<rootDir>/packages/graphql/src$1'
+  },
   setupFiles: ['./packages/microservices/test/util/setup.ts'],
   testEnvironment: 'node',
   testMatch: ['**/src/**/*spec.ts']
