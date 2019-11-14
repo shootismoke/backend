@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "lib",
+    "rootDir": "src"
   },
   "extends": "../../tsconfig.json",
-  "include": ["./src"]
+  "references": [{ "path": "../aqi" }, { "path": "../graphql" }]
 }
