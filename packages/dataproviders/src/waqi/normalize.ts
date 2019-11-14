@@ -13,15 +13,17 @@ export function waqiNormalizeByGps({
   d: [data]
 }: WaqiStation): NormalizedByGps {
   const universalId = `waqi|${data.x}`;
-  const aqiUS = +data.v;
-  const raw = aqiToRaw('pm25', aqiUS, 'US');
-  const aqiCN = rawToAqi('pm25', raw, 'CN');
 
   if (!isPollutant(data.pol)) {
     throw new Error(
       `Cannot normalizeByGps station ${universalId}: ${JSON.stringify(data)}`
     );
   }
+
+  const aqiUS = +data.v;
+  // Calculate pm25 raw value to get cigarettes value
+  const raw = aqiToRaw('pm25', aqiUS, 'US');
+  const aqiCN = rawToAqi('pm25', raw, 'CN');
 
   return {
     closestStation: {
