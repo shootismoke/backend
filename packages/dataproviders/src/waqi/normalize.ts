@@ -1,4 +1,4 @@
-import { aqiToRaw, getUnit, rawToAqi } from '@shootismoke/aqi/src';
+import { aqiToRaw, getUnit, isPollutant, rawToAqi } from '@shootismoke/aqi/src';
 
 import { pm25ToCigarettes } from '../secretSauce';
 import { NormalizedByGps } from '../types';
@@ -12,9 +12,16 @@ import { WaqiStation } from './validation';
 export function waqiNormalizeByGps({
   d: [data]
 }: WaqiStation): NormalizedByGps {
-  const aqiUS = +data.x;
+  const universalId = `waqi|${data.x}`;
+  const aqiUS = +data.v;
   const raw = aqiToRaw('pm25', aqiUS, 'US');
   const aqiCN = rawToAqi('pm25', raw, 'CN');
+
+  if (!isPollutant(data.pol)) {
+    throw new Error(
+      `Cannot normalizeByGps station ${universalId}: ${JSON.stringify(data)}`
+    );
+  }
 
   return {
     closestStation: {
@@ -23,15 +30,12 @@ export function waqiNormalizeByGps({
       provider: 'waqi',
       universalId: `waqi|${data.x}`
     },
-    dailyCigarettes: pm25ToCigarettes(raw),
-    pollutants:
-      // Only cater for pm25 for now
-      // FIXME Cater for other pollutants too
-      data.pol === 'pm25'
-        ? {
-            pm25: { aqiCN, aqiUS, raw, unit: getUnit('pm25') }
-          }
-        : {},
+    dailyCigarettes: data.pol === 'pm25' ? pm25ToCigarettes(raw) : undefined,
+    pollutants: {
+      // FIXME aqiCN, raw, and unit values are Wrong!!!
+      // https://github.com/shootismoke/backend/issues/28
+      [data.pol]: { aqiCN, aqiUS, raw, unit: getUnit(data.pol) }
+    },
     updatedAt: data.t
   };
 }

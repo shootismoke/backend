@@ -100,7 +100,13 @@ describe('data providers', () => {
               expect(isNaN(data.dailyCigarettes)).toBe(false);
             }
 
-            expect(Array.isArray(data.stations)).toBe(true);
+            expect(data.closestStation.gps.latitude).toBeDefined();
+            expect(data.closestStation.gps.longitude).toBeDefined();
+            expect(data.closestStation.name).toBeDefined();
+            expect(data.closestStation.provider).toBe('waqi');
+            expect(data.closestStation.universalId.startsWith('waqi')).toBe(
+              true
+            );
           },
           fetchBy: 'gps',
           fetchById: `[${[latitude, longitude]}]`,

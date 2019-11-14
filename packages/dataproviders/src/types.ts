@@ -34,7 +34,6 @@ export interface NormalizedByGps {
   closestStation: Station;
   dailyCigarettes?: number;
   pollutants: Partial<{
-    pm25: PollutantValue;
     // FIXME Use exact pollutants list
     [index: string]: PollutantValue;
   }>;

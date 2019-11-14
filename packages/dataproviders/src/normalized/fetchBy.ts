@@ -27,6 +27,7 @@ export function normalizedByGps(
     )
   ];
 
+  // Return a race behavior between the tasks
   return pipe(
     A.array.sequence(TE.taskEither)(tasks),
     // Attempt to merge responses from all data providers

@@ -1,6 +1,6 @@
 import * as breakpoints from './breakpoints';
-import { AqiType, Pollutant } from './types';
-import { roundTo1Decimal } from './util';
+import { AqiType } from './types';
+import { Pollutant, roundTo1Decimal } from './util';
 
 /**
  * Converts a pollutant AQI into the raw PM25 level, in ug/m3, following the
@@ -17,6 +17,12 @@ export function rawToAqi(
   raw: number,
   aqiType: AqiType = 'US'
 ): number {
+  if (pollutant !== 'pm25') {
+    throw new Error(
+      'Not implemeted. See https://github.com/shootismoke/backend/issues/28.'
+    );
+  }
+
   // Find the segment in which the `aqi` is
   const segment = breakpoints[pollutant][aqiType].find(
     ([[_l, _h], [rawLow, rawHigh]]) => rawLow <= raw && raw <= rawHigh
