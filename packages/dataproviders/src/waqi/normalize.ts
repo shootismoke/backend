@@ -33,6 +33,7 @@ export function waqiNormalizeByGps({
       universalId: `waqi|${data.x}`
     },
     dailyCigarettes: data.pol === 'pm25' ? pm25ToCigarettes(raw) : undefined,
+    dominant: data.pol,
     pollutants: {
       // FIXME aqiCN, raw, and unit values are Wrong!!!
       // https://github.com/shootismoke/backend/issues/28

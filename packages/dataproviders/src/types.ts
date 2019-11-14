@@ -1,4 +1,4 @@
-import { Unit } from '@shootismoke/aqi/src/util';
+import { Pollutant, Unit } from '@shootismoke/aqi/src/util';
 import { Provider } from '@shootismoke/graphql/src/types';
 
 /**
@@ -33,6 +33,7 @@ interface Station {
 export interface NormalizedByGps {
   closestStation: Station;
   dailyCigarettes?: number;
+  dominant?: Pollutant;
   pollutants: Partial<{
     // FIXME Use exact pollutants list
     [index: string]: PollutantValue;
