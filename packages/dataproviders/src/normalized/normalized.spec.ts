@@ -40,11 +40,17 @@ describe('normalized', () => {
     [...Array(2)].map(generateRandomLatLng).forEach(gps => {
       // Test normalization separately
       testProvider(
-        pipe(aqicnByGps(gps), TE.map(aqicnNormalizeByGps)),
+        pipe(
+          aqicnByGps(gps),
+          TE.map(aqicnNormalizeByGps)
+        ),
         getOptions(gps)
       );
       testProvider(
-        pipe(waqiByGps(gps), TE.map(waqiNormalizeByGps)),
+        pipe(
+          waqiByGps(gps),
+          TE.map(waqiNormalizeByGps)
+        ),
         getOptions(gps)
       );
 
