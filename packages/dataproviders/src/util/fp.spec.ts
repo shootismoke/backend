@@ -4,7 +4,7 @@ import { promiseToTE } from './fp';
 
 describe('promiseToTE', () => {
   it('should correctly convert to a TaskEither Right', async done => {
-    const promise = () => Promise.resolve(42);
+    const promise = (): Promise<number> => Promise.resolve(42);
     const e = await promiseToTE(promise)();
 
     expect(e).toEqual(E.right(42));
@@ -12,7 +12,7 @@ describe('promiseToTE', () => {
   });
 
   it('should correctly convert to a TaskEither Left (string)', async done => {
-    const promise = () => Promise.reject('foo');
+    const promise = (): Promise<number> => Promise.reject('foo');
     const e = await promiseToTE(promise)();
 
     expect(e).toEqual(E.left(new Error('foo')));
@@ -20,7 +20,7 @@ describe('promiseToTE', () => {
   });
 
   it('should correctly convert to a TaskEither Left (Error)', async done => {
-    const promise = () => Promise.reject(new Error('foo'));
+    const promise = (): Promise<number> => Promise.reject(new Error('foo'));
     const e = await promiseToTE(promise)();
 
     expect(e).toEqual(E.left(new Error('foo')));

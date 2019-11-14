@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 
-import { decodeWith } from './codec';
 import { AqicnStationCodec } from '../aqicn';
+import { decodeWith } from './codec';
 
 describe('codec decode', () => {
   it('should return left when decode fails', async done => {

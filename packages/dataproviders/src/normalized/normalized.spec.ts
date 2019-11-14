@@ -2,10 +2,14 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import { aqicnByGps, aqicnNormalizeByGps } from '../aqicn';
-import { generateRandomLatLng, testProvider } from '../util';
+import { LatLng, NormalizedByGps } from '../types';
+import {
+  generateRandomLatLng,
+  testProvider,
+  TestProviderOptions
+} from '../util';
 import { waqiByGps, waqiNormalizeByGps } from '../waqi';
 import { normalizedByGps } from './fetchBy';
-import { LatLng, NormalizedByGps } from '../types';
 
 function additionalExpects(data: NormalizedByGps): void {
   if (data.dailyCigarettes) {
@@ -19,12 +23,15 @@ function additionalExpects(data: NormalizedByGps): void {
   expect(data.closestStation.universalId.startsWith('waqi')).toBe(true);
 }
 
-function getOptions({ latitude, longitude }: LatLng) {
+function getOptions({
+  latitude,
+  longitude
+}: LatLng): TestProviderOptions<NormalizedByGps> {
   return {
     additionalExpects,
-    fetchBy: 'gps' as const,
+    fetchBy: 'gps',
     fetchById: `[${[latitude, longitude]}]`,
-    provider: 'normalized' as const
+    provider: 'normalized'
   };
 }
 

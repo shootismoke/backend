@@ -4,22 +4,19 @@ import * as TE from 'fp-ts/lib/TaskEither';
 
 import { LatLng } from '../types';
 
+export interface TestProviderOptions<T> {
+  additionalExpects?: (response: T) => void;
+  fetchById: string;
+  provider: 'aqicn' | 'normalized' | 'waqi';
+  fetchBy: 'gps' | 'station';
+}
+
 /**
  * Test helper to test a provider
  */
 export function testProvider<T>(
   te: TE.TaskEither<Error, T>,
-  {
-    additionalExpects,
-    fetchBy,
-    fetchById,
-    provider
-  }: {
-    additionalExpects?: (response: T) => void;
-    fetchById: string;
-    provider: 'aqicn' | 'normalized' | 'waqi';
-    fetchBy: 'gps' | 'station';
-  }
+  { additionalExpects, fetchBy, fetchById, provider }: TestProviderOptions<T>
 ): void {
   it(`should fetch ${provider} station by ${fetchBy}: ${fetchById}`, done => {
     pipe(
