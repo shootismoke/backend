@@ -1,4 +1,4 @@
-import { Pollutant } from '../types';
+import { Pollutant } from './pollutant';
 import { getUnit, Unit } from './unit';
 
 function testUnit(pollutant: Pollutant, unit: Unit): void {
@@ -8,5 +8,10 @@ function testUnit(pollutant: Pollutant, unit: Unit): void {
 }
 
 describe('getUnit', () => {
+  testUnit('co', 'ppm');
+  testUnit('no2', 'ppb');
+  testUnit('o3', 'ppm');
+  testUnit('pm10', 'µg/m³');
   testUnit('pm25', 'µg/m³');
+  testUnit('so2', 'ppb');
 });
