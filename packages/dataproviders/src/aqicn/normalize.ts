@@ -69,6 +69,7 @@ export function aqicnNormalizeByGps(data: AqicnStation): NormalizedByGps {
       universalId
     },
     dailyCigarettes: pm25Raw && pm25ToCigarettes(pm25Raw),
+    dominant: data.dominentpol as Pollutant,
     pollutants: computePollutants(data.iaqi),
     updatedAt: data.time.v
   };
