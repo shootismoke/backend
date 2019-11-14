@@ -1,5 +1,6 @@
-import * as A from 'fp-ts/lib/Array';
+import * as M from 'fp-ts/lib/Monoid';
 import { pipe } from 'fp-ts/lib/pipeable';
+import * as T from 'fp-ts/lib/Task';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import { aqicnByGps, aqicnNormalizeByGps } from '../aqicn';
@@ -29,16 +30,7 @@ export function normalizedByGps(
 
   // Return a race behavior between the tasks
   return pipe(
-    A.array.sequence(TE.taskEither)(tasks),
-    // Attempt to merge responses from all data providers
-    TE.map(([aqicn, waqi]) => ({
-      ...waqi,
-      ...aqicn,
-      pollutants: {
-        ...waqi.pollutants,
-        ...aqicn.pollutants,
-        pm25: aqicn.pollutants.pm25 || waqi.pollutants.pm25
-      }
-    }))
+    tasks,
+    M.fold(T.getRaceMonoid())
   );
 }
