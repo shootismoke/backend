@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.12](https://github.com/shootismoke/backend/compare/v0.1.11...v0.1.12) (2019-11-14)
+
+
+### Bug Fixes
+
+* **dataproviders:** Add dominant pollutant ([#30](https://github.com/shootismoke/backend/issues/30)) ([f645ed6](https://github.com/shootismoke/backend/commit/f645ed6d35856293e065094a6ae0e5b3ddeeba9a))
+
+
+
+
+
 ## [0.1.11](https://github.com/shootismoke/backend/compare/v0.1.10...v0.1.11) (2019-11-14)
 
 
