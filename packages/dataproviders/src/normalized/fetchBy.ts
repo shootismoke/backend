@@ -3,9 +3,13 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import * as T from 'fp-ts/lib/Task';
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import { aqicnByGps, aqicnNormalizeByGps } from '../aqicn';
+import { aqicnByGps, aqicnNormalizeByGps, AqicnOptions } from '../aqicn';
 import { LatLng, NormalizedByGps } from '../types';
 import { waqiByGps, waqiNormalizeByGps } from '../waqi';
+
+export interface NormalizedOptions {
+  aqicn: AqicnOptions;
+}
 
 /**
  * Fetch data parallely from difference data sources, and normalize the
@@ -14,12 +18,13 @@ import { waqiByGps, waqiNormalizeByGps } from '../waqi';
  * @param gps - The GPS coordinates to fetch data for
  */
 export function normalizedByGps(
-  gps: LatLng
+  gps: LatLng,
+  options: NormalizedOptions
 ): TE.TaskEither<Error, NormalizedByGps> {
   // Run these tasks parallely
   const tasks = [
     pipe(
-      aqicnByGps(gps),
+      aqicnByGps(gps, options.aqicn),
       TE.map(aqicnNormalizeByGps)
     ),
     pipe(

@@ -22,13 +22,26 @@ function checkError({
     : TE.left(new Error(msg || (data as string)));
 }
 
-export function aqicnByGps(gps: LatLng): TE.TaskEither<Error, AqicnStation> {
+export interface AqicnOptions {
+  token: string;
+}
+
+/**
+ * Fetch the closest station to the user's current position. Uses aqicn.
+ * @see https://aqicn.org
+ *
+ * @param gps - Latitude and longitude of the user's current position
+ */
+export function aqicnByGps(
+  gps: LatLng,
+  options: AqicnOptions
+): TE.TaskEither<Error, AqicnStation> {
   const { latitude, longitude } = gps;
 
   return pipe(
     promiseToTE(() =>
       fetch(
-        `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${process.env.WAQI_TOKEN}`
+        `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${options.token}`
       ).then(response => response.json())
     ),
     TE.chain(decodeWith(AqicnStationCodec)),

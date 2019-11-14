@@ -35,13 +35,17 @@ function getOptions({
   };
 }
 
+const aqicnOptions = {
+  token: process.env.WAQI_TOKEN as string
+};
+
 describe('normalized', () => {
   describe('by gps', () => {
     [...Array(2)].map(generateRandomLatLng).forEach(gps => {
       // Test normalization separately
       testProvider(
         pipe(
-          aqicnByGps(gps),
+          aqicnByGps(gps, aqicnOptions),
           TE.map(aqicnNormalizeByGps)
         ),
         getOptions(gps)
@@ -55,7 +59,10 @@ describe('normalized', () => {
       );
 
       // Test normalization + race
-      testProvider(normalizedByGps(gps), getOptions(gps));
+      testProvider(
+        normalizedByGps(gps, { aqicn: aqicnOptions }),
+        getOptions(gps)
+      );
     });
   });
 });

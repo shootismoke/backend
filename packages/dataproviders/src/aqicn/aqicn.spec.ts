@@ -32,11 +32,19 @@ describe('aqicn', () => {
     [...Array(2)]
       .map(generateRandomLatLng)
       .forEach(({ latitude, longitude }) => {
-        testProvider(aqicnByGps({ latitude, longitude }), {
-          fetchBy: 'gps',
-          fetchById: `[${[latitude, longitude]}]`,
-          provider: 'aqicn'
-        });
+        testProvider(
+          aqicnByGps(
+            { latitude, longitude },
+            {
+              token: process.env.WAQI_TOKEN as string
+            }
+          ),
+          {
+            fetchBy: 'gps',
+            fetchById: `[${[latitude, longitude]}]`,
+            provider: 'aqicn'
+          }
+        );
       });
   });
 });
