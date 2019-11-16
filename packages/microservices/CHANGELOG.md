@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.17](https://github.com/shootismoke/backend/compare/v0.1.16...v0.1.17) (2019-11-16)
+
+
+### Bug Fixes
+
+* **microservices:** Make graphql endpoint work again ([#36](https://github.com/shootismoke/backend/issues/36)) ([ba144b7](https://github.com/shootismoke/backend/commit/ba144b723b012c4dce74a6def91c30f6585af44f))
+
+
+
+
+
 ## [0.1.16](https://github.com/shootismoke/backend/compare/v0.1.15...v0.1.16) (2019-11-16)
 
 **Note:** Version bump only for package @shootismoke/microservices

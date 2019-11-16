@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.17](https://github.com/shootismoke/backend/compare/v0.1.16...v0.1.17) (2019-11-16)
+
+
+### Bug Fixes
+
+* **dataproviders:** Use axios instead of fetch ([#37](https://github.com/shootismoke/backend/issues/37)) ([ff09a2d](https://github.com/shootismoke/backend/commit/ff09a2d828f079e988c8917126e09573fdbbeadb))
+
+
+
+
+
 ## [0.1.16](https://github.com/shootismoke/backend/compare/v0.1.15...v0.1.16) (2019-11-16)
 
 
