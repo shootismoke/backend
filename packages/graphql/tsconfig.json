@@ -3,5 +3,5 @@
     "outDir": "lib",
     "rootDir": "src"
   },
-  "extends": "../tsconfig.settings.json"
+  "extends": "../../tsconfig.settings.json"
 }

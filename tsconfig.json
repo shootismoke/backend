@@ -1,0 +1,8 @@
+{
+  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig",
+  "references": [
+    { "path": "packages/aqi" },
+    { "path": "packages/dataproviders" },
+    { "path": "packages/graphql" }
+  ]
+}
