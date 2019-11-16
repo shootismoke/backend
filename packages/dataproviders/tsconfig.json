@@ -3,6 +3,6 @@
     "outDir": "lib",
     "rootDir": "src"
   },
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.settings.json",
   "references": [{ "path": "../aqi" }, { "path": "../graphql" }]
 }

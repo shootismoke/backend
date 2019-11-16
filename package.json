@@ -7,7 +7,9 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
-    "build": "lerna run --stream build",
+    "prebuild": "yarn clean",
+    "build": "tsc --build packages/aqi packages/dataproviders packages/graphql",
+    "clean": "rimraf packages/**/lib packages/**/tsconfig.tsbuildinfo",
     "predeploy": "yarn build",
     "deploy": "lerna version --conventional-commits && lerna publish from-git",
     "lint": "tsc --noEmit && eslint --ext ts .",

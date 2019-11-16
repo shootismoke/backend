@@ -1,12 +1,9 @@
 {
-  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig.json",
+  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "declaration": true,
     "paths": {
-      "@shootismoke/aqi": ["packages/aqi/src"],
-      "@shootismoke/dataproviders": ["packages/dataproviders/src"],
-      "@shootismoke/graphql": ["packages/graphql/src"]
+      "@shootismoke/*": ["packages/*/src"]
     }
   }
 }
