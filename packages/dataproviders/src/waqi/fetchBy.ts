@@ -1,5 +1,4 @@
-import 'isomorphic-fetch';
-
+import axios from 'axios';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 
@@ -18,9 +17,9 @@ export function waqiByGps(gps: LatLng): TE.TaskEither<Error, WaqiStation> {
 
   return pipe(
     promiseToTE(() =>
-      fetch(
+      axios.get(
         `https://wind.waqi.info/mapq/nearest?geo=1/${latitude}/${longitude}`
-      ).then(response => response.json())
+      )
     ),
     TE.chain(decodeWith(WaqiStationCodec))
   );
