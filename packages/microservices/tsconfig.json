@@ -1,4 +1,3 @@
 {
-  "extends": "../../tsconfig.settings.json",
-  "references": [{ "path": "../dataproviders" }, { "path": "../graphql" }]
+  "extends": "../../tsconfig"
 }
