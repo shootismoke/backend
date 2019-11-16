@@ -39,9 +39,11 @@ export function aqicnByGps(
 
   return pipe(
     promiseToTE(() =>
-      axios.get(
-        `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${options.token}`
-      )
+      axios
+        .get(
+          `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${options.token}`
+        )
+        .then(({ data }) => data)
     ),
     TE.chain(decodeWith(AqicnStationCodec)),
     TE.chain(checkError)
@@ -53,9 +55,11 @@ export function aqicnByStation(
 ): TE.TaskEither<Error, AqicnStation> {
   return pipe(
     promiseToTE(() =>
-      axios.get(
-        `https://api.waqi.info/feed/@${stationId}/?token=${process.env.WAQI_TOKEN}`
-      )
+      axios
+        .get(
+          `https://api.waqi.info/feed/@${stationId}/?token=${process.env.WAQI_TOKEN}`
+        )
+        .then(({ data }) => data)
     ),
     TE.chain(decodeWith(AqicnStationCodec)),
     TE.chain(checkError)
