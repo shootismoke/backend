@@ -3,7 +3,6 @@
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
   "license": "GPL-3.0",
-  "main": "index.js",
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
@@ -24,7 +23,7 @@
     "@types/jest": "^24.0.21",
     "jest": "^24.9.0",
     "lerna": "^3.18.3",
-    "now": "^16.4.4",
+    "now": "^16.5.2",
     "ts-jest": "^24.1.0",
     "typescript": "^3.7.2"
   }
