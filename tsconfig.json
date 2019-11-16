@@ -3,9 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@shootismoke/aqi": ["packages/dataproviders/src"],
+      "@shootismoke/aqi": ["packages/aqi/src"],
       "@shootismoke/dataproviders": ["packages/dataproviders/src"],
-      "@shootismoke/graphql": ["packages/dataproviders/src"]
+      "@shootismoke/graphql": ["packages/graphql/src"]
     }
   }
 }
