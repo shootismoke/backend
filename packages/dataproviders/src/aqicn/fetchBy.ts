@@ -1,5 +1,4 @@
-import 'isomorphic-fetch';
-
+import axios from 'axios';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { TypeOf } from 'io-ts';
@@ -40,9 +39,11 @@ export function aqicnByGps(
 
   return pipe(
     promiseToTE(() =>
-      fetch(
-        `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${options.token}`
-      ).then(response => response.json())
+      axios
+        .get(
+          `http://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${options.token}`
+        )
+        .then(({ data }) => data)
     ),
     TE.chain(decodeWith(AqicnStationCodec)),
     TE.chain(checkError)
@@ -54,9 +55,11 @@ export function aqicnByStation(
 ): TE.TaskEither<Error, AqicnStation> {
   return pipe(
     promiseToTE(() =>
-      fetch(
-        `https://api.waqi.info/feed/@${stationId}/?token=${process.env.WAQI_TOKEN}`
-      ).then(response => response.json())
+      axios
+        .get(
+          `https://api.waqi.info/feed/@${stationId}/?token=${process.env.WAQI_TOKEN}`
+        )
+        .then(({ data }) => data)
     ),
     TE.chain(decodeWith(AqicnStationCodec)),
     TE.chain(checkError)
