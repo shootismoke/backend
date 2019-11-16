@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.16](https://github.com/shootismoke/backend/compare/v0.1.15...v0.1.16) (2019-11-16)
+
+
+### Bug Fixes
+
+* **dataproviders:** Remove useless dependency ([#35](https://github.com/shootismoke/backend/issues/35)) ([d2a0dd4](https://github.com/shootismoke/backend/commit/d2a0dd4919259a51e629fc25404a69acbf839fc3))
+
+
+
+
+
 ## [0.1.15](https://github.com/shootismoke/backend/compare/v0.1.14...v0.1.15) (2019-11-16)
 
 
