@@ -3,7 +3,7 @@ import {
   linkSchema,
   stationSchema,
   userSchema
-} from '@shootismoke/graphql';
+} from '@shootismoke/graphql/src';
 
 import { historyItemTypeDefs } from './historyItem';
 import { userTypeDefs } from './user';

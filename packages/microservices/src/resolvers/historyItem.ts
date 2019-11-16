@@ -1,5 +1,5 @@
-import { aqicnByStation } from '@shootismoke/dataproviders';
-import { Resolvers, Station as IStation } from '@shootismoke/graphql';
+import { aqicnByStation } from '@shootismoke/dataproviders/src';
+import { Resolvers, Station as IStation } from '@shootismoke/graphql/src';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as T from 'fp-ts/lib/Task';
 import * as TE from 'fp-ts/lib/TaskEither';
