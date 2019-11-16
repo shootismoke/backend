@@ -3,7 +3,6 @@
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
   "license": "GPL-3.0",
-  "main": "index.js",
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
