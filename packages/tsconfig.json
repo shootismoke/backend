@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "aqi" },
+    { "path": "dataproviders" },
+    { "path": "graphql" }
+  ]
+}
