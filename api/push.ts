@@ -4,9 +4,9 @@ import { array } from 'fp-ts/lib/Array';
 import * as E from 'fp-ts/lib/Either';
 import * as T from 'fp-ts/lib/Task';
 
-import { HistoryItem } from '../../src/models';
-import { connectToDatabase } from '../../src/util';
-import { aggregation } from './aggregation';
+import { HistoryItem } from '../src/models';
+import { connectToDatabase } from '../src/util/db';
+import { pushAggregation } from '../src/util/push';
 
 export default async function push(
   _req: NowRequest,
@@ -15,7 +15,7 @@ export default async function push(
   try {
     await connectToDatabase();
 
-    const items = await HistoryItem.aggregate(aggregation);
+    const items = await HistoryItem.aggregate(pushAggregation);
 
     const tasks = Array.from(
       new Set(items.map(({ universalId }) => universalId))
