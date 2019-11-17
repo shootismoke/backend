@@ -1,3 +1,8 @@
 {
-  "extends": "../../tsconfig"
+  "extends": "../../tsconfig.settings.json",
+  "references": [
+    { "path": "../aqi" },
+    { "path": "../dataproviders" },
+    { "path": "../graphql" }
+  ]
 }
