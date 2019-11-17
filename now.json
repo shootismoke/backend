@@ -2,7 +2,7 @@
   "name": "@shootismoke/backend",
   "version": 2,
   "alias": ["staging.shootismoke.now.sh"],
-  "builds": [{ "src": "/packages/microservices/**/*.ts", "use": "@now/node" }],
+  "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
     "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri",
     "WAQI_TOKEN": "@shootismoke-staging-waqi-token"
@@ -11,11 +11,11 @@
   "routes": [
     {
       "src": "/api/graphql",
-      "dest": "/packages/microservices/api/graphql.ts"
+      "dest": "/api/graphql.ts"
     },
     {
       "src": "/api/push",
-      "dest": "/packages/microservices/api/push/index.ts"
+      "dest": "/api/push/index.ts"
     }
   ],
   "scope": "shootismoke"

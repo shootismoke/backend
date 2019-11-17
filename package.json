@@ -6,19 +6,27 @@
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
   "scripts": {
-    "prebuild": "yarn clean",
-    "build": "tsc --build packages/aqi packages/dataproviders packages/graphql",
-    "clean": "rimraf packages/**/lib packages/**/tsconfig.tsbuildinfo",
-    "predeploy": "yarn build",
-    "deploy": "lerna version --conventional-commits && lerna publish from-git",
     "lint": "tsc --noEmit && eslint --ext ts .",
     "start": "now dev",
     "test": "jest"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "dependencies": {
+    "@now/node": "^1.0.2",
+    "@shootismoke/dataproviders": "^0.1.17",
+    "@shootismoke/graphql": "^0.1.15",
+    "@types/mongodb": "^3.3.6",
+    "@types/mongoose": "^5.5.23",
+    "apollo-server-micro": "^2.9.7",
+    "graphql": "^14.5.8",
+    "mongodb": "^3.3.3",
+    "mongoose": "^5.7.7"
+  },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^1.1.3",
+    "apollo-server-testing": "^2.9.7",
+    "deepmerge": "^4.2.2",
+    "dotenv": "^8.2.0",
+    "p-memoize": "^3.1.0",
     "@amaurymartiny/config": "^1.0.7",
     "@types/jest": "^24.0.21",
     "jest": "^24.9.0",
