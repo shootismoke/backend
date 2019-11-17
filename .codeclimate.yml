@@ -1,3 +1,2 @@
 exclude_patterns:
-  - 'packages/graphql/src/types.ts'
   - '**/*.spec.ts'
