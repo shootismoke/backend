@@ -9,8 +9,7 @@ module.exports = {
   collectCoverageFrom: [
     '**/src/**/*.ts',
     '!**/index.ts', // index.ts only re-exports stuff
-    '!**/testUtil.ts', // These files are used in tests
-    '!./packages/microservices/**' // These files are hard to unit test
+    '!**/testUtil.ts' // These files are used in tests
   ],
   setupFiles: ['./test/util/setup.ts'],
   testEnvironment: 'node',

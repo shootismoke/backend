@@ -1,7 +1,8 @@
 /**
- * Doing a mongodb aggregation on HistoryItem
+ * Doing a mongodb aggregation on HistoryItem to get all push notification
+ * tokens
  */
-export const aggregation = [
+export const pushAggregation = [
   // Group all historyItem by userId, take last historyItem in each group
   {
     $group: {

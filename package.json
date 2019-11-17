@@ -1,5 +1,6 @@
 {
   "name": "@shootismoke/backend",
+  "version": "0.0.1",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
   "license": "GPL-3.0",
