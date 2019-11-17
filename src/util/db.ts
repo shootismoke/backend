@@ -14,8 +14,5 @@ export async function connectToDatabase(uri?: string): Promise<void> {
     throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
   }
 
-  await connect(
-    dbUri,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  );
+  await connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 }
