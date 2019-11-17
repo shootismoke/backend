@@ -1,4 +1,4 @@
-import { Station as IStation } from '@shootismoke/graphql/src';
+import { Station as IStation } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
 export const StationSchema = new Schema(

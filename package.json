@@ -12,6 +12,7 @@
     "predeploy": "yarn build",
     "deploy": "lerna version --conventional-commits && lerna publish from-git",
     "lint": "tsc --noEmit && eslint --ext ts .",
+    "postinstall": "yarn build",
     "start": "now dev",
     "test": "jest"
   },
