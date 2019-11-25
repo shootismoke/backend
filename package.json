@@ -31,7 +31,7 @@
     "@amaurymartiny/config": "^1.0.7",
     "@types/jest": "^24.0.21",
     "jest": "^24.9.0",
-    "lerna": "^3.18.3",
+    "lerna": "^3.19.0",
     "now": "^16.5.2",
     "ts-jest": "^24.1.0",
     "typescript": "^3.7.2"
