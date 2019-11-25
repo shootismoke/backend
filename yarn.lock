@@ -2,18 +2,18 @@
 # yarn lockfile v1
 
 
-"@amaurymartiny/config@^1.0.7":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@amaurymartiny/config/-/config-1.0.9.tgz#e2886058944f77780ea709daf882d2033d747ff2"
-  integrity sha512-EAINPW3GSklwmWEO0SQxr3V26GY1/WJwzfwCrCd4W0JREjT6SUQ/RZgzEUF8RjDP5gHz09exlPy31qf+To7KfA==
+"@amaurymartiny/config@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@amaurymartiny/config/-/config-1.0.10.tgz#c7c00dc4ba6c2f71c84969ab56fae18ea0cb89fe"
+  integrity sha512-l7d2fGAJMnFUV72KJdCJCcKXAJaS0Ss2Fu2RCfuSBNAbys4EmAsWXjmSchz+jj3XRPDQfX4FPVJqCgOQysDe6w==
   dependencies:
-    "@amaurymartiny/eslintrc" "^1.0.9"
+    "@amaurymartiny/eslintrc" "^1.0.10"
     "@amaurymartiny/tsconfig" "^1.0.9"
 
-"@amaurymartiny/eslintrc@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@amaurymartiny/eslintrc/-/eslintrc-1.0.9.tgz#009add8fe3bc3d0cd7f0a6391668e1ebe548d16e"
-  integrity sha512-g0D8pTd7+LF3oQBZobP+xe9WpDAAKP12X+QIAniqJgB13RYis9OWPiJI2J6o8/4oGjtbMvZC2LNChLDmHzstfQ==
+"@amaurymartiny/eslintrc@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@amaurymartiny/eslintrc/-/eslintrc-1.0.10.tgz#796394c59eb887efc9f17911a4e71898dc0aa4af"
+  integrity sha512-zxL/e+F7+A6rK++RuKQqvlYVNgv//ouGe6Gy+UuZXWn91Z9MtkhMVb794dNj4nYJtox7kqGZAnfMQv1B5LDS7g==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.4.0"
     "@typescript-eslint/parser" "^2.4.0"
@@ -22,7 +22,7 @@
     eslint-plugin-prettier "^3.1.1"
     eslint-plugin-react "^7.16.0"
     eslint-plugin-react-hooks "^2.2.0"
-    eslint-plugin-simple-import-sort "^4.0.0"
+    eslint-plugin-simple-import-sort "^5.0.0"
     prettier "^1.18.2"
 
 "@amaurymartiny/tsconfig@^1.0.9":
@@ -3208,12 +3208,10 @@ eslint-plugin-react@^7.16.0:
     prop-types "^15.7.2"
     resolve "^1.12.0"
 
-eslint-plugin-simple-import-sort@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-4.0.0.tgz#048736c170b9b43f0a8c3ef85ba53881c389f3ff"
-  integrity sha512-QsxOMrXhhqvSiTmZafPc/lvSET9lhblaO2kaaSbFo1FVU/AW9mFQDXadiHJ5OqG6i0N6+Qd+RZ95iQbkg4p+0w==
-  dependencies:
-    validate-npm-package-name "^3.0.0"
+eslint-plugin-simple-import-sort@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-5.0.0.tgz#fd2abac52c0ae6050baf340c004b0b5d9aa76e8e"
+  integrity sha512-Zn6OppySnbwl/UonkzmMBbiFXZwe/tI9ZlSXwQek5h1FfPv3hcDTE3kG0SC70pBsKuVE8IMwZCMl0tKwcY89rw==
 
 eslint-scope@^5.0.0:
   version "5.0.0"
