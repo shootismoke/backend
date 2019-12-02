@@ -15,7 +15,7 @@
     "@now/node": "^1.2.0",
     "@shootismoke/dataproviders": "^0.1.17",
     "@shootismoke/graphql": "^0.1.15",
-    "@types/mongodb": "^3.3.6",
+    "@types/mongodb": "^3.3.11",
     "@types/mongoose": "^5.5.23",
     "apollo-server-micro": "^2.9.12",
     "graphql": "^14.5.8",
