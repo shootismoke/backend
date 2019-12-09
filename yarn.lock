@@ -1782,7 +1782,7 @@ apollo-server-caching@^0.5.0:
   dependencies:
     lru-cache "^5.0.0"
 
-apollo-server-core@^2.9.12, apollo-server-core@^2.9.13:
+apollo-server-core@^2.9.13:
   version "2.9.13"
   resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.9.13.tgz#29fee69be56d30605b0a06cd755fd39e0409915f"
   integrity sha512-iXTGNCtouB0Xe37ySovuZO69NBYOByJlZfUc87gj0pdcz0WbdfUp7qUtNzy3onp63Zo60TFkHWhGNcBJYFluzw==
@@ -5694,10 +5694,10 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@^5.7.13:
-  version "5.7.13"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.7.13.tgz#d8ebbc15cfb19d014cf1fbd4b7af413d75952d46"
-  integrity sha512-MoTCETTIfXU1PqIYc+YAkhSB3uzK5xseh6ysAUnoOowkqS66OjBJtsL/bcgAKi6XfMYkFU6M1abKyuL7k//xeg==
+mongoose@^5.7.14:
+  version "5.7.14"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.7.14.tgz#1e9be2b561b6f4e3fad9d4b2a4f0de14f02a785f"
+  integrity sha512-fF+7+7Xl856VQRwRl1/pc/sL3eblWnaYO1K0Yp3d7v+53e5dMJDg3b1Iz61Fk1PBbJF2Z39yGyxakj59lLoj0w==
   dependencies:
     bson "~1.1.1"
     kareem "2.3.1"
