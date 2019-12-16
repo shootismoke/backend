@@ -16,7 +16,7 @@
     "@shootismoke/dataproviders": "^0.1.17",
     "@shootismoke/graphql": "^0.1.15",
     "@types/mongodb": "^3.3.12",
-    "@types/mongoose": "^5.5.23",
+    "@types/mongoose": "^5.5.34",
     "apollo-server-micro": "^2.9.13",
     "graphql": "^14.5.8",
     "mongodb": "^3.3.5",
