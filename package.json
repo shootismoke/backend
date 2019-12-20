@@ -34,6 +34,6 @@
     "now": "^16.7.0",
     "p-memoize": "^3.1.0",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   }
 }
