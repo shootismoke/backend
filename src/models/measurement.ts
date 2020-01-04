@@ -2,6 +2,8 @@ import { AllPollutants } from '@shootismoke/convert';
 import { Measurement as IMeasurementBase } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
+import { dbTimestamps } from '../util';
+
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface IMeasurement
   extends Pick<
@@ -19,8 +21,6 @@ interface IMeasurement
   > {
   locationId: string;
 }
-
-import { dbTimestamps } from '../util';
 
 export const MeasurementSchema = new Schema(
   {
