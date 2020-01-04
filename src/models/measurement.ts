@@ -1,8 +1,24 @@
 import { AllPollutants } from '@shootismoke/convert';
-// import { Measurement as IMeasurement } from '@shootismoke/graphql';
+import { Measurement as IMeasurementBase } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
-type IMeasurement = any;
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface IMeasurement
+  extends Pick<
+    IMeasurementBase,
+    | '__typename'
+    | '_id'
+    | 'attribution'
+    | 'averagingPeriod'
+    | 'coordinates'
+    | 'date'
+    | 'mobile'
+    | 'parameter'
+    | 'unit'
+    | 'value'
+  > {
+  locationId: string;
+}
 
 import { dbTimestamps } from '../util';
 

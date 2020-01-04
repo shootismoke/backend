@@ -1,9 +1,18 @@
+import { Measurement } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
-// import { Measurement as IMeasurement } from '@shootismoke/graphql';
 import { dbTimestamps } from '../util';
 
-type ILocation = any;
+type ILocation = Pick<
+  Measurement,
+  | '_id'
+  | 'city'
+  | 'country'
+  | 'location'
+  | 'sourceName'
+  | 'sourceNames'
+  | 'sourceType'
+>;
 
 /**
  * Location model
@@ -46,5 +55,4 @@ export const LocationSchema = new Schema(
   }
 );
 
-// FIXME any
 export const Location = model<ILocation & Document>('Location', LocationSchema);

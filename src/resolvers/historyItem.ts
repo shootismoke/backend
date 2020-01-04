@@ -1,5 +1,4 @@
-// import { Location as ILocation, Resolvers } from '@shootismoke/graphql';
-type ILocation = any;
+import { Resolvers } from '@shootismoke/graphql';
 
 import { HistoryItem, Location, Measurement } from '../models';
 
@@ -9,9 +8,8 @@ import { HistoryItem, Location, Measurement } from '../models';
  */
 const PROVIDERS = ['aqicn', 'openaq', 'waqi'];
 
-export const historyItemResolvers: any = {
+export const historyItemResolvers: Resolvers = {
   Mutation: {
-    // @ts-ignore
     createHistoryItem: async (_parent, { input }): Promise<boolean> => {
       const {
         measurement: { location: locationId }
@@ -45,10 +43,7 @@ export const historyItemResolvers: any = {
         locationId: location._id,
         mobile: input.measurement.mobile,
         parameter: input.measurement.parameter,
-        // In GraphQL, we accept String for unit. We actually only would accept
-        // 'µg/m³' and 'ppm', but if the user gives 'ugm3', we would still
-        // accept it and cast to 'µg/m³'
-        unit: input.measurement.unit.replace('ugm3', 'µg/m³'),
+        unit: input.measurement.unit,
         value: input.measurement.value
       });
 
