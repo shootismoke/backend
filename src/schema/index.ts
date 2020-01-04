@@ -1,4 +1,4 @@
 export * from './historyItem';
-export * from './location';
+export * from './link';
 export * from './measurement';
 export * from './user';

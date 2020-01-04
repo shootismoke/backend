@@ -1,55 +1,59 @@
-import { aqicnByStation } from '@shootismoke/dataproviders';
-import { Resolvers, Station as IStation } from '@shootismoke/graphql';
-import { pipe } from 'fp-ts/lib/pipeable';
-import * as T from 'fp-ts/lib/Task';
-import * as TE from 'fp-ts/lib/TaskEither';
-import { Document } from 'mongoose';
+// import { Location as ILocation, Resolvers } from '@shootismoke/graphql';
+type ILocation = any;
 
-import { HistoryItem, Station } from '../models';
+import { HistoryItem, Location, Measurement } from '../models';
 
 /**
- * Fetch a station name from WAQI, and create a station in DB
+ * List of known providers
+ * @todo This should come from @shootismoke/dataproviders
  */
-async function createStation(
-  universalId: string,
-  provider: string,
-  id: string
-): Promise<IStation & Document> {
-  const data = await pipe(
-    aqicnByStation(id),
-    TE.fold(error => {
-      throw new Error(`WAQI Error ${universalId}: ${error.message}`);
-    }, T.of)
-  )();
+const PROVIDERS = ['aqicn', 'openaq', 'waqi'];
 
-  return Station.create({
-    name: data.attributions[0].name,
-    provider,
-    universalId
-  });
-}
-
-export const historyItemResolvers: Resolvers = {
+export const historyItemResolvers: any = {
   Mutation: {
+    // @ts-ignore
     createHistoryItem: async (_parent, { input }): Promise<boolean> => {
-      const { universalId } = input;
-      const [provider, id] = universalId.split('|');
+      const {
+        measurement: { location: locationId }
+      } = input;
+      const [provider, id] = locationId.split('|');
 
-      if (provider !== 'waqi' || !id) {
-        throw new Error('Only `waqi` provider is supported for now');
+      if (!PROVIDERS.includes(provider) || !id) {
+        throw new Error(
+          `Only providers ${JSON.stringify(PROVIDERS)} are supported for now`
+        );
       }
 
-      let station = await Station.findOne({
-        universalId
+      let location = await Location.findOne({ location: locationId });
+
+      if (!location) {
+        location = await Location.create({
+          city: input.measurement.city,
+          country: input.measurement.country,
+          location: input.measurement.location,
+          sourceName: input.measurement.sourceName,
+          sourceNames: input.measurement.sourceNames,
+          sourceType: input.measurement.sourceType
+        });
+      }
+
+      const measurement = await Measurement.create({
+        attribution: input.measurement.attribution,
+        averagingPeriod: input.measurement.averagingPeriod,
+        coordinates: input.measurement.coordinates,
+        date: input.measurement.date,
+        locationId: location._id,
+        mobile: input.measurement.mobile,
+        parameter: input.measurement.parameter,
+        // In GraphQL, we accept String for unit. We actually only would accept
+        // 'µg/m³' and 'ppm', but if the user gives 'ugm3', we would still
+        // accept it and cast to 'µg/m³'
+        unit: input.measurement.unit.replace('ugm3', 'µg/m³'),
+        value: input.measurement.value
       });
 
-      if (!station) {
-        station = await createStation(universalId, provider, id);
-      }
-
       await HistoryItem.create({
-        rawPm25: input.rawPm25,
-        stationId: station._id,
+        measurementId: measurement._id,
         userId: input.userId
       });
 
