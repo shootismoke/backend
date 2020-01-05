@@ -16,3 +16,11 @@ export async function connectToDatabase(uri?: string): Promise<void> {
 
   await connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 }
+
+/**
+ * Create timestamps for every document in the db, using the openaq format
+ */
+export const dbTimestamps = {
+  createdAt: 'firstUpdated',
+  updatedAt: 'lastUpdated'
+};

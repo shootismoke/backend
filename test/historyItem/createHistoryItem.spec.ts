@@ -1,81 +1,33 @@
+import { openaq } from '@shootismoke/dataproviders/lib/promise';
+
 import { describeApollo, getAlice } from '../util';
 import { CREATE_HISTORY_ITEM } from './gql';
 
-const HISTORY1 = {
-  universalId: 'waqi|8374', // This is an actual real station
-  rawPm25: 1.1
-};
+const OPENAQ_REAL_STATION = 'FR04101';
 
 describeApollo('historyItem::createHistoryItem', client => {
-  /**
-   * Test that missing required fields throw an error
-   */
-  function testRequiredFields(field: string): void {
-    it(`should require ${field}`, async done => {
-      const { mutate } = await client;
-      const correctInput = {
-        ...HISTORY1,
-        userId: (await getAlice(client))._id
-      };
-      const {
-        // eslint-disable-next-line
-        [field as keyof typeof correctInput]: _removedValue,
-        ...rest
-      } = correctInput;
-
-      const res = await mutate({
-        mutation: CREATE_HISTORY_ITEM,
-        variables: { input: { ...rest } }
-      });
-
-      expect(res.errors && res.errors[0].message).toContain(
-        `Variable "$input" got invalid value`
-      );
-      expect(res.errors && res.errors[0].message).toContain(
-        `Field ${field} of required type`
-      );
-
-      done();
-    });
-  }
-
-  (['universalId', 'rawPm25', 'userId'] as const).forEach(testRequiredFields);
-
   it('should only allow known providers', async done => {
     const { mutate } = await client;
-    const input = {
-      ...HISTORY1,
-      universalId: 'random|2',
-      userId: (await getAlice(client))._id
-    };
 
-    const res = await mutate({
-      mutation: CREATE_HISTORY_ITEM,
-      variables: { input }
-    });
-
-    expect(res.errors && res.errors[0].message).toContain(
-      'Only `waqi` provider is supported for now'
+    const [measurement] = openaq.normalizeByStation(
+      await openaq.fetchByStation(OPENAQ_REAL_STATION)
     );
 
-    done();
-  });
-
-  it("should fail if id doesn't exist on WAQI", async done => {
-    const { mutate } = await client;
-
     const input = {
-      ...HISTORY1,
-      universalId: 'waqi|foobar_random_123',
+      measurement: {
+        ...measurement,
+        location: 'foo|bar' // Change location to something dummy
+      },
       userId: (await getAlice(client))._id
     };
+
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'WAQI Error waqi|foobar_random_123: Unknown station'
+      'Only providers ["aqicn","openaq","waqi"] are supported for now'
     );
 
     done();
@@ -84,7 +36,11 @@ describeApollo('historyItem::createHistoryItem', client => {
   it('should create a history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: (await getAlice(client))._id };
+    const [measurement] = openaq.normalizeByStation(
+      await openaq.fetchByStation(OPENAQ_REAL_STATION)
+    );
+
+    const input = { measurement, userId: (await getAlice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }
@@ -100,10 +56,14 @@ describeApollo('historyItem::createHistoryItem', client => {
     done();
   });
 
-  it('should can create twice the same history item', async done => {
+  it('can create twice the same history item', async done => {
     const { mutate } = await client;
 
-    const input = { ...HISTORY1, userId: (await getAlice(client))._id };
+    const [measurement] = openaq.normalizeByStation(
+      await openaq.fetchByStation(OPENAQ_REAL_STATION)
+    );
+
+    const input = { measurement, userId: (await getAlice(client))._id };
     const res = await mutate({
       mutation: CREATE_HISTORY_ITEM,
       variables: { input }

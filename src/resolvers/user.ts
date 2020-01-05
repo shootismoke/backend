@@ -21,7 +21,7 @@ export const userResolvers: Resolvers = {
       return user;
     },
     updateUser: async (_parent, { userId, input }): Promise<IUser> => {
-      // TODO Is there some faster way to do the below, with findOneAndUpdate?
+      // FIXME Is there some faster way to do the below, with findOneAndUpdate?
       const user = await User.findById(userId);
 
       if (!user) {

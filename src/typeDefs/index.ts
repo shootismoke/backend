@@ -1,10 +1,9 @@
 import {
   historyItemSchema,
   linkSchema,
-  stationSchema,
+  measurementSchema,
   userSchema
-} from '@shootismoke/graphql';
-
+} from '../schema';
 import { historyItemTypeDefs } from './historyItem';
 import { userTypeDefs } from './user';
 
@@ -12,7 +11,7 @@ export const typeDefs = [
   linkSchema,
   historyItemSchema,
   historyItemTypeDefs,
-  stationSchema,
+  measurementSchema,
   userSchema,
   userTypeDefs
 ];

@@ -1,55 +1,49 @@
-import { aqicnByStation } from '@shootismoke/dataproviders';
-import { Resolvers, Station as IStation } from '@shootismoke/graphql';
-import { pipe } from 'fp-ts/lib/pipeable';
-import * as T from 'fp-ts/lib/Task';
-import * as TE from 'fp-ts/lib/TaskEither';
-import { Document } from 'mongoose';
+import { AllProviders } from '@shootismoke/dataproviders';
+import { Resolvers } from '@shootismoke/graphql';
 
-import { HistoryItem, Station } from '../models';
-
-/**
- * Fetch a station name from WAQI, and create a station in DB
- */
-async function createStation(
-  universalId: string,
-  provider: string,
-  id: string
-): Promise<IStation & Document> {
-  const data = await pipe(
-    aqicnByStation(id),
-    TE.fold(error => {
-      throw new Error(`WAQI Error ${universalId}: ${error.message}`);
-    }, T.of)
-  )();
-
-  return Station.create({
-    name: data.attributions[0].name,
-    provider,
-    universalId
-  });
-}
+import { HistoryItem, Location, Measurement } from '../models';
 
 export const historyItemResolvers: Resolvers = {
   Mutation: {
     createHistoryItem: async (_parent, { input }): Promise<boolean> => {
-      const { universalId } = input;
-      const [provider, id] = universalId.split('|');
+      const {
+        measurement: { location: locationId }
+      } = input;
+      const [provider, id] = locationId.split('|');
 
-      if (provider !== 'waqi' || !id) {
-        throw new Error('Only `waqi` provider is supported for now');
+      if (!AllProviders.includes(provider) || !id) {
+        throw new Error(
+          `Only providers ${JSON.stringify(AllProviders)} are supported for now`
+        );
       }
 
-      let station = await Station.findOne({
-        universalId
+      let location = await Location.findOne({ location: locationId });
+
+      if (!location) {
+        location = await Location.create({
+          city: input.measurement.city,
+          country: input.measurement.country,
+          location: input.measurement.location,
+          sourceName: input.measurement.sourceName,
+          sourceNames: input.measurement.sourceNames,
+          sourceType: input.measurement.sourceType
+        });
+      }
+
+      const measurement = await Measurement.create({
+        attribution: input.measurement.attribution,
+        averagingPeriod: input.measurement.averagingPeriod,
+        coordinates: input.measurement.coordinates,
+        date: input.measurement.date,
+        locationId: location._id,
+        mobile: input.measurement.mobile,
+        parameter: input.measurement.parameter,
+        unit: input.measurement.unit,
+        value: input.measurement.value
       });
 
-      if (!station) {
-        station = await createStation(universalId, provider, id);
-      }
-
       await HistoryItem.create({
-        rawPm25: input.rawPm25,
-        stationId: station._id,
+        measurementId: measurement._id,
         userId: input.userId
       });
 

@@ -1,14 +1,12 @@
 import { HistoryItem as IHistoryItem } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
+import { dbTimestamps } from '../util';
+
 export const HistoryItemSchema = new Schema(
   {
-    rawPm25: {
-      required: true,
-      type: Schema.Types.Number
-    },
-    stationId: {
-      ref: 'Station',
+    measurementId: {
+      ref: 'Measurement',
       required: true,
       type: Schema.Types.ObjectId
     },
@@ -18,7 +16,7 @@ export const HistoryItemSchema = new Schema(
       type: Schema.Types.ObjectId
     }
   },
-  { strict: 'throw', timestamps: true }
+  { strict: 'throw', timestamps: dbTimestamps }
 );
 
 export const HistoryItem = model<IHistoryItem & Document>(

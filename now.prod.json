@@ -5,7 +5,7 @@
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
     "MONGODB_ATLAS_URI": "@shootismoke-production-mongodb-atlas-uri",
-    "WAQI_TOKEN": "@shootismoke-production-waqi-token"
+    "AQICN_TOKEN": "@shootismoke-production-aqicn-token"
   },
   "public": false,
   "routes": [

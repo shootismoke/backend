@@ -13,8 +13,9 @@
   },
   "dependencies": {
     "@now/node": "^1.3.0",
-    "@shootismoke/dataproviders": "^0.1.17",
-    "@shootismoke/graphql": "^0.1.15",
+    "@shootismoke/convert": "^0.2.6",
+    "@shootismoke/dataproviders": "^0.2.6",
+    "@shootismoke/graphql": "^0.2.6",
     "@types/mongodb": "^3.3.14",
     "@types/mongoose": "^5.5.36",
     "apollo-server-micro": "^2.9.15",
