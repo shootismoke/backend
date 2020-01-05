@@ -1248,25 +1248,27 @@
     debug "4.1.1"
     mongodb-memory-server "6.0.1"
 
-"@shootismoke/convert@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@shootismoke/convert/-/convert-0.2.0.tgz#d2cc547ec2c66b377957d0be7b626ce0e55f0065"
-  integrity sha512-+sktsQwh0IBcFQdJP5uuR3LDLh7fcuQFy4yxdRq5liVCZ9cRzAHl+ckB+4uALoS4qdvZA7h9dmFMkgjyQpt47w==
+"@shootismoke/convert@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@shootismoke/convert/-/convert-0.2.6.tgz#2ea3c8da8359cadc8c8ff15300c41ed8279f3187"
+  integrity sha512-jxZ4wteXt0Pi+NFK+0nbtaA8D5m/KrZg1bzoMnxKEjEQlRlHsmUXqF84ypcJG3uPH4oI46e1LJqAFApf1SXH8w==
 
-"@shootismoke/dataproviders@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@shootismoke/dataproviders/-/dataproviders-0.2.3.tgz#f3bb1cb8b95106662f47cee48467da7382f22dc6"
-  integrity sha512-A1WqIwrB1cfngUBn2OIHqUXu5476zEEF9Jc2IV9bujI7Ny6+hYtJdFwiRi0LYKNWGHNbwjj2RPUyRVtA8faT+Q==
+"@shootismoke/dataproviders@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@shootismoke/dataproviders/-/dataproviders-0.2.6.tgz#27569c3a789fb90643fdcec1d6cb3c7a23f61f07"
+  integrity sha512-YOM+g/1NsFvO8oFro2whSi0cBOdlhqc7437HedxqAfvXp5mmk9bKe+D+tvoHP7IC2OZmWvGic8wMcw2lVh5hXg==
   dependencies:
-    "@shootismoke/convert" "^0.2.0"
+    "@shootismoke/convert" "^0.2.6"
     axios "^0.19.0"
+    date-fns "^2.8.1"
+    date-fns-tz "^1.0.9"
     fp-ts "^2.1.1"
     io-ts "^2.0.1"
 
-"@shootismoke/graphql@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.4.tgz#ed5924f545aa5841d4272d9ca4f5fbeb403339cb"
-  integrity sha512-nNXpN32QVQi/Xc7sEdGo/adypDUAa8hRn/blmF1I8RDavlpauxRCYxOFUxJlj7uPY4VFilaboThEIo/pdC2xUw==
+"@shootismoke/graphql@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.6.tgz#a19f47bfac9b4a4043c5c24f37e287caf7434ccb"
+  integrity sha512-bZ48Y8slWnIfoiLJPmedNBIUE/vHlWzxnWmoMMKL/XaHel7x2mVfLDArCFhYNYv78+YfG11uVZzbwoHYuS4KnQ==
 
 "@types/accepts@*":
   version "1.3.5"
@@ -2799,6 +2801,16 @@ data-urls@^1.0.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+date-fns-tz@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-1.0.9.tgz#71ca33b5b471f6cef71d6c1ec7365e7e0b47b412"
+  integrity sha512-5VOe9FBMwhb3LjGttJhrxdgf6WrVwzu9HEU1H4KgJYAclt0UABmQhE/5jUaDsH7qktihxd22xF8zl6BChAYTAw==
+
+date-fns@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.8.1.tgz#2109362ccb6c87c3ca011e9e31f702bc09e4123b"
+  integrity sha512-EL/C8IHvYRwAHYgFRse4MGAPSqlJVlOrhVYZ75iQBKrnv+ZedmYsgwH3t+BCDuZDXpoo07+q9j4qgSSOa7irJg==
 
 dateformat@^3.0.0:
   version "3.0.3"

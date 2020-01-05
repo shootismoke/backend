@@ -1,12 +1,7 @@
+import { AllProviders } from '@shootismoke/dataproviders';
 import { Resolvers } from '@shootismoke/graphql';
 
 import { HistoryItem, Location, Measurement } from '../models';
-
-/**
- * List of known providers
- * @todo This should come from @shootismoke/dataproviders
- */
-const PROVIDERS = ['aqicn', 'openaq', 'waqi'];
 
 export const historyItemResolvers: Resolvers = {
   Mutation: {
@@ -16,9 +11,9 @@ export const historyItemResolvers: Resolvers = {
       } = input;
       const [provider, id] = locationId.split('|');
 
-      if (!PROVIDERS.includes(provider) || !id) {
+      if (!AllProviders.includes(provider) || !id) {
         throw new Error(
-          `Only providers ${JSON.stringify(PROVIDERS)} are supported for now`
+          `Only providers ${JSON.stringify(AllProviders)} are supported for now`
         );
       }
 
