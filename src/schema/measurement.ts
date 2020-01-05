@@ -43,7 +43,7 @@ export const measurementSchema = gql`
   }
 
   enum Parameter {
-    ${Object.keys(AllPollutants).join('\n')}
+    ${AllPollutants.join('\n')}
   }
 
   enum SourceType {
