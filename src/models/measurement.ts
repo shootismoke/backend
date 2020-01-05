@@ -84,7 +84,7 @@ export const MeasurementSchema = new Schema(
       type: Schema.Types.Boolean
     },
     parameter: {
-      enum: Object.keys(AllPollutants),
+      enum: AllPollutants,
       required: true,
       type: Schema.Types.String
     },
