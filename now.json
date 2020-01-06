@@ -4,8 +4,7 @@
   "alias": ["staging.shootismoke.now.sh"],
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
-    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri",
-    "AQICN_TOKEN": "@shootismoke-staging-aqicn-token"
+    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri"
   },
   "public": false,
   "routes": [
