@@ -3,7 +3,10 @@ import { RequestHandler } from 'express';
 
 type AsyncVoid = void | Promise<void>;
 
-type NowFunction<Req, Res> = (req: Req, res: Res) => AsyncVoid;
+/**
+ * A Zeit Now lambda function.
+ */
+export type NowFunction<Req, Res> = (req: Req, res: Res) => AsyncVoid;
 
 /**
  * Combine multiple middleware together.
@@ -15,7 +18,7 @@ type NowFunction<Req, Res> = (req: Req, res: Res) => AsyncVoid;
  */
 function combineMiddleware(middlewares: RequestHandler[]): RequestHandler {
   return middlewares.reduce((acc, mid) => {
-    return function(req, res, next): void {
+    return function (req, res, next): void {
       acc(req, res, err => {
         if (err) {
           return next(err);
@@ -37,8 +40,8 @@ function combineMiddleware(middlewares: RequestHandler[]): RequestHandler {
 export function chain<Req = NowRequest, Res = NowResponse>(
   ...middlewares: RequestHandler[]
 ): (fn: NowFunction<Req, Res>) => NowFunction<Req, Res> {
-  return function(fn: NowFunction<Req, Res>): NowFunction<Req, Res> {
-    return function(req: Req, res: Res): AsyncVoid {
+  return function (fn: NowFunction<Req, Res>): NowFunction<Req, Res> {
+    return function (req: Req, res: Res): AsyncVoid {
       // eslint-disable-next-line
       // @ts-ignore Need to cast (and verify everything works) from a
       // express.Request to a NowRequest
