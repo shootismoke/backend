@@ -1,6 +1,5 @@
 import Hawk from '@hapi/hawk';
 import { NextFunction, Request, Response } from 'express';
-import { OutgoingHttpHeaders } from 'http';
 
 interface Credential {
   algorithm: 'sha256';
