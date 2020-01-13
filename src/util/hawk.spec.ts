@@ -3,6 +3,10 @@ import { Request, Response } from 'express';
 
 import { hawk } from './hawk';
 
+function noop(): void {
+  /* Do nothing */
+}
+
 function createReq(id: string, key: string): Request {
   const { header } = Hawk.client.header(
     'http://example.com/resource/4?filter=a',
@@ -30,23 +34,38 @@ function createReq(id: string, key: string): Request {
   } as unknown) as Request;
 }
 
+function createRes(): Response {
+  return ({
+    end: jest.fn(),
+    send: jest.fn(),
+    status: jest.fn()
+  } as unknown) as Response;
+}
+
 describe('hawk', () => {
   it('should throw an error on invalid id', async done => {
     const req = createReq('foo', 'bar');
+    const res = createRes();
 
-    const res = ({
-      end: jest.fn(),
-      writeHead: jest.fn()
-    } as unknown) as Response;
+    await hawk(req, res, noop);
 
-    await hawk(req, res, () => {
-      /* Do nothing */
-    });
+    expect(res.send).toBeCalledWith('Invalid Hawk id: foo'); // eslint-disable-line @typescript-eslint/unbound-method
+    expect(res.status).toBeCalledWith(401); // eslint-disable-line @typescript-eslint/unbound-method
+    expect(res.end).toHaveBeenCalledTimes(1); // eslint-disable-line @typescript-eslint/unbound-method
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(res.writeHead).toBeCalledWith(401, 'Invalid Hawk id: foo');
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(res.end).toHaveBeenCalledTimes(1);
+    done();
+  });
+
+  it('should return "Unauthorized" on a plain request', async done => {
+    const req = createReq('foo', 'bar');
+    delete req.headers.authorization;
+    const res = createRes();
+
+    await hawk(req, res, noop);
+
+    expect(res.send).toBeCalledWith('Unauthorized'); // eslint-disable-line @typescript-eslint/unbound-method
+    expect(res.status).toBeCalledWith(401); // eslint-disable-line @typescript-eslint/unbound-method
+    expect(res.end).toHaveBeenCalledTimes(1); // eslint-disable-line @typescript-eslint/unbound-method
 
     done();
   });
@@ -56,15 +75,7 @@ describe('hawk', () => {
       'shootismoke-v1.5.0',
       process.env.HAWK_KEY_1_5_0 as string
     );
-
-    const res = ({
-      end: () => {
-        /* Do nothing */
-      },
-      writeHead: () => {
-        /* Do nothing */
-      }
-    } as unknown) as Response;
+    const res = createRes();
 
     const next = jest.fn();
     await hawk(req, res, next);

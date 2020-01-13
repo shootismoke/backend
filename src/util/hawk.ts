@@ -54,7 +54,8 @@ export async function hawk(
     next();
   } catch (error) {
     // TODO Add Sentry here
-    res.writeHead(401, error.message);
+    res.status(401);
+    res.send(error.message);
     res.end();
   }
 }
