@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
+  "engines": {
+    "node": "12.x"
+  },
   "license": "GPL-3.0",
   "private": true,
   "repository": "https://github.com/shootismoke/backend",
