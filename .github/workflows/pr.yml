@@ -14,10 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: yarn install
-      - name: yarn test and send coverage
+      - name: Run yarn test and send coverage
         uses: paambaati/codeclimate-action@v2.3.0
         env:
           AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          HAWK_KEY_1_5_0: ${{ secrets.HAWK_KEY_1_5_0 }}
         with:
           coverageCommand: yarn test --coverage
