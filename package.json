@@ -4,7 +4,7 @@
   "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
   "description": "Backend for Sh**t! I Smoke",
   "engines": {
-    "node": "12.x"
+    "node": ">=12"
   },
   "license": "GPL-3.0",
   "private": true,

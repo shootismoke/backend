@@ -4,6 +4,7 @@
   "alias": ["staging.shootismoke.now.sh"],
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
+    "HAWK_KEY_1_5_0": "@shootismoke-staging-hawk-key-1-5-0",
     "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri"
   },
   "public": false,
@@ -11,10 +12,6 @@
     {
       "src": "/api/graphql",
       "dest": "/api/graphql.ts"
-    },
-    {
-      "src": "/api/push",
-      "dest": "/api/push/index.ts"
     }
   ],
   "scope": "shootismoke"
