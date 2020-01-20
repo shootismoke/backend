@@ -24,7 +24,7 @@
     "apollo-server-micro": "^2.9.16",
     "graphql": "^14.5.8",
     "mongodb": "^3.5.1",
-    "mongoose": "^5.8.7"
+    "mongoose": "^5.8.9"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.0.11",
