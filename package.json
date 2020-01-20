@@ -23,7 +23,7 @@
     "@types/mongoose": "^5.5.41",
     "apollo-server-micro": "^2.9.16",
     "graphql": "^14.5.8",
-    "mongodb": "^3.4.1",
+    "mongodb": "^3.5.1",
     "mongoose": "^5.8.7"
   },
   "devDependencies": {
