@@ -7,7 +7,7 @@
     "ENGINE_API_KEY": "@shootismoke-production-engine-api-key",
     "HAWK_KEY_1_5_0": "@shootismoke-production-hawk-key-1-5-0",
     "MONGODB_ATLAS_URI": "@shootismoke-production-mongodb-atlas-uri",
-    "SENTRY_DSN": "shootismoke-production-sentry-dsn"
+    "SENTRY_DSN": "@shootismoke-production-sentry-dsn"
   },
   "public": false,
   "routes": [
