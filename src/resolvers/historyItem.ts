@@ -1,7 +1,7 @@
 import { AllProviders } from '@shootismoke/dataproviders';
 import { Resolvers } from '@shootismoke/graphql';
 
-import { HistoryItem, Location, Measurement } from '../models';
+import { HistoryItem, Location, Measurement, User } from '../models';
 
 export const historyItemResolvers: Resolvers = {
   Mutation: {
@@ -15,6 +15,11 @@ export const historyItemResolvers: Resolvers = {
         throw new Error(
           `Only providers ${JSON.stringify(AllProviders)} are supported for now`
         );
+      }
+
+      const user = await User.findById(input.userId);
+      if (!user) {
+        throw new Error(`User ${input.userId} does not exist in database`);
       }
 
       let location = await Location.findOne({ location: locationId });
