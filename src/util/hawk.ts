@@ -8,6 +8,11 @@ interface Credential {
   key: string;
 }
 
+/**
+ * Mapping of id->key credentials. Note: for now, this ampping holds both
+ * staging and production ids. For example, `shootismoke-default` should never
+ * be a valid id for production.
+ */
 const CREDENTIALS: Record<string, Credential> = {
   'shootismoke-default': {
     algorithm: 'sha256',
