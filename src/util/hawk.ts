@@ -1,6 +1,8 @@
 import Hawk from '@hapi/hawk';
 import { NextFunction, Request, Response } from 'express';
 
+import { logger } from './logger';
+
 interface Credential {
   algorithm: 'sha256';
   key: string;
@@ -63,7 +65,7 @@ export async function hawk(
 
     next();
   } catch (error) {
-    // TODO Add Sentry here
+    logger.error(error);
     res.status(401);
     res.send(error.message);
     res.end();
