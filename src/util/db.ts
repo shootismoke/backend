@@ -1,5 +1,7 @@
 import { connect } from 'mongoose';
 
+import { logger } from './logger';
+
 /**
  * A function for connecting to MongoDB, taking a single paramater of the
  * connection string
@@ -11,7 +13,9 @@ export async function connectToDatabase(uri?: string): Promise<void> {
   const dbUri = uri || process.env.MONGODB_ATLAS_URI;
 
   if (!dbUri) {
-    throw new Error('process.env.MONGODB_ATLAS_URI is not defined');
+    const e = new Error('process.env.MONGODB_ATLAS_URI is not defined');
+    logger.error(e);
+    throw e;
   }
 
   await connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });

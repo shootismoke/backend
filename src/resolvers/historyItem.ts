@@ -2,6 +2,7 @@ import { AllProviders } from '@shootismoke/dataproviders';
 import { Resolvers } from '@shootismoke/graphql';
 
 import { HistoryItem, Location, Measurement, User } from '../models';
+import { logger } from '../util';
 
 export const historyItemResolvers: Resolvers = {
   Mutation: {
@@ -12,14 +13,18 @@ export const historyItemResolvers: Resolvers = {
       const [provider, id] = locationId.split('|');
 
       if (!AllProviders.includes(provider) || !id) {
-        throw new Error(
+        const e = new Error(
           `Only providers ${JSON.stringify(AllProviders)} are supported for now`
         );
+        logger.debug(e.message);
+        throw e;
       }
 
       const user = await User.findById(input.userId);
       if (!user) {
-        throw new Error(`User ${input.userId} does not exist in database`);
+        const e = new Error(`User ${input.userId} does not exist in database`);
+        logger.debug(e.message);
+        throw e;
       }
 
       let location = await Location.findOne({ location: locationId });

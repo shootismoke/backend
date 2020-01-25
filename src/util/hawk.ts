@@ -22,7 +22,9 @@ const CREDENTIALS: Record<string, Credential> = {
 // Credentials lookup function
 function credentialsFunc(id: string): Credential {
   if (!CREDENTIALS[id]) {
-    throw new Error(`Invalid Hawk id: ${id}`);
+    const e = new Error(`Invalid Hawk id: ${id}`);
+    logger.debug(e.message);
+    throw e;
   }
 
   return {

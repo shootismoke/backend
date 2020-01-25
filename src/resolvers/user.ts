@@ -5,6 +5,7 @@ import {
 } from '@shootismoke/graphql';
 
 import { HistoryItem, User } from '../models';
+import { logger } from '../util';
 
 export const userResolvers: Resolvers = {
   Mutation: {
@@ -25,7 +26,9 @@ export const userResolvers: Resolvers = {
       const user = await User.findById(userId);
 
       if (!user) {
-        throw new Error(`No user with id ${userId} found`);
+        const e = new Error(`No user with id ${userId} found`);
+        logger.debug(e.message);
+        throw e;
       }
 
       Object.assign(user, input);
