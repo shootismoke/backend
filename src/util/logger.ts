@@ -7,10 +7,10 @@ function debug(message: string): void {
 }
 
 function error(error: Error): void {
-  if (!process.env.SENTRY_DSN) {
-    console.error(error.message);
-  } else {
+  if (process.env.SENTRY_DSN) {
     Sentry.captureException(error);
+  } else {
+    console.error(error.message);
   }
 }
 
