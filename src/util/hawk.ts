@@ -1,4 +1,5 @@
 import Hawk from '@hapi/hawk';
+import Utils from '@hapi/hawk/lib/utils';
 import { NextFunction, Request, Response } from 'express';
 
 interface Credential {
@@ -44,7 +45,36 @@ export async function hawk(
   next: NextFunction
 ): Promise<void> {
   try {
-    console.log('REQUEST', req.headers, req.method);
+    console.log('AAA', req.headers, req.method);
+
+    const request = Utils.parseRequest(req, {});
+
+    console.log('BBB', request);
+
+    // Parse HTTP Authorization header
+
+    const attributes = Utils.parseAuthorizationHeader(request.authorization);
+
+    console.log('CCC', attributes);
+
+    // Construct artifacts container
+
+    const artifacts2 = {
+      method: request.method,
+      host: request.host,
+      port: request.port,
+      resource: request.url,
+      ts: attributes.ts,
+      nonce: attributes.nonce,
+      hash: attributes.hash,
+      ext: attributes.ext,
+      app: attributes.app,
+      dlg: attributes.dlg,
+      mac: attributes.mac,
+      id: attributes.id
+    };
+    console.log('DDD', artifacts2);
+
     // Authenticate incoming request
     const { artifacts, credentials } = await Hawk.server.authenticate(
       req,
@@ -63,6 +93,7 @@ export async function hawk(
     next();
   } catch (error) {
     // TODO Add Sentry here
+    console.log('ERROR!', error.message);
     res.status(401);
     res.send(error.message);
     res.end();
