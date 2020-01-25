@@ -25,6 +25,11 @@ export async function createServer(options?: DbOptions): Promise<ApolloServer> {
 
   // eslint-disable-next-line require-atomic-updates
   server = new ApolloServer({
+    engine: process.env.ENGINE_API_KEY
+      ? {
+          apiKey: process.env.ENGINE_API_KEY
+        }
+      : undefined,
     typeDefs,
     resolvers
   });
