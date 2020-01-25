@@ -1,12 +1,23 @@
 import Hawk from '@hapi/hawk';
 import { NextFunction, Request, Response } from 'express';
 
+import { logger } from './logger';
+
 interface Credential {
   algorithm: 'sha256';
   key: string;
 }
 
+/**
+ * Mapping of id->key credentials. Note: for now, this ampping holds both
+ * staging and production ids. For example, `shootismoke-default` should never
+ * be a valid id for production.
+ */
 const CREDENTIALS: Record<string, Credential> = {
+  'shootismoke-default': {
+    algorithm: 'sha256',
+    key: process.env.HAWK_KEY_1_5_0 as string
+  },
   'shootismoke-development': {
     algorithm: 'sha256',
     key: process.env.HAWK_KEY_1_5_0 as string
@@ -20,7 +31,9 @@ const CREDENTIALS: Record<string, Credential> = {
 // Credentials lookup function
 function credentialsFunc(id: string): Credential {
   if (!CREDENTIALS[id]) {
-    throw new Error(`Invalid Hawk id: ${id}`);
+    const e = new Error(`Invalid Hawk id: ${id}`);
+    logger.debug(e.message);
+    throw e;
   }
 
   return {
@@ -63,7 +76,7 @@ export async function hawk(
 
     next();
   } catch (error) {
-    // TODO Add Sentry here
+    logger.error(error);
     res.status(401);
     res.send(error.message);
     res.end();
