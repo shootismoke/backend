@@ -5,7 +5,8 @@
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
     "HAWK_KEY_1_5_0": "@shootismoke-staging-hawk-key-1-5-0",
-    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri"
+    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri",
+    "SENTRY_DSN": ""
   },
   "public": false,
   "routes": [
