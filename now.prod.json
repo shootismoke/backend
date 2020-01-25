@@ -1,5 +1,5 @@
 {
-  "name": "@shootismoke/backend",
+  "name": "backend-production",
   "version": 2,
   "alias": ["shootismoke.now.sh"],
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
