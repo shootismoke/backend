@@ -1,5 +1,4 @@
 import Hawk from '@hapi/hawk';
-import Utils from '@hapi/hawk/lib/utils';
 import { NextFunction, Request, Response } from 'express';
 
 interface Credential {
@@ -45,48 +44,17 @@ export async function hawk(
   next: NextFunction
 ): Promise<void> {
   try {
-    console.log('NODENV', process.env.NODE_ENV);
-    console.log('AAA', req.headers, req.method, req);
-
-    const request = Utils.parseRequest(req, {});
-
-    console.log('BBB', request);
-
-    // Parse HTTP Authorization header
-
-    const attributes = Utils.parseAuthorizationHeader(request.authorization);
-
-    console.log('CCC', attributes);
-
-    // Construct artifacts container
-
-    const artifacts2 = {
-      method: request.method,
-      host: request.host,
-      port: request.port,
-      resource: request.url,
-      ts: attributes.ts,
-      nonce: attributes.nonce,
-      hash: attributes.hash,
-      ext: attributes.ext,
-      app: attributes.app,
-      dlg: attributes.dlg,
-      mac: attributes.mac,
-      id: attributes.id
-    };
-    console.log('DDD', artifacts2);
-
     // Authenticate incoming request
     const { artifacts, credentials } = await Hawk.server.authenticate(
       req,
       credentialsFunc,
       {
+        // The client constructs the port as 443, because in production we use
+        // https. But somehow, in the `req`, object, the port is 80, even in
+        // production. Here we just force the port to 443 in production.
         port: process.env.NODE_ENV === 'production' ? 443 : undefined
       }
     );
-
-    console.log(artifacts);
-    console.log(credentials);
 
     // Generate Server-Authorization response header
     const header = Hawk.server.header(credentials, artifacts);
@@ -97,7 +65,6 @@ export async function hawk(
     next();
   } catch (error) {
     // TODO Add Sentry here
-    console.log('ERROR!', error.message);
     res.status(401);
     res.send(error.message);
     res.end();
