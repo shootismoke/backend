@@ -19,6 +19,7 @@ const CREDENTIALS: Record<string, Credential> = {
 
 // Credentials lookup function
 function credentialsFunc(id: string): Credential {
+  console.log('credentialsFunc', id, CREDENTIALS[id].key);
   if (!CREDENTIALS[id]) {
     throw new Error(`Invalid Hawk id: ${id}`);
   }
@@ -43,11 +44,15 @@ export async function hawk(
   next: NextFunction
 ): Promise<void> {
   try {
+    console.log('REQUEST', req.headers, req.method);
     // Authenticate incoming request
     const { artifacts, credentials } = await Hawk.server.authenticate(
       req,
       credentialsFunc
     );
+
+    console.log(artifacts);
+    console.log(credentials);
 
     // Generate Server-Authorization response header
     const header = Hawk.server.header(credentials, artifacts);
