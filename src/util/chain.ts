@@ -3,7 +3,10 @@ import { RequestHandler } from 'express';
 
 type AsyncVoid = void | Promise<void>;
 
-type NowFunction<Req, Res> = (req: Req, res: Res) => AsyncVoid;
+/**
+ * A Zeit Now lambda function.
+ */
+export type NowFunction<Req, Res> = (req: Req, res: Res) => AsyncVoid;
 
 /**
  * Combine multiple middleware together.
