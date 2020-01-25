@@ -7,7 +7,11 @@ interface Credential {
 }
 
 const CREDENTIALS: Record<string, Credential> = {
-  'shootismoke-v1.5.0': {
+  'shootismoke-development': {
+    algorithm: 'sha256',
+    key: process.env.HAWK_KEY_1_5_0 as string
+  },
+  'shootismoke-production-v1.5.0': {
     algorithm: 'sha256',
     key: process.env.HAWK_KEY_1_5_0 as string
   }
