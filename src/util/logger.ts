@@ -1,11 +1,9 @@
 import { captureException } from '@sentry/node';
 
-function debug(message: string): void {
-  if (!process.env.SENTRY_DSN) {
-    console.log(message);
-  }
-}
-
+/**
+ * Send an error to Sentry, or if sentry is not set up, just log it
+ * @param error - Error to log
+ */
 function error(error: Error): void {
   if (process.env.SENTRY_DSN) {
     captureException(error);
@@ -15,6 +13,5 @@ function error(error: Error): void {
 }
 
 export const logger = {
-  debug,
   error
 };

@@ -32,7 +32,7 @@ const CREDENTIALS: Record<string, Credential> = {
 function credentialsFunc(id: string): Credential {
   if (!CREDENTIALS[id]) {
     const e = new Error(`Invalid Hawk id: ${id}`);
-    logger.debug(e.message);
+    logger.error(e);
     throw e;
   }
 

@@ -16,14 +16,14 @@ export const historyItemResolvers: Resolvers = {
         const e = new Error(
           `Only providers ${JSON.stringify(AllProviders)} are supported for now`
         );
-        logger.debug(e.message);
+        logger.error(e);
         throw e;
       }
 
       const user = await User.findById(input.userId);
       if (!user) {
         const e = new Error(`User ${input.userId} does not exist in database`);
-        logger.debug(e.message);
+        logger.error(e);
         throw e;
       }
 
