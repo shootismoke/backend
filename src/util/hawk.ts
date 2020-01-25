@@ -45,7 +45,8 @@ export async function hawk(
   next: NextFunction
 ): Promise<void> {
   try {
-    console.log('AAA', req.headers, req.method);
+    console.log('NODENV', process.env.NODE_ENV);
+    console.log('AAA', req.headers, req.method, req);
 
     const request = Utils.parseRequest(req, {});
 
@@ -78,7 +79,10 @@ export async function hawk(
     // Authenticate incoming request
     const { artifacts, credentials } = await Hawk.server.authenticate(
       req,
-      credentialsFunc
+      credentialsFunc,
+      {
+        port: process.env.NODE_ENV === 'production' ? 443 : undefined
+      }
     );
 
     console.log(artifacts);
