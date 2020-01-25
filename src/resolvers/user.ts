@@ -27,7 +27,7 @@ export const userResolvers: Resolvers = {
 
       if (!user) {
         const e = new Error(`No user with id ${userId} found`);
-        logger.debug(e.message);
+        logger.error(e);
         throw e;
       }
 
