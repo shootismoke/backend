@@ -1,10 +1,10 @@
-import Sentry from '@sentry/node';
+import { init } from '@sentry/node';
 
 import { nowApollo } from '../src/apollo';
 import { chain, hawk } from '../src/util';
 
 if (process.env.SENTRY_DSN) {
-  Sentry.init({
+  init({
     dsn: process.env.SENTRY_DSN
   });
 }

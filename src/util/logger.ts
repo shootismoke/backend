@@ -1,4 +1,4 @@
-import Sentry from '@sentry/node';
+import { captureException } from '@sentry/node';
 
 function debug(message: string): void {
   if (!process.env.SENTRY_DSN) {
@@ -8,7 +8,7 @@ function debug(message: string): void {
 
 function error(error: Error): void {
   if (process.env.SENTRY_DSN) {
-    Sentry.captureException(error);
+    captureException(error);
   } else {
     console.error(error.message);
   }
