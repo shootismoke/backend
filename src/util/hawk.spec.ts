@@ -72,7 +72,7 @@ describe('hawk', () => {
 
   it('should work', async done => {
     const req = createReq(
-      'shootismoke-v1.5.0',
+      'shootismoke-development',
       process.env.HAWK_KEY_1_5_0 as string
     );
     const res = createRes();

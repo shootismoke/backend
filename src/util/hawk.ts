@@ -19,7 +19,6 @@ const CREDENTIALS: Record<string, Credential> = {
 
 // Credentials lookup function
 function credentialsFunc(id: string): Credential {
-  console.log('credentialsFunc', id, CREDENTIALS[id].key);
   if (!CREDENTIALS[id]) {
     throw new Error(`Invalid Hawk id: ${id}`);
   }
