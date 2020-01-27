@@ -24,7 +24,7 @@
     "@types/mongodb": "^3.3.14",
     "@types/mongoose": "^5.5.43",
     "apollo-server-micro": "^2.9.16",
-    "graphql": "^14.5.8",
+    "graphql": "^14.6.0",
     "mongodb": "^3.5.2",
     "mongoose": "^5.8.9"
   },
