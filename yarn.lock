@@ -1556,10 +1556,10 @@
     debug "4.1.1"
     mongodb-memory-server "6.0.1"
 
-"@shootismoke/convert@^0.2.6", "@shootismoke/convert@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@shootismoke/convert/-/convert-0.2.7.tgz#332aa2f3a0c9a55e2f8eeeea78030f703d40c56e"
-  integrity sha512-Wo/jvMTM1fm4acWxSBUbmu2K/OvTA7YOrBRmmZL19p326rYtLz4EwGkeHVUMe0FPiwzNQkedz4zl2d18syJcMg==
+"@shootismoke/convert@^0.2.7", "@shootismoke/convert@^0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@shootismoke/convert/-/convert-0.2.8.tgz#328eb9d32aff370020f1ba17c1badc340c102300"
+  integrity sha512-fa8PdUZOCbEjrRAgteXBIywMNMaXriFcaiy+2PTqBLZKBhi/EkHm4BsdTO1WyYEQwj61YgGzkMYRrlA+1yX4kw==
 
 "@shootismoke/dataproviders@^0.2.7":
   version "0.2.7"
