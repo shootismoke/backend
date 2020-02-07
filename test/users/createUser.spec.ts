@@ -4,17 +4,19 @@ import { CREATE_USER } from './gql';
 const ALICE = {
   expoInstallationId: 'id1',
   expoPushToken: 'token1',
-  lastStation: 'openaq|FR04101',
-  notifications: { frequency: 'weekly' }
+  notifications: { frequency: 'weekly', station: 'openaq|FR04101' }
 };
 const BOB = {
   expoInstallationId: 'id2',
-  expoPushToken: 'token1', // Same token as ALICE
-  lastStation: 'openaq|FR04101'
+  expoPushToken: 'token2',
+  notifications: { frequency: 'never' }
 };
 const CHARLIE = {
   expoInstallationId: 'id3',
-  lastStation: 'openaq|FR04101'
+  expoPushToken: 'token1' // Same token as ALICE
+};
+const DAVE = {
+  expoInstallationId: 'id4'
 };
 
 describeApollo('users::createUser', client => {
@@ -48,37 +50,66 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it('should require lastStation', async done => {
+  it('should require station if notifications is not `never`', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: { ...ALICE, lastStation: undefined } }
+      variables: {
+        input: {
+          ...ALICE,
+          notifications: { ...ALICE.notifications, station: undefined }
+        }
+      }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'Variable "$input" got invalid value { expoInstallationId: "id1", expoPushToken: "token1", lastStation: undefined, notifications: { frequency: "weekly" } }; Field lastStation of required type String! was not provided.'
+      'User validation failed: notifications.station: Path `station` is required., notifications: Validation failed: station: Path `station` is required.'
     );
 
     done();
   });
 
-  it('should require well-formed lastStation', async done => {
+  it('should require well-formed station', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: { ...ALICE, lastStation: 'foo' } }
+      variables: {
+        input: {
+          ...ALICE,
+          notifications: { ...ALICE.notifications, station: 'foo' }
+        }
+      }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
-      'User validation failed: lastStation: foo is not a valid universalId'
+      'User validation failed: notifications.station: foo is not a valid universalId, notifications: Validation failed: station: foo is not a valid universalId'
     );
 
     done();
   });
 
-  it('should create a user', async done => {
+  it('should create a user with `never` notifications', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: BOB }
+    });
+
+    if (!res.data) {
+      console.error(res);
+      return done.fail('No data in response');
+    }
+
+    expect(res.data.createUser._id).toBeDefined();
+    expect(res.data.createUser).toMatchObject(BOB);
+
+    done();
+  });
+
+  it('should create a user with `weekly` notifications', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
@@ -106,7 +137,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: BOB }
+      variables: { input: CHARLIE }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
@@ -121,7 +152,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: CHARLIE }
+      variables: { input: DAVE }
     });
 
     if (!res.data) {
@@ -139,11 +170,11 @@ describeApollo('users::createUser', client => {
 
     const res1 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: CHARLIE }
+      variables: { input: DAVE }
     });
     const res2 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: CHARLIE }
+      variables: { input: DAVE }
     });
 
     if (!res1.data || !res2.data) {

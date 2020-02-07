@@ -10,31 +10,30 @@ export const userSchema = gql`
 
   type Notifications {
     frequency: Frequency!
+    station: String
   }
 
   type User {
     _id: ID!
     expoInstallationId: String!
     expoPushToken: String
-    lastStation: String!
     notifications: Notifications!
   }
 
   input NotificationsInput {
     frequency: Frequency!
+    station: String
   }
 
   input CreateUserInput {
     expoInstallationId: String!
     expoPushToken: String
-    lastStation: String!
     notifications: NotificationsInput
   }
 
   input UpdateUserInput {
     expoInstallationId: String
     expoPushToken: String
-    lastStation: String
     notifications: NotificationsInput
   }
 `;

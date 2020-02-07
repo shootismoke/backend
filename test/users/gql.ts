@@ -6,9 +6,9 @@ export const CREATE_USER = gql`
       _id
       expoInstallationId
       expoPushToken
-      lastStation
       notifications {
         frequency
+        station
       }
     }
   }
@@ -20,9 +20,9 @@ export const UPDATE_USER = gql`
       _id
       expoInstallationId
       expoPushToken
-      lastStation
       notifications {
         frequency
+        station
       }
     }
   }

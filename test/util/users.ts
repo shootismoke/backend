@@ -15,8 +15,7 @@ function getUser(name: string) {
     const input = deepmerge(
       {
         expoInstallationId: `id_${name}`,
-        expoPushToken: `token_${name}`,
-        lastStation: 'openaq|FR04101'
+        expoPushToken: `token_${name}`
       },
       additionalInputs
     );

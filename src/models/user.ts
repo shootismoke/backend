@@ -10,6 +10,27 @@ const NotificationsSchema = new Schema({
     enum: FREQUENCY,
     required: true,
     type: Schema.Types.String
+  },
+  /**
+   * Station of the user to get the notifications. The value is an universalId,
+   * e.g. `openaq|FR1012` or `aqicn|1047`. For privacy reasons, we do not store
+   * the user's exact lat/lng.
+   */
+  station: {
+    required: function(): boolean {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore Following docs: https://mongoosejs.com/docs/validation.html#built-in-validators
+      return this.frequency !== 'never';
+    },
+    type: Schema.Types.String,
+    validate: {
+      message: ({ value }): string => `${value} is not a valid universalId`,
+      validator: (station: string): boolean => {
+        const [provider, id] = station.split('|');
+
+        return !!id && AllProviders.includes(provider);
+      }
+    }
   }
 });
 
@@ -28,22 +49,6 @@ export const UserSchema = new Schema(
      * @see https://docs.expo.io/versions/latest/guides/push-notifications/
      */
     expoPushToken: { sparse: true, type: String, unique: true },
-    /**
-     * Last know station of the user. The value is an universalId, e.g.
-     * `openaq|FR1012` or `aqicn|1047`.
-     */
-    lastStation: {
-      required: true,
-      type: Schema.Types.String,
-      validate: {
-        message: ({ value }): string => `${value} is not a valid universalId`,
-        validator: (station: string): boolean => {
-          const [provider, id] = station.split('|');
-
-          return !!id && AllProviders.includes(provider);
-        }
-      }
-    },
     notifications: {
       default: {
         frequency: 'never'
