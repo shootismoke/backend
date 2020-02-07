@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { RequestHandler } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 type AsyncVoid = void | Promise<void>;
 
@@ -50,4 +50,15 @@ export function chain<Req = NowRequest, Res = NowResponse>(
       });
     };
   };
+}
+
+/**
+ * An express middleware that does nothing
+ */
+export function noopMiddleware(
+  _req: Request,
+  _res: Response,
+  next: NextFunction
+): void {
+  return next();
 }

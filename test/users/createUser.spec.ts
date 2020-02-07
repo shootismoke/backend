@@ -1,17 +1,22 @@
 import { describeApollo } from '../util';
 import { CREATE_USER } from './gql';
 
-const USER1 = {
+const ALICE = {
   expoInstallationId: 'id1',
   expoPushToken: 'token1',
-  notifications: { frequency: 'weekly' }
+  notifications: { frequency: 'weekly', station: 'openaq|FR04101' }
 };
-const USER2 = {
+const BOB = {
   expoInstallationId: 'id2',
-  expoPushToken: 'token1' // Same token as USER1
+  expoPushToken: 'token2',
+  notifications: { frequency: 'never' }
 };
-const USER3 = {
-  expoInstallationId: 'id3'
+const CHARLIE = {
+  expoInstallationId: 'id3',
+  expoPushToken: 'token1' // Same token as ALICE
+};
+const DAVE = {
+  expoInstallationId: 'id4'
 };
 
 describeApollo('users::createUser', client => {
@@ -45,12 +50,52 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it('should create a user', async done => {
+  it('should require station if notifications is not `never`', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER1 }
+      variables: {
+        input: {
+          ...ALICE,
+          notifications: { ...ALICE.notifications, station: undefined }
+        }
+      }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'User validation failed: notifications.station: Path `station` is required., notifications: Validation failed: station: Path `station` is required.'
+    );
+
+    done();
+  });
+
+  it('should require well-formed station', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: {
+        input: {
+          ...ALICE,
+          notifications: { ...ALICE.notifications, station: 'foo' }
+        }
+      }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'User validation failed: notifications.station: foo is not a valid universalId, notifications: Validation failed: station: foo is not a valid universalId'
+    );
+
+    done();
+  });
+
+  it('should create a user with `never` notifications', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: BOB }
     });
 
     if (!res.data) {
@@ -59,7 +104,26 @@ describeApollo('users::createUser', client => {
     }
 
     expect(res.data.createUser._id).toBeDefined();
-    expect(res.data.createUser).toMatchObject(USER1);
+    expect(res.data.createUser).toMatchObject(BOB);
+
+    done();
+  });
+
+  it('should create a user with `weekly` notifications', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: ALICE }
+    });
+
+    if (!res.data) {
+      console.error(res);
+      return done.fail('No data in response');
+    }
+
+    expect(res.data.createUser._id).toBeDefined();
+    expect(res.data.createUser).toMatchObject(ALICE);
 
     done();
   });
@@ -73,7 +137,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER2 }
+      variables: { input: CHARLIE }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
@@ -88,7 +152,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: DAVE }
     });
 
     if (!res.data) {
@@ -106,11 +170,11 @@ describeApollo('users::createUser', client => {
 
     const res1 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: DAVE }
     });
     const res2 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: DAVE }
     });
 
     if (!res1.data || !res2.data) {

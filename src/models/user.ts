@@ -1,3 +1,4 @@
+import { AllProviders } from '@shootismoke/dataproviders';
 import { User as IUser } from '@shootismoke/graphql';
 import { Document, model, Schema } from 'mongoose';
 
@@ -9,6 +10,27 @@ const NotificationsSchema = new Schema({
     enum: FREQUENCY,
     required: true,
     type: Schema.Types.String
+  },
+  /**
+   * Station of the user to get the notifications. The value is an universalId,
+   * e.g. `openaq|FR1012` or `aqicn|1047`. For privacy reasons, we do not store
+   * the user's exact lat/lng.
+   */
+  station: {
+    required: function(): boolean {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore Following docs: https://mongoosejs.com/docs/validation.html#built-in-validators
+      return this.frequency !== 'never';
+    },
+    type: Schema.Types.String,
+    validate: {
+      message: ({ value }): string => `${value} is not a valid universalId`,
+      validator: (station: string): boolean => {
+        const [provider, id] = station.split('|');
+
+        return !!id && AllProviders.includes(provider);
+      }
+    }
   }
 });
 

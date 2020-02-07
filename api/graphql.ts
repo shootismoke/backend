@@ -1,7 +1,7 @@
 import { init } from '@sentry/node';
 
 import { nowApollo } from '../src/apollo';
-import { chain, hawk } from '../src/util';
+import { chain, hawk, noopMiddleware } from '../src/util';
 
 if (process.env.SENTRY_DSN) {
   init({
@@ -9,4 +9,6 @@ if (process.env.SENTRY_DSN) {
   });
 }
 
-export default chain(hawk)(nowApollo({ server: { path: '/api/graphql' } }));
+export default chain(
+  process.env.NODE_ENV === 'production' ? hawk : noopMiddleware
+)(nowApollo({ server: { path: '/api/graphql' } }));
