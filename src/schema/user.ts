@@ -16,7 +16,7 @@ export const userSchema = gql`
     _id: ID!
     expoInstallationId: String!
     expoPushToken: String
-    history: [HistoryItem]!
+    lastStation: String!
     notifications: Notifications!
   }
 
@@ -27,12 +27,14 @@ export const userSchema = gql`
   input CreateUserInput {
     expoInstallationId: String!
     expoPushToken: String
+    lastStation: String!
     notifications: NotificationsInput
   }
 
   input UpdateUserInput {
     expoInstallationId: String
     expoPushToken: String
+    lastStation: String
     notifications: NotificationsInput
   }
 `;

@@ -1,10 +1,6 @@
-import {
-  HistoryItem as IHistoryItem,
-  Resolvers,
-  User as IUser
-} from '@shootismoke/graphql';
+import { Resolvers, User as IUser } from '@shootismoke/graphql';
 
-import { HistoryItem, User } from '../models';
+import { User } from '../models';
 import { logger } from '../util';
 
 export const userResolvers: Resolvers = {
@@ -36,19 +32,6 @@ export const userResolvers: Resolvers = {
       await user.save({ validateBeforeSave: true });
 
       return user;
-    }
-  },
-  User: {
-    history: async (user: IUser): Promise<IHistoryItem[]> => {
-      // FIXME For now, we don't expose the history of each user, for privacy
-      // reasons. Think it through.
-      if (process.env.NODE_ENV === 'production') {
-        return [];
-      }
-
-      return HistoryItem.find({
-        userId: user._id
-      });
     }
   }
 };

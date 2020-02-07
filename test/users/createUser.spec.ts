@@ -1,17 +1,20 @@
 import { describeApollo } from '../util';
 import { CREATE_USER } from './gql';
 
-const USER1 = {
+const ALICE = {
   expoInstallationId: 'id1',
   expoPushToken: 'token1',
+  lastStation: 'openaq|FR04101',
   notifications: { frequency: 'weekly' }
 };
-const USER2 = {
+const BOB = {
   expoInstallationId: 'id2',
-  expoPushToken: 'token1' // Same token as USER1
+  expoPushToken: 'token1', // Same token as ALICE
+  lastStation: 'openaq|FR04101'
 };
-const USER3 = {
-  expoInstallationId: 'id3'
+const CHARLIE = {
+  expoInstallationId: 'id3',
+  lastStation: 'openaq|FR04101'
 };
 
 describeApollo('users::createUser', client => {
@@ -45,12 +48,42 @@ describeApollo('users::createUser', client => {
     done();
   });
 
+  it('should require lastStation', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: { ...ALICE, lastStation: undefined } }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'Variable "$input" got invalid value { expoInstallationId: "id1", expoPushToken: "token1", lastStation: undefined, notifications: { frequency: "weekly" } }; Field lastStation of required type String! was not provided.'
+    );
+
+    done();
+  });
+
+  it('should require well-formed lastStation', async done => {
+    const { mutate } = await client;
+
+    const res = await mutate({
+      mutation: CREATE_USER,
+      variables: { input: { ...ALICE, lastStation: 'foo' } }
+    });
+
+    expect(res.errors && res.errors[0].message).toContain(
+      'User validation failed: lastStation: foo is not a valid universalId'
+    );
+
+    done();
+  });
+
   it('should create a user', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER1 }
+      variables: { input: ALICE }
     });
 
     if (!res.data) {
@@ -59,7 +92,7 @@ describeApollo('users::createUser', client => {
     }
 
     expect(res.data.createUser._id).toBeDefined();
-    expect(res.data.createUser).toMatchObject(USER1);
+    expect(res.data.createUser).toMatchObject(ALICE);
 
     done();
   });
@@ -73,7 +106,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER2 }
+      variables: { input: BOB }
     });
 
     expect(res.errors && res.errors[0].message).toContain(
@@ -88,7 +121,7 @@ describeApollo('users::createUser', client => {
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: CHARLIE }
     });
 
     if (!res.data) {
@@ -106,11 +139,11 @@ describeApollo('users::createUser', client => {
 
     const res1 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: CHARLIE }
     });
     const res2 = await mutate({
       mutation: CREATE_USER,
-      variables: { input: USER3 }
+      variables: { input: CHARLIE }
     });
 
     if (!res1.data || !res2.data) {
