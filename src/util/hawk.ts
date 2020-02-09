@@ -60,6 +60,6 @@ export async function hawk(req: Request): Promise<true | string> {
 
     return true;
   } catch (error) {
-    return error.message;
+    return `Hawk: ${error.message}`;
   }
 }

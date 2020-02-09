@@ -36,7 +36,7 @@ describe('hawk', () => {
 
     const result = await hawk(req);
 
-    expect(result).toBe('Invalid Hawk id: foo');
+    expect(result).toBe('Hawk: Invalid Hawk id: foo');
 
     done();
   });
@@ -47,7 +47,7 @@ describe('hawk', () => {
 
     const result = await hawk(req);
 
-    expect(result).toBe('Unauthorized');
+    expect(result).toBe('Hawk: Unauthorized');
 
     done();
   });
