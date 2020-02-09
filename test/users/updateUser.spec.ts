@@ -1,29 +1,159 @@
-import { describeApollo, getAlice, getBob } from '../util';
+import { ALICE_ID, BOB_ID, describeApollo, getAlice, getBob } from '../util';
 import { UPDATE_USER } from './gql';
 
 const ALICE_1 = {
-  expoPushToken: 'token_alice_1'
+  notifications: {
+    expoPushToken: 'token_alice_1',
+    frequency: 'monthly',
+    station: 'openaq|FR04101'
+  }
 };
 const ALICE_2 = {
-  notifications: { frequency: 'monthly', station: 'openaq|FR04101' }
+  notifications: {
+    expoPushToken: 'token_alice_2',
+    frequency: 'never',
+    station: 'openaq|FR04102'
+  }
 };
-const ALICE_3 = {
-  notifications: { frequency: 'weekly', station: 'openaq|FR04102' }
-};
-const ALICE_4 = {
-  notifications: { frequency: 'never' }
-};
-const ALICE_5 = {
-  expoInstallationId: 'id_alice_1'
+const BOB = {
+  notifications: {
+    expoPushToken: ALICE_2.notifications.expoPushToken, // Samel token as ALICE_2
+    frequency: 'monthly',
+    station: 'openaq|FR04102'
+  }
 };
 
 describeApollo('users::updateUser', client => {
-  it('should be able to change expoPushToken', async done => {
+  beforeAll(async done => {
+    await getAlice(client);
+    await getBob(client);
+
+    done();
+  });
+
+  // FIXME ADD TEST NO/wrong expoInstallationId
+
+  describe('notifications input validation', () => {
+    it('should fail on wrong expoInstallationId', async done => {
+      const { mutate } = await client;
+
+      const res = await mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          expoInstallationId: 'foo',
+          input: ALICE_1
+        }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        'No user with expoInstallationId "foo" found'
+      );
+
+      done();
+    });
+
+    it('should require expoPushToken', async done => {
+      const { mutate } = await client;
+
+      const res = await mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          expoInstallationId: ALICE_ID,
+          input: {
+            notifications: {
+              ...ALICE_1.notifications,
+              expoPushToken: undefined
+            }
+          }
+        }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        'Variable "$input" got invalid value { expoPushToken: undefined, frequency: "monthly", station: "openaq|FR04101" } at "input.notifications"; Field expoPushToken of required type ID! was not provided.'
+      );
+
+      done();
+    });
+
+    it('should require frequency', async done => {
+      const { mutate } = await client;
+
+      const res = await mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          expoInstallationId: ALICE_ID,
+          input: {
+            notifications: {
+              ...ALICE_1.notifications,
+              frequency: undefined
+            }
+          }
+        }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        'Variable "$input" got invalid value { expoPushToken: "token_alice_1", frequency: undefined, station: "openaq|FR04101" } at "input.notifications"; Field frequency of required type Frequency! was not provided.'
+      );
+
+      done();
+    });
+
+    it('should require station', async done => {
+      const { mutate } = await client;
+
+      const res = await mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          expoInstallationId: ALICE_ID,
+          input: {
+            notifications: {
+              ...ALICE_1.notifications,
+              station: undefined
+            }
+          }
+        }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        'Variable "$input" got invalid value { expoPushToken: "token_alice_1", frequency: "monthly", station: undefined } at "input.notifications"; Field station of required type String! was not provided.'
+      );
+
+      done();
+    });
+
+    it('should require well-formed station as universalId', async done => {
+      const { mutate } = await client;
+
+      const res = await mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          expoInstallationId: ALICE_ID,
+          input: {
+            notifications: {
+              ...ALICE_1.notifications,
+              station: 'foo'
+            }
+          }
+        }
+      });
+
+      expect(res.errors && res.errors[0].message).toContain(
+        'User validation failed: notifications.station: foo is not a valid universalId, notifications: Validation failed: station: foo is not a valid universalId'
+      );
+
+      done();
+    });
+  });
+
+  it('should be able to create notifications', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await getAlice(client))._id, input: ALICE_1 }
+      variables: {
+        expoInstallationId: ALICE_ID,
+        input: ALICE_1
+      }
     });
 
     if (!res.data) {
@@ -36,12 +166,15 @@ describeApollo('users::updateUser', client => {
     done();
   });
 
-  it('should be able to create notifications', async done => {
+  it('should be able to update notifications', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await getAlice(client))._id, input: ALICE_2 }
+      variables: {
+        expoInstallationId: ALICE_ID,
+        input: ALICE_2
+      }
     });
 
     if (!res.data) {
@@ -54,87 +187,15 @@ describeApollo('users::updateUser', client => {
     done();
   });
 
-  it('should be able to update notifications to never', async done => {
-    const { mutate } = await client;
-
-    const res = await mutate({
-      mutation: UPDATE_USER,
-      variables: { userId: (await getAlice(client))._id, input: ALICE_4 }
-    });
-
-    if (!res.data) {
-      console.error(res);
-      return done.fail('No data in response');
-    }
-
-    expect(res.data.updateUser).toMatchObject(ALICE_4);
-
-    done();
-  });
-
-  it('should not be able to update weekly notifications without station', async done => {
-    const { mutate } = await client;
-
-    const res = await mutate({
-      mutation: UPDATE_USER,
-      variables: {
-        userId: (await getAlice(client))._id,
-        input: {
-          ...ALICE_3,
-          notifications: { ...ALICE_3.notifications, station: undefined }
-        }
-      }
-    });
-
-    expect(res.errors && res.errors[0].message).toContain(
-      'User validation failed: notifications.station: Path `station` is required., notifications: Validation failed: station: Path `station` is required.'
-    );
-
-    done();
-  });
-
-  it('should be able to update notifications to weekly', async done => {
-    const { mutate } = await client;
-
-    const res = await mutate({
-      mutation: UPDATE_USER,
-      variables: { userId: (await getAlice(client))._id, input: ALICE_3 }
-    });
-
-    if (!res.data) {
-      console.error(res);
-      return done.fail('No data in response');
-    }
-
-    expect(res.data.updateUser).toMatchObject(ALICE_3);
-
-    done();
-  });
-
-  it('should be able to change expoInstallationId', async done => {
-    const { mutate } = await client;
-
-    const res = await mutate({
-      mutation: UPDATE_USER,
-      variables: { userId: (await getAlice(client))._id, input: ALICE_5 }
-    });
-
-    if (!res.data) {
-      console.error(res);
-      return done.fail('No data in response');
-    }
-
-    expect(res.data.updateUser).toMatchObject(ALICE_5);
-
-    done();
-  });
-
   it('should validate unique expoPushToken', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: UPDATE_USER,
-      variables: { userId: (await getBob(client))._id, input: ALICE_1 }
+      variables: {
+        expoInstallationId: BOB_ID,
+        input: BOB
+      }
     });
 
     expect(res.errors && res.errors[0].message).toContain(

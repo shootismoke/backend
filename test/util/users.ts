@@ -14,8 +14,7 @@ function getUser(name: string) {
 
     const input = deepmerge(
       {
-        expoInstallationId: `id_${name}`,
-        expoPushToken: `token_${name}`
+        expoInstallationId: `id_${name}`
       },
       additionalInputs
     );
@@ -26,7 +25,7 @@ function getUser(name: string) {
 
     if (!createRes.data) {
       console.error(createRes);
-      throw new Error('No data in response');
+      throw new Error(`Failed to create user ${name}`);
     }
 
     return createRes.data.createUser;
@@ -35,3 +34,6 @@ function getUser(name: string) {
 
 export const getAlice = pMemoize(getUser('alice'));
 export const getBob = pMemoize(getUser('bob'));
+
+export const ALICE_ID = 'id_alice';
+export const BOB_ID = 'id_bob';

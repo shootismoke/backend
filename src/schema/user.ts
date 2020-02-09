@@ -9,31 +9,28 @@ export const userSchema = gql`
   }
 
   type Notifications {
+    expoPushToken: ID!
     frequency: Frequency!
-    station: String
+    station: String!
   }
 
   type User {
     _id: ID!
-    expoInstallationId: String!
-    expoPushToken: String
-    notifications: Notifications!
+    expoInstallationId: ID!
+    notifications: Notifications
   }
 
   input NotificationsInput {
+    expoPushToken: ID!
     frequency: Frequency!
-    station: String
+    station: String!
   }
 
   input CreateUserInput {
-    expoInstallationId: String!
-    expoPushToken: String
-    notifications: NotificationsInput
+    expoInstallationId: ID!
   }
 
   input UpdateUserInput {
-    expoInstallationId: String
-    expoPushToken: String
     notifications: NotificationsInput
   }
 `;

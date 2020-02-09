@@ -1564,10 +1564,10 @@
     fp-ts "^2.1.1"
     io-ts "^2.0.1"
 
-"@shootismoke/graphql@^0.2.10":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.10.tgz#cd8918b955218014a04f2299e19fc8170807511b"
-  integrity sha512-OPPpEXG8BZb/iYWGqm7QSu34QwZvueibT79FeqkPJdw9cUgWFs84wz/ikReUXhZcK0WCbAXPbALsQ8ziKIRENw==
+"@shootismoke/graphql@^0.2.11":
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.11.tgz#a5e5b4cd08a860aa67927486dd77c57fa04fd8b2"
+  integrity sha512-eNuAb41MZzRaSPMMTszYKqXCrlSIV4DlEcL6HeZvvV1gGm0e8Qt1sINzwMNUVo3XywMWru37wj9Z3B/GqzFtPw==
 
 "@sinonjs/commons@^1.7.0":
   version "1.7.0"

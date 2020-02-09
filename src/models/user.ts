@@ -5,6 +5,19 @@ import { Document, model, Schema } from 'mongoose';
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'] as const;
 
 const NotificationsSchema = new Schema({
+  /**
+   * @see https://docs.expo.io/versions/latest/guides/push-notifications/
+   */
+  expoPushToken: {
+    // For simplicity sake, we require even if frequency is `never`
+    required: true,
+    sparse: true,
+    type: String,
+    unique: true
+  },
+  /**
+   * Frequency of notifications
+   */
   frequency: {
     default: 'never',
     enum: FREQUENCY,
@@ -17,11 +30,8 @@ const NotificationsSchema = new Schema({
    * the user's exact lat/lng.
    */
   station: {
-    required: function(): boolean {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore Following docs: https://mongoosejs.com/docs/validation.html#built-in-validators
-      return this.frequency !== 'never';
-    },
+    // For simplicity sake, we require even if frequency is `never`
+    required: true,
     type: Schema.Types.String,
     validate: {
       message: ({ value }): string => `${value} is not a valid universalId`,
@@ -45,15 +55,7 @@ export const UserSchema = new Schema(
       type: Schema.Types.String,
       unique: true
     },
-    /**
-     * @see https://docs.expo.io/versions/latest/guides/push-notifications/
-     */
-    expoPushToken: { sparse: true, type: String, unique: true },
     notifications: {
-      default: {
-        frequency: 'never'
-      },
-      required: true,
       type: NotificationsSchema
     }
   },
