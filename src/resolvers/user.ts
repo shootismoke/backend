@@ -17,12 +17,19 @@ export const userResolvers: Resolvers = {
 
       return user;
     },
-    updateUser: async (_parent, { userId, input }): Promise<IUser> => {
+    updateUser: async (
+      _parent,
+      { expoInstallationId, input }
+    ): Promise<IUser> => {
       // FIXME Is there some faster way to do the below, with findOneAndUpdate?
-      const user = await User.findById(userId);
+      const user = await User.findOne({
+        expoInstallationId
+      });
 
       if (!user) {
-        const e = new Error(`No user with id ${userId} found`);
+        const e = new Error(
+          `No user with expoInstallationId "${expoInstallationId}" found`
+        );
         logger.error(e);
         throw e;
       }

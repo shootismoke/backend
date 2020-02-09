@@ -5,24 +5,20 @@ export const CREATE_USER = gql`
     createUser(input: $input) {
       _id
       expoInstallationId
-      expoPushToken
-      notifications {
-        frequency
-        station
-      }
     }
   }
 `;
 
 export const UPDATE_USER = gql`
-  mutation($userId: ID!, $input: UpdateUserInput!) {
-    updateUser(userId: $userId, input: $input) {
+  mutation($expoInstallationId: ID!, $input: UpdateUserInput!) {
+    updateUser(expoInstallationId: $expoInstallationId, input: $input) {
       _id
       expoInstallationId
-      expoPushToken
       notifications {
+        expoPushToken
         frequency
         station
+        timezone
       }
     }
   }
