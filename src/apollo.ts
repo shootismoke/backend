@@ -37,8 +37,8 @@ export async function createServer(options?: DbOptions): Promise<ApolloServer> {
     },
     engine: process.env.ENGINE_API_KEY
       ? {
-        apiKey: process.env.ENGINE_API_KEY
-      }
+          apiKey: process.env.ENGINE_API_KEY
+        }
       : undefined,
     typeDefs,
     resolvers
@@ -59,7 +59,7 @@ interface Options {
 export function nowApollo(
   options?: Options
 ): (req: NowRequest, res: NowResponse) => Promise<void> {
-  return async function (req: NowRequest, res: NowResponse): Promise<void> {
+  return async function(req: NowRequest, res: NowResponse): Promise<void> {
     const server = await createServer(options && options.db);
 
     server.createHandler(options && options.server)(req, res);
