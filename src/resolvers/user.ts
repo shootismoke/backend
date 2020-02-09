@@ -1,11 +1,19 @@
 import { Resolvers, User as IUser } from '@shootismoke/graphql';
 
 import { User } from '../models';
-import { logger } from '../util';
+import { ApolloContext, logger } from '../util';
 
-export const userResolvers: Resolvers = {
+function assertHawkAuthenticated(context: ApolloContext): void {
+  if (context.isHawkAuthenticated !== true) {
+    throw new Error(context.isHawkAuthenticated);
+  }
+}
+
+export const userResolvers: Resolvers<ApolloContext> = {
   Mutation: {
-    createUser: async (_parent, { input }): Promise<IUser> => {
+    createUser: async (_parent, { input }, context): Promise<IUser> => {
+      assertHawkAuthenticated(context);
+
       let user = await User.findOne({
         expoInstallationId: input.expoInstallationId
       });
@@ -19,9 +27,11 @@ export const userResolvers: Resolvers = {
     },
     updateUser: async (
       _parent,
-      { expoInstallationId, input }
+      { expoInstallationId, input },
+      context
     ): Promise<IUser> => {
-      // FIXME Is there some faster way to do the below, with findOneAndUpdate?
+      assertHawkAuthenticated(context);
+
       const user = await User.findOne({
         expoInstallationId
       });

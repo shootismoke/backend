@@ -11,7 +11,7 @@ module.exports = {
     '!**/index.ts', // index.ts only re-exports stuff
     '!**/testUtil.ts' // These files are used in tests
   ],
-  setupFiles: ['./test/util/setup.ts'],
+  setupFiles: ['./e2e/util/setup.ts'],
   testEnvironment: 'node',
   testMatch: ['**/*.spec.ts']
 };
