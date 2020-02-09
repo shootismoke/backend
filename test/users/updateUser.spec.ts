@@ -5,21 +5,24 @@ const ALICE_1 = {
   notifications: {
     expoPushToken: 'token_alice_1',
     frequency: 'monthly',
-    station: 'openaq|FR04101'
+    station: 'openaq|FR04101',
+    timezone: 'America/Los_Angeles'
   }
 };
 const ALICE_2 = {
   notifications: {
     expoPushToken: 'token_alice_2',
     frequency: 'never',
-    station: 'openaq|FR04102'
+    station: 'openaq|FR04102',
+    timezone: 'Europe/Paris'
   }
 };
 const BOB = {
   notifications: {
-    expoPushToken: ALICE_2.notifications.expoPushToken, // Samel token as ALICE_2
+    expoPushToken: ALICE_2.notifications.expoPushToken, // Same token as ALICE_2
     frequency: 'monthly',
-    station: 'openaq|FR04102'
+    station: 'openaq|FR04102',
+    timezone: 'Europe/Paris'
   }
 };
 
@@ -30,8 +33,6 @@ describeApollo('users::updateUser', client => {
 
     done();
   });
-
-  // FIXME ADD TEST NO/wrong expoInstallationId
 
   describe('notifications input validation', () => {
     it('should fail on wrong expoInstallationId', async done => {
@@ -52,74 +53,38 @@ describeApollo('users::updateUser', client => {
       done();
     });
 
-    it('should require expoPushToken', async done => {
-      const { mutate } = await client;
+    /**
+     * Test that skipping a required field will yield an error.
+     */
+    function testRequiredField(field: string, graphqlType: string): void {
+      it(`should require ${field}`, async done => {
+        const { mutate } = await client;
 
-      const res = await mutate({
-        mutation: UPDATE_USER,
-        variables: {
-          expoInstallationId: ALICE_ID,
-          input: {
-            notifications: {
-              ...ALICE_1.notifications,
-              expoPushToken: undefined
+        const res = await mutate({
+          mutation: UPDATE_USER,
+          variables: {
+            expoInstallationId: ALICE_ID,
+            input: {
+              notifications: {
+                ...ALICE_1.notifications,
+                [field]: undefined
+              }
             }
           }
-        }
+        });
+
+        expect(res.errors && res.errors[0].message).toContain(
+          `Field ${field} of required type ${graphqlType} was not provided.`
+        );
+
+        done();
       });
+    }
 
-      expect(res.errors && res.errors[0].message).toContain(
-        'Variable "$input" got invalid value { expoPushToken: undefined, frequency: "monthly", station: "openaq|FR04101" } at "input.notifications"; Field expoPushToken of required type ID! was not provided.'
-      );
-
-      done();
-    });
-
-    it('should require frequency', async done => {
-      const { mutate } = await client;
-
-      const res = await mutate({
-        mutation: UPDATE_USER,
-        variables: {
-          expoInstallationId: ALICE_ID,
-          input: {
-            notifications: {
-              ...ALICE_1.notifications,
-              frequency: undefined
-            }
-          }
-        }
-      });
-
-      expect(res.errors && res.errors[0].message).toContain(
-        'Variable "$input" got invalid value { expoPushToken: "token_alice_1", frequency: undefined, station: "openaq|FR04101" } at "input.notifications"; Field frequency of required type Frequency! was not provided.'
-      );
-
-      done();
-    });
-
-    it('should require station', async done => {
-      const { mutate } = await client;
-
-      const res = await mutate({
-        mutation: UPDATE_USER,
-        variables: {
-          expoInstallationId: ALICE_ID,
-          input: {
-            notifications: {
-              ...ALICE_1.notifications,
-              station: undefined
-            }
-          }
-        }
-      });
-
-      expect(res.errors && res.errors[0].message).toContain(
-        'Variable "$input" got invalid value { expoPushToken: "token_alice_1", frequency: "monthly", station: undefined } at "input.notifications"; Field station of required type String! was not provided.'
-      );
-
-      done();
-    });
+    testRequiredField('expoPushToken', 'ID!');
+    testRequiredField('frequency', 'Frequency!');
+    testRequiredField('station', 'String!');
+    testRequiredField('timezone', 'String!');
 
     it('should require well-formed station as universalId', async done => {
       const { mutate } = await client;
@@ -145,7 +110,7 @@ describeApollo('users::updateUser', client => {
     });
   });
 
-  it('should be able to create notifications', async done => {
+  it.only('should be able to create notifications', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
@@ -155,6 +120,8 @@ describeApollo('users::updateUser', client => {
         input: ALICE_1
       }
     });
+
+    console.log(res);
 
     if (!res.data) {
       console.error(res);

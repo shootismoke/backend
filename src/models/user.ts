@@ -41,6 +41,13 @@ const NotificationsSchema = new Schema({
         return !!id && AllProviders.includes(provider);
       }
     }
+  },
+  /**
+   * User's timezone
+   */
+  timezone: {
+    required: true,
+    type: Schema.Types.String
   }
 });
 

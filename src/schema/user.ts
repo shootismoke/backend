@@ -12,6 +12,7 @@ export const userSchema = gql`
     expoPushToken: ID!
     frequency: Frequency!
     station: String!
+    timezone: String!
   }
 
   type User {
@@ -24,6 +25,7 @@ export const userSchema = gql`
     expoPushToken: ID!
     frequency: Frequency!
     station: String!
+    timezone: String!
   }
 
   input CreateUserInput {
