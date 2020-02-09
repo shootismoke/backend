@@ -1,5 +1,5 @@
 import Hawk from '@hapi/hawk';
-import { NextFunction, Request, Response } from 'express';
+import { Request } from 'express';
 
 import { logger } from './logger';
 
@@ -43,42 +43,23 @@ function credentialsFunc(id: string): Credential {
 }
 
 /**
- * An express middleware to secure an endpoint with Hawk
+ * A function to test if the request is hawk-authenticated.
  * @see https://hapi.dev/family/hawk
  *
  * @param req - The incoming express request
- * @param res - The outgoing express response
- * @param next - The express next function
  */
-export async function hawk(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function hawk(req: Request): Promise<true | string> {
   try {
     // Authenticate incoming request
-    const { artifacts, credentials } = await Hawk.server.authenticate(
-      req,
-      credentialsFunc,
-      {
-        // The client constructs the port as 443, because in production we use
-        // https. But somehow, in the `req`, object, the port is 80, even in
-        // production. Here we just force the port to 443 in production.
-        port: process.env.NODE_ENV === 'production' ? 443 : undefined
-      }
-    );
+    await Hawk.server.authenticate(req, credentialsFunc, {
+      // The client constructs the port as 443, because in production we use
+      // https. But somehow, in the `req`, object, the port is 80, even in
+      // production. Here we just force the port to 443 in production.
+      port: process.env.NODE_ENV === 'production' ? 443 : undefined
+    });
 
-    // Generate Server-Authorization response header
-    const header = Hawk.server.header(credentials, artifacts);
-
-    // eslint-disable-next-line require-atomic-updates
-    req.headers['Server-Authorization'] = header;
-
-    next();
+    return true;
   } catch (error) {
-    logger.error(error);
-    res.status(401);
-    res.send(error.message);
-    res.end();
+    return `Hawk: ${error.message}`;
   }
 }
