@@ -2182,14 +2182,14 @@ apollo-server-errors@^2.3.4:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.3.4.tgz#b70ef01322f616cbcd876f3e0168a1a86b82db34"
   integrity sha512-Y0PKQvkrb2Kd18d1NPlHdSqmlr8TgqJ7JQcNIfhNDgdb45CnqZlxL1abuIRhr8tiw8OhVOcFxz2KyglBi8TKdA==
 
-apollo-server-micro@^2.9.16:
-  version "2.9.16"
-  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-2.9.16.tgz#f3e5aa275bfe604c1182178942101905760fab78"
-  integrity sha512-NcnZJAf8PqbfAJbIUrCSVDBy5/4iPh0/C0+aOyP8FN32/hhIUDFiibFzvZNlMQs68zB39qhDWZ/hWKJv8j+Vbg==
+apollo-server-micro@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-2.10.0.tgz#c86e64086a1dc0d3b309f7fbea235e0403533810"
+  integrity sha512-pYLQ+iDYGTuYAdiZ/b9GaS5Zl5yikSi07lfcvYxyrNEUNWtS/4yiMJrJ1xeYJqdU3qRWRIroWNu2vPC95eAFvQ==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.24"
     accept "^3.0.2"
-    apollo-server-core "^2.9.16"
+    apollo-server-core "^2.10.0"
     apollo-server-types "^0.2.10"
     micro "^9.3.2"
 
