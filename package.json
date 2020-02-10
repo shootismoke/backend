@@ -17,7 +17,7 @@
   "dependencies": {
     "@hapi/hawk": "^8.0.0",
     "@now/node": "^1.4.1",
-    "@sentry/node": "^5.11.2",
+    "@sentry/node": "^5.12.3",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.9",
     "@shootismoke/graphql": "^0.2.12",
