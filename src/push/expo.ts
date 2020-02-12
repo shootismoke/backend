@@ -28,7 +28,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 
   return `Shoot! You smoked ${
     frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
-    } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
+  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
 
 /**

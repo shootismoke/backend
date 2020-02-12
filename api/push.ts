@@ -11,7 +11,7 @@ import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
-export default async function (
+export default async function(
   _req: NowRequest,
   res: NowResponse
 ): Promise<void> {
