@@ -1,26 +1,23 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { captureException, init } from '@sentry/node';
 import {
   AllProviders,
   OpenAQFormat,
   ProviderPromise
 } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
-import { Frequency } from '@shootismoke/graphql';
+import { Frequency, User as IUser } from '@shootismoke/graphql';
 import { ExpoPushMessage } from 'expo-server-sdk';
+import { Document } from 'mongoose';
 
 import { User } from '../src/models';
 import {
   connectToDatabase,
   findTimezonesAt,
-  IS_SENTRY_SET_UP
+  logger,
+  sentrySetup
 } from '../src/util';
 
-if (process.env.SENTRY_DSN) {
-  init({
-    dsn: process.env.SENTRY_DSN
-  });
-}
+sentrySetup();
 
 /**
  * Convert raw pm25 level to number of cigarettes. 1 cigarette is equivalent of
@@ -103,10 +100,42 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
   } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
 
-// Show notifications at these hours of the day
-const DAILY_NOTIFICATION_HOUR = 9;
-const WEEKLY_NOTIFICATION_HOUR = 21;
-const MONTHLY_NOTIFICATION_HOUR = 21;
+/**
+ * Show notifications at these hours of the day
+ */
+const NOTIFICATION_HOUR = {
+  daily: 9,
+  weekly: 21,
+  monthly: 21
+};
+
+/**
+ * Find in DB all users to show notifications with frequency `frequency`.
+ *
+ * @param frequency - The frequency to show the timezones.
+ */
+async function findUsersForNotifications(
+  frequency: Frequency
+): Promise<(IUser & Document)[]> {
+  const today = new Date();
+  let timezones: string[] = [];
+  if (frequency === 'daily') {
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.daily);
+  } else if (frequency === 'weekly' && today.getUTCDay() === 0) {
+    // Show weekly notifications on Sundays
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.weekly);
+  } else if (frequency === 'monthly' && today.getUTCDate() === 1) {
+    // Show monthly notifications on the 1st of the month
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.monthly);
+  }
+
+  return User.find({
+    'notifications.frequency': frequency,
+    'notifications.timezone': {
+      $in: timezones
+    }
+  });
+}
 
 export default async function(
   _req: NowRequest,
@@ -114,30 +143,24 @@ export default async function(
 ): Promise<void> {
   await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
-  const today = new Date();
-  // Find timezones to show notifications
-  const dailyTimezones = findTimezonesAt(DAILY_NOTIFICATION_HOUR);
-  // Show weekly notifications on Sundays
-  const weeklyTimezones =
-    today.getUTCDay() === 0 ? findTimezonesAt(WEEKLY_NOTIFICATION_HOUR) : [];
-  // Show monthly notifications on the 1st of the month
-  const monthlyTimezones =
-    today.getUTCDate() === 1 ? findTimezonesAt(MONTHLY_NOTIFICATION_HOUR) : [];
-
-  const users = await User.find({
-    'notifications.timezone': {
-      $in: dailyTimezones.concat(weeklyTimezones).concat(monthlyTimezones)
-    }
-  });
+  // Fetch all users to whom we should show a notification
+  const users = (
+    await Promise.all(
+      (['daily', 'weekly', 'monthly'] as const).map(findUsersForNotifications)
+    )
+  ).flat();
 
   // All the values we get from providers
   const messages = await Promise.all(
     users.map(async user => {
       try {
         if (!user.notifications) {
-          throw new Error(`User ${user.id} has no notifications`);
+          throw new Error(
+            `User ${user.id} cannot not have notifications, as per our query. qed.`
+          );
         }
 
+        // FIXME add retries + timeout
         const { value } = await universalFetch(user.notifications.universalId);
 
         return {
@@ -147,7 +170,7 @@ export default async function(
           pm25: value
         } as ExpoPushMessage;
       } catch (error) {
-        IS_SENTRY_SET_UP && captureException(error);
+        logger.error(error);
 
         return error as Error;
       }

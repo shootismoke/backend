@@ -1,11 +1,6 @@
-import { init } from '@sentry/node';
-
 import { nowApollo } from '../src/apollo';
+import { sentrySetup } from '../src/util';
 
-if (process.env.SENTRY_DSN) {
-  init({
-    dsn: process.env.SENTRY_DSN
-  });
-}
+sentrySetup();
 
 export default nowApollo({ server: { path: '/api/graphql' } });
