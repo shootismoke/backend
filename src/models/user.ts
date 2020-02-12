@@ -25,29 +25,29 @@ const NotificationsSchema = new Schema({
     type: Schema.Types.String
   },
   /**
-   * Station of the user to get the notifications. The value is an universalId,
-   * e.g. `openaq|FR1012` or `aqicn|1047`. For privacy reasons, we do not store
-   * the user's exact lat/lng.
-   */
-  station: {
-    // For simplicity sake, we require even if frequency is `never`
-    required: true,
-    type: Schema.Types.String,
-    validate: {
-      message: ({ value }): string => `${value} is not a valid universalId`,
-      validator: (station: string): boolean => {
-        const [provider, id] = station.split('|');
-
-        return !!id && AllProviders.includes(provider);
-      }
-    }
-  },
-  /**
    * User's timezone
    */
   timezone: {
     required: true,
     type: Schema.Types.String
+  },
+  /**
+   * Station of the user to get the notifications. The value is an universalId,
+   * e.g. `openaq|FR1012` or `aqicn|1047`. For privacy reasons, we do not store
+   * the user's exact lat/lng.
+   */
+  universalId: {
+    // For simplicity sake, we require even if frequency is `never`
+    required: true,
+    type: Schema.Types.String,
+    validate: {
+      message: ({ value }): string => `${value} is not a valid universalId`,
+      validator: (universalId: string): boolean => {
+        const [provider, station] = universalId.split('|');
+
+        return !!station && AllProviders.includes(provider);
+      }
+    }
   }
 });
 

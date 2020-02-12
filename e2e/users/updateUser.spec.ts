@@ -5,24 +5,24 @@ const ALICE_1 = {
   notifications: {
     expoPushToken: 'token_alice_1',
     frequency: 'monthly',
-    station: 'openaq|FR04101',
-    timezone: 'America/Los_Angeles'
+    timezone: 'America/Los_Angeles',
+    universalId: 'openaq|FR04101'
   }
 };
 const ALICE_2 = {
   notifications: {
     expoPushToken: 'token_alice_2',
     frequency: 'never',
-    station: 'openaq|FR04102',
-    timezone: 'Europe/Paris'
+    timezone: 'Europe/Paris',
+    universalId: 'openaq|FR04102'
   }
 };
 const BOB = {
   notifications: {
     expoPushToken: ALICE_2.notifications.expoPushToken, // Same token as ALICE_2
     frequency: 'monthly',
-    station: 'openaq|FR04102',
-    timezone: 'Europe/Paris'
+    timezone: 'Europe/Paris',
+    universalId: 'openaq|FR04102'
   }
 };
 
@@ -83,10 +83,10 @@ describeApollo('users::updateUser', client => {
 
     testRequiredField('expoPushToken', 'ID!');
     testRequiredField('frequency', 'Frequency!');
-    testRequiredField('station', 'String!');
     testRequiredField('timezone', 'String!');
+    testRequiredField('universalId', 'String!');
 
-    it('should require well-formed station as universalId', async done => {
+    it('should require well-formed universalId', async done => {
       const { mutate } = await client;
 
       const res = await mutate({
@@ -96,14 +96,14 @@ describeApollo('users::updateUser', client => {
           input: {
             notifications: {
               ...ALICE_1.notifications,
-              station: 'foo'
+              universalId: 'foo'
             }
           }
         }
       });
 
       expect(res.errors && res.errors[0].message).toContain(
-        'User validation failed: notifications.station: foo is not a valid universalId, notifications: Validation failed: station: foo is not a valid universalId'
+        'User validation failed: notifications.universalId: foo is not a valid universalId, notifications: Validation failed:universalId:foo is not a valid universalId'
       );
 
       done();

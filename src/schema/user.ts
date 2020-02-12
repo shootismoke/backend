@@ -11,8 +11,8 @@ export const userSchema = gql`
   type Notifications {
     expoPushToken: ID!
     frequency: Frequency!
-    station: String!
     timezone: String!
+    universalId: String!
   }
 
   type User {
@@ -24,8 +24,8 @@ export const userSchema = gql`
   input NotificationsInput {
     expoPushToken: ID!
     frequency: Frequency!
-    station: String!
     timezone: String!
+    universalId: String!
   }
 
   input CreateUserInput {
