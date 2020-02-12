@@ -172,24 +172,35 @@ export default async function(
   _req: NowRequest,
   res: NowResponse
 ): Promise<void> {
-  await connectToDatabase(process.env.MONGODB_ATLAS_URI);
+  try {
+    await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
-  // Fetch all users to whom we should show a notification
-  const users = (
-    await Promise.all(
-      (['daily', 'weekly', 'monthly'] as const).map(findUsersForNotifications)
-    )
-  ).flat();
+    // Fetch all users to whom we should show a notification
+    const users = (
+      await Promise.all(
+        (['daily', 'weekly', 'monthly'] as const).map(findUsersForNotifications)
+      )
+    ).flat();
 
-  // All the values we get from providers
-  const messages = await Promise.all(users.map(constructExpoMessage));
+    // All the values we get from providers
+    const messages = await Promise.all(users.map(constructExpoMessage));
 
-  res.send(
-    JSON.stringify({
-      status: 'ok',
-      data: `Successfully sent ${messages.filter(isExpoPushMessage).length}/${
-        messages.length
-      } push notifications`
-    })
-  );
+    res.send(
+      JSON.stringify({
+        status: 'ok',
+        data: `Successfully sent ${messages.filter(isExpoPushMessage).length}/${
+          messages.length
+        } push notifications`
+      })
+    );
+  } catch (error) {
+    logger.error(error);
+
+    res.send(
+      JSON.stringify({
+        status: 'error',
+        data: error.message
+      })
+    );
+  }
 }
