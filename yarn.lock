@@ -1564,10 +1564,10 @@
     fp-ts "^2.1.1"
     io-ts "^2.0.1"
 
-"@shootismoke/graphql@^0.2.12":
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.12.tgz#967e710d5ce4492c23445dbd570188db21509e9b"
-  integrity sha512-Sy8QR92E4Pmj+nyxFpwPvsp0TrYjvY0gHjvLjnJnzsZ18ntkA1t47il41DRIDP2/6N1+YBzEdQZ+7JCUqGU9cw==
+"@shootismoke/graphql@^0.2.13":
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.13.tgz#1e2feaefa40a30bd8efa99c363f67bef97c97fd9"
+  integrity sha512-M9xZudnAlclnXfTcyh2ExhFSRT5n7cXF5T0mgDnDUGT8cij8uee6hrNOI42TLv28dV2mrhMJQZGPpTG8L/xd5Q==
 
 "@sinonjs/commons@^1.7.0":
   version "1.7.0"
@@ -3846,6 +3846,14 @@ expect@^25.1.0:
     jest-matcher-utils "^25.1.0"
     jest-message-util "^25.1.0"
     jest-regex-util "^25.1.0"
+
+expo-server-sdk@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/expo-server-sdk/-/expo-server-sdk-3.4.0.tgz#07c46e57ddfa29c5d8da702586eef1b61b9ada75"
+  integrity sha512-Ss+XC8BpRiRZ32PglBQ88oIrUv6MXeGaZjLshZ6fDXaHaMIvTbw7euEOGFOAbwb92Ldv6tDSVKspYnU0bAjvTA==
+  dependencies:
+    node-fetch "^2.3.0"
+    promise-limit "^2.7.0"
 
 extend-shallow@^2.0.1:
   version "2.0.1"
@@ -7074,6 +7082,11 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
 
+promise-limit@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/promise-limit/-/promise-limit-2.7.0.tgz#eb5737c33342a030eaeaecea9b3d3a93cb592b26"
+  integrity sha512-7nJ6v5lnJsXwGprnGXga4wx6d1POjvi5Qmf1ivTRxTjH4Z/9Czja/UCMLVmB9N93GeWOU93XaFaEt6jbuoagNw==
+
 promise-retry@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-1.1.1.tgz#6739e968e3051da20ce6497fb2b50f6911df3d6d"
@@ -8312,6 +8325,11 @@ through@2, "through@>=2.2.7 <3", through@^2.3.4, through@^2.3.6, through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+timezones.json@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/timezones.json/-/timezones.json-1.5.2.tgz#536e4779f518a4a2bdd0e95db1053a6c528252a0"
+  integrity sha512-Z+anCOAVpuJ0LcbsYl1a3D/yQNgntPzUgNTyoDgHklieiUWLec0XZM8xZ4I/r66M2yVMBfWhKftt0Rr6Fpu1/A==
 
 tmp@^0.0.33:
   version "0.0.33"

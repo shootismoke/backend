@@ -20,13 +20,15 @@
     "@sentry/node": "^5.12.3",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.9",
-    "@shootismoke/graphql": "^0.2.12",
+    "@shootismoke/graphql": "^0.2.13",
     "@types/mongodb": "^3.3.15",
     "@types/mongoose": "^5.7.0",
     "apollo-server-micro": "^2.10.0",
+    "expo-server-sdk": "^3.4.0",
     "graphql": "^14.6.0",
     "mongodb": "^3.5.2",
-    "mongoose": "^5.8.11"
+    "mongoose": "^5.8.11",
+    "timezones.json": "^1.5.2"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.0.11",

@@ -17,8 +17,8 @@ export const UPDATE_USER = gql`
       notifications {
         expoPushToken
         frequency
-        station
         timezone
+        universalId
       }
     }
   }

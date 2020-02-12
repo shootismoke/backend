@@ -1,11 +1,25 @@
-import { captureException } from '@sentry/node';
+import { captureException, init } from '@sentry/node';
+
+import { IS_SENTRY_SET_UP } from './constants';
 
 /**
- * Send an error to Sentry, or if sentry is not set up, just log it
+ * Set up Sentry, if available.
+ */
+export function sentrySetup(): void {
+  if (process.env.SENTRY_DSN) {
+    init({
+      dsn: process.env.SENTRY_DSN
+    });
+  }
+}
+
+/**
+ * Send an error to Sentry, or if sentry is not set up, just log it.
+ *
  * @param error - Error to log
  */
 function error(error: Error): void {
-  if (process.env.SENTRY_DSN) {
+  if (IS_SENTRY_SET_UP) {
     captureException(error);
   } else {
     console.error(error.message);
