@@ -7,7 +7,7 @@ import timezones from 'timezones.json';
  * @example
  * ```typescript
  * -13 % 64; // -13
- * mod(13, 64); // 51
+ * mod(-13, 64); // 51
  * ```
  */
 function mod(n: number, m: number): number {
