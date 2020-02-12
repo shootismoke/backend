@@ -138,7 +138,6 @@ export default async function(
           throw new Error(`User ${user.id} has no notifications`);
         }
 
-        // @ts-ignore
         const { value } = await universalFetch(user.notifications.universalId);
 
         return {
