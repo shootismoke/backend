@@ -1,8 +1,7 @@
-import { Frequency, User as IUser } from '@shootismoke/graphql';
+import { Frequency, User } from '@shootismoke/graphql';
 import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
-import { PushTicket } from '../models';
 import { logger } from '../util';
 import { pm25ToCigarettes, universalFetch } from './provider';
 
@@ -37,7 +36,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
  * @param user - The user to construct the message for
  */
 export async function constructExpoMessage(
-  user: IUser & Document
+  user: User & Document
 ): Promise<Error | ExpoPushMessage> {
   try {
     if (!user.notifications) {
@@ -97,15 +96,4 @@ export async function sendBatchToExpo(
   }
 
   return tickets;
-}
-
-/**
- * Save Expo push tickets to our DB.
- *
- * @param tickets - The tickets to save.
- */
-export async function saveTicketsToDb(
-  tickets: ExpoPushTicket[]
-): Promise<void> {
-  await PushTicket.insertMany(tickets);
 }

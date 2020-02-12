@@ -1,10 +1,10 @@
 import { NowRequest, NowResponse } from '@now/node';
 
+import { PushTicket } from '../src/models';
 import {
   constructExpoMessage,
   findUsersForNotifications,
   isExpoPushMessage,
-  saveTicketsToDb,
   sendBatchToExpo
 } from '../src/push';
 import { connectToDatabase, logger, sentrySetup } from '../src/util';
@@ -28,8 +28,10 @@ export default async function(
     // Self-explanatory
     const messages = await Promise.all(users.map(constructExpoMessage));
     const validMessages = messages.filter(isExpoPushMessage);
+    console.log('validMessages', validMessages);
     const tickets = await sendBatchToExpo(validMessages);
-    await saveTicketsToDb(tickets);
+    console.log('tickets', tickets);
+    await PushTicket.insertMany(tickets);
 
     res.send(
       JSON.stringify({
