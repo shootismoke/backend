@@ -80,27 +80,6 @@ async function universalFetch(universalId: string): Promise<OpenAQFormat> {
 }
 
 /**
- * Check if a value is an Error or an ExpoPushMessage.
- */
-function isExpoPushMessage(e: Error | ExpoPushMessage): e is ExpoPushMessage {
-  return !(e instanceof Error);
-}
-
-/**
- * Generate the body of the push notification message.
- */
-function getMessageBody(pm25: number, frequency: Frequency): string {
-  const dailyCigarettes = pm25ToCigarettes(pm25);
-  if (frequency === 'daily') {
-    return `Shoot! You'll smoke ${dailyCigarettes} cigarettes today`;
-  }
-
-  return `Shoot! You smoked ${
-    frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
-  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
-}
-
-/**
  * Show notifications at these hours of the day
  */
 const NOTIFICATION_HOUR = {
@@ -137,6 +116,58 @@ async function findUsersForNotifications(
   });
 }
 
+/**
+ * Check if a value is an Error or an ExpoPushMessage.
+ */
+function isExpoPushMessage(e: Error | ExpoPushMessage): e is ExpoPushMessage {
+  return !(e instanceof Error);
+}
+
+/**
+ * Generate the body of the push notification message.
+ */
+function getMessageBody(pm25: number, frequency: Frequency): string {
+  const dailyCigarettes = pm25ToCigarettes(pm25);
+  if (frequency === 'daily') {
+    return `Shoot! You'll smoke ${dailyCigarettes} cigarettes today`;
+  }
+
+  return `Shoot! You smoked ${
+    frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
+  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
+}
+
+/**
+ * For a user, construct a personalized ExpoPushMessage.
+ *
+ * @param user - The user to construct the message for
+ */
+async function constructExpoMessage(
+  user: IUser & Document
+): Promise<Error | ExpoPushMessage> {
+  try {
+    if (!user.notifications) {
+      throw new Error(
+        `User ${user.id} cannot not have notifications, as per our query. qed.`
+      );
+    }
+
+    // FIXME add retries + timeout
+    const { value } = await universalFetch(user.notifications.universalId);
+
+    return {
+      body: getMessageBody(value, user.notifications.frequency),
+      title: 'Sh**t! I Smoke',
+      to: user.notifications.expoPushToken,
+      pm25: value
+    } as ExpoPushMessage;
+  } catch (error) {
+    logger.error(error);
+
+    return error as Error;
+  }
+}
+
 export default async function(
   _req: NowRequest,
   res: NowResponse
@@ -151,31 +182,7 @@ export default async function(
   ).flat();
 
   // All the values we get from providers
-  const messages = await Promise.all(
-    users.map(async user => {
-      try {
-        if (!user.notifications) {
-          throw new Error(
-            `User ${user.id} cannot not have notifications, as per our query. qed.`
-          );
-        }
-
-        // FIXME add retries + timeout
-        const { value } = await universalFetch(user.notifications.universalId);
-
-        return {
-          body: getMessageBody(value, user.notifications.frequency),
-          title: 'Sh**t! I Smoke',
-          to: user.notifications.expoPushToken,
-          pm25: value
-        } as ExpoPushMessage;
-      } catch (error) {
-        logger.error(error);
-
-        return error as Error;
-      }
-    })
-  );
+  const messages = await Promise.all(users.map(constructExpoMessage));
 
   res.send(
     JSON.stringify({
