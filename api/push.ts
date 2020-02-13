@@ -30,7 +30,7 @@ function whitelisted(req: NowRequest): boolean {
     '2607:5300:60:4b6e::'
   ];
 
-  return whitelist.includes(req.headers.forwarded || '');
+  return whitelist.includes(req.headers['x-real-ip'] as string);
 }
 
 export default async function (
