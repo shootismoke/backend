@@ -111,8 +111,8 @@ describe('sendBatchToExpo', () => {
 
     const messages: ExpoPushMessage[] = [{ to: 'foo' }, { to: 'bar' }];
     await sendBatchToExpo(expo, messages);
-    expect(expo.chunkPushNotifications).toBeCalledTimes(1);
-    expect(expo.sendPushNotificationsAsync).toBeCalledTimes(2);
+    expect(expo.chunkPushNotifications).toBeCalledTimes(1); // eslint-disable-line @typescript-eslint/unbound-method
+    expect(expo.sendPushNotificationsAsync).toBeCalledTimes(2); // eslint-disable-line @typescript-eslint/unbound-method
 
     done();
   });
