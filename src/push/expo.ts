@@ -122,7 +122,6 @@ export async function handleReceipts(
   for (const chunk of receiptIdChunks) {
     try {
       const receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-      console.log(receipts);
 
       // The receipts specify whether Apple or Google successfully received the
       // notification and information about an error, if one occurred.

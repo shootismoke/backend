@@ -4,6 +4,7 @@ import { Document } from 'mongoose';
 
 import {
   constructExpoMessage,
+  handleReceipts,
   isExpoPushMessage,
   sendBatchToExpo
 } from './expo';
@@ -119,10 +120,22 @@ describe('sendBatchToExpo', () => {
 });
 
 describe('handleReceipts', () => {
-  it('should correctly call onOk and onError', () => {
+  it('should correctly call onOk and onError', async done => {
+    const receipts = {
+      receiptA: { status: 'ok' },
+      receiptB: { status: 'error', message: 'foo' }
+    };
     const expo = ({
-      chunkPushNotifications: jest.fn(<T>(a: T[]) => a.map(value => [value])),
-      sendPushNotificationsAsync: jest.fn(() => Promise.resolve([]))
+      chunkPushNotificationReceiptIds: jest.fn(() => [Object.keys(receipts)]),
+      getPushNotificationReceiptsAsync: jest.fn(() => Promise.resolve(receipts))
     } as unknown) as Expo;
+    const onOk = jest.fn();
+    const onError = jest.fn();
+
+    await handleReceipts(expo, Object.keys(receipts), onOk, onError);
+    expect(onOk).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
+
+    done();
   });
 });

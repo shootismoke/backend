@@ -39,8 +39,6 @@ export default async function(
       )
     ).flat();
 
-    console.log(users);
-
     // Craft a push notification message for each user
     const messages = await Promise.all(
       users.map(async user => {
