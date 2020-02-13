@@ -2,8 +2,8 @@ import { NowRequest, NowResponse } from '@now/node';
 import { Expo, ExpoPushReceiptId } from 'expo-server-sdk';
 
 import { IPushTicket, PushTicket } from '../src/models';
-import { handleReceipts } from '../src/push';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+import { handleReceipts, whitelisted } from '../src/push';
+import { connectToDatabase, IS_PROD, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -11,10 +11,20 @@ sentrySetup();
  * Handle push notifications receipts.
  */
 export default async function(
-  _req: NowRequest,
+  req: NowRequest,
   res: NowResponse
 ): Promise<void> {
   try {
+    if (IS_PROD && !whitelisted(req)) {
+      res.status(401);
+      res.send({
+        status: 'error',
+        details: `Not a whitelisted IP address`
+      });
+
+      return;
+    }
+
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     const tickets = await PushTicket.find({
