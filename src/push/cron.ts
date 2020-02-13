@@ -17,5 +17,5 @@ const whitelist = [
  * @see https://www.easycron.com/ips
  */
 export function whitelisted(req: NowRequest): boolean {
-  return whitelist.includes(req.headers['x-real-ip'] as string);
+  return whitelist.includes(req.headers['x-forwarded-for'] as string);
 }
