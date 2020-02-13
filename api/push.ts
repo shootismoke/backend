@@ -1,31 +1,29 @@
 import { NowRequest, NowResponse } from '@now/node';
-import Expo from 'expo-server-sdk';
+import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
+  assertWhitelistedIP,
   constructExpoMessage,
+  ExpoPushSuccessTicket,
   findUsersForNotifications,
   isExpoPushMessage,
   sendBatchToExpo,
-  universalFetch,
-  whitelisted
+  universalFetch
 } from '../src/push';
 import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
+/**
+ * Send push notifications to all relevant users.
+ */
 export default async function(
   req: NowRequest,
   res: NowResponse
 ): Promise<void> {
   try {
-    if (!whitelisted(req)) {
-      res.status(401);
-      res.send({
-        status: 'error',
-        details: `Not a whitelisted IP address`
-      });
-
+    if (!assertWhitelistedIP(req, res)) {
       return;
     }
 
@@ -50,12 +48,28 @@ export default async function(
         // FIXME add retries + timeout
         const { value } = await universalFetch(user.notifications.universalId);
 
-        return constructExpoMessage(user, value);
+        return {
+          userId: user._id,
+          message: constructExpoMessage(user, value)
+        };
       })
     );
-    const validMessages = messages.filter(isExpoPushMessage);
-    const tickets = await sendBatchToExpo(new Expo(), validMessages);
-    await PushTicket.insertMany(tickets);
+    // Find the messages that are valid
+    const validMessages = messages.filter(({ message }) =>
+      isExpoPushMessage(message)
+    );
+    // Send the valid messages, we get the tickets
+    const tickets = await sendBatchToExpo(
+      new Expo(),
+      validMessages.map(({ message }) => message as ExpoPushMessage)
+    );
+    await PushTicket.insertMany(
+      tickets.map((ticket, index) => ({
+        ...ticket,
+        receiptId: (ticket as ExpoPushSuccessTicket).id,
+        userId: validMessages[index].userId
+      }))
+    );
 
     res.send({
       status: 'ok',
@@ -64,6 +78,7 @@ export default async function(
   } catch (error) {
     logger.error(error);
 
+    res.status(500);
     res.send({
       status: 'error',
       details: error.message

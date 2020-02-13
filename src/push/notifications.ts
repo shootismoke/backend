@@ -1,7 +1,7 @@
 import { Frequency, User as IUser } from '@shootismoke/graphql';
 import { Document } from 'mongoose';
 
-import { User } from '../models';
+import { PushTicket, User } from '../models';
 import { findTimezonesAt } from '../util';
 
 /**
@@ -12,6 +12,40 @@ const NOTIFICATION_HOUR = {
   weekly: 21,
   monthly: 21
 };
+
+/**
+ * Generate the mongodb users aggregation pipeline for finding users to send
+ * notifications to.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function usersPipeline(frequency: Frequency, timezones: string[]): any[] {
+  return [
+    // Get all users matching frequency and timezone.
+    {
+      $match: {
+        'notifications.frequency': frequency,
+        'notifications.timezone': {
+          $in: timezones
+        }
+      }
+    },
+    // Check if user has any active pushTickets from Expo.
+    {
+      $lookup: {
+        as: 'pushTickets',
+        from: PushTicket.collection.name,
+        localField: '_id',
+        foreignField: 'userId'
+      }
+    },
+    // Only return users with no puchTickets.
+    {
+      $match: {
+        pushTickets: { $size: 0 }
+      }
+    }
+  ];
+}
 
 /**
  * Find in DB all users to show notifications with frequency `frequency`.
@@ -33,10 +67,5 @@ export async function findUsersForNotifications(
     timezones = findTimezonesAt(NOTIFICATION_HOUR.monthly);
   }
 
-  return User.find({
-    'notifications.frequency': frequency,
-    'notifications.timezone': {
-      $in: timezones
-    }
-  });
+  return User.aggregate(usersPipeline(frequency, timezones));
 }

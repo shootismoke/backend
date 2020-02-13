@@ -1,6 +1,14 @@
 import { ExpoPushTicket } from 'expo-server-sdk';
 import { Document, model, Schema } from 'mongoose';
 
+export type IPushTicket = Omit<
+  ExpoPushTicket & {
+    receiptId?: string;
+    userId: string;
+  },
+  'id'
+>;
+
 const PushTicketErrorDetailsSchema = new Schema({
   error: {
     enum: [
@@ -9,11 +17,13 @@ const PushTicketErrorDetailsSchema = new Schema({
       'MessageTooBig',
       'MessageRateExceeded'
     ],
-    type: Schema.Types.String,
-    unique: true
+    type: Schema.Types.String
   }
 });
 
+/**
+ * @see https://docs.expo.io/versions/latest/guides/push-notifications/#push-ticket-format
+ */
 const PushTicketSchema = new Schema(
   {
     /**
@@ -39,16 +49,27 @@ const PushTicketSchema = new Schema(
     receiptId: {
       type: Schema.Types.String
     },
+    /**
+     * Ticket status
+     */
     status: {
       enum: ['ok', 'error'],
       required: true,
       type: Schema.Types.String
+    },
+    /**
+     * The user associated to the ticket.
+     */
+    userId: {
+      ref: 'User',
+      required: true,
+      type: Schema.Types.ObjectId
     }
   },
   { strict: 'throw', timestamps: true }
 );
 
-export const PushTicket = model<ExpoPushTicket & Document>(
+export const PushTicket = model<IPushTicket & Document>(
   'PushTicket',
   PushTicketSchema
 );

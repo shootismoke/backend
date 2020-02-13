@@ -4,6 +4,7 @@ import { Document } from 'mongoose';
 
 import {
   constructExpoMessage,
+  handleReceipts,
   isExpoPushMessage,
   sendBatchToExpo
 } from './expo';
@@ -113,6 +114,27 @@ describe('sendBatchToExpo', () => {
     await sendBatchToExpo(expo, messages);
     expect(expo.chunkPushNotifications).toBeCalledTimes(1); // eslint-disable-line @typescript-eslint/unbound-method
     expect(expo.sendPushNotificationsAsync).toBeCalledTimes(2); // eslint-disable-line @typescript-eslint/unbound-method
+
+    done();
+  });
+});
+
+describe('handleReceipts', () => {
+  it('should correctly call onOk and onError', async done => {
+    const receipts = {
+      receiptA: { status: 'ok' },
+      receiptB: { status: 'error', message: 'foo' }
+    };
+    const expo = ({
+      chunkPushNotificationReceiptIds: jest.fn(() => [Object.keys(receipts)]),
+      getPushNotificationReceiptsAsync: jest.fn(() => Promise.resolve(receipts))
+    } as unknown) as Expo;
+    const onOk = jest.fn();
+    const onError = jest.fn();
+
+    await handleReceipts(expo, Object.keys(receipts), onOk, onError);
+    expect(onOk).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
 
     done();
   });

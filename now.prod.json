@@ -18,6 +18,10 @@
     {
       "src": "/api/push",
       "dest": "/api/push.ts"
+    },
+    {
+      "src": "/api/receipts",
+      "dest": "/api/receipts.ts"
     }
   ],
   "scope": "shootismoke"

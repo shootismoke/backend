@@ -1,3 +1,4 @@
+import { PushTicket } from '../../src/models';
 import { ALICE_ID, BOB_ID, describeApollo, getAlice, getBob } from '../util';
 import { UPDATE_USER } from './gql';
 
@@ -168,6 +169,30 @@ describeApollo('users::updateUser', client => {
     expect(res.errors && res.errors[0].message).toContain(
       'E11000 duplicate key error'
     );
+
+    done();
+  });
+
+  it('should delete all pushTickets', async done => {
+    const alice = await getAlice(client);
+    const { mutate } = await client;
+
+    await PushTicket.create({
+      message: 'foo',
+      status: 'error',
+      userId: alice._id
+    });
+
+    await mutate({
+      mutation: UPDATE_USER,
+      variables: {
+        expoInstallationId: ALICE_ID,
+        input: ALICE_1
+      }
+    });
+
+    const pushTickets = await PushTicket.find();
+    expect(pushTickets.length).toBe(0);
 
     done();
   });

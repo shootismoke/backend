@@ -1,6 +1,6 @@
 import { Resolvers, User as IUser } from '@shootismoke/graphql';
 
-import { User } from '../models';
+import { PushTicket, User } from '../models';
 import { ApolloContext, logger } from '../util';
 
 function assertHawkAuthenticated(context: ApolloContext): void {
@@ -47,6 +47,12 @@ export const userResolvers: Resolvers<ApolloContext> = {
       Object.assign(user, input);
 
       await user.save({ validateBeforeSave: true });
+
+      // Everytime we update user, we also delete all the pushTickets he/she
+      // might have.
+      await PushTicket.deleteMany({
+        userId: user._id
+      });
 
       return user;
     }
