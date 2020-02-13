@@ -14,6 +14,10 @@
     {
       "src": "/api/graphql",
       "dest": "/api/graphql.ts"
+    },
+    {
+      "src": "/api/push",
+      "dest": "/api/push.ts"
     }
   ],
   "scope": "shootismoke"

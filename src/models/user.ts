@@ -12,7 +12,7 @@ const NotificationsSchema = new Schema({
     // For simplicity sake, we require even if frequency is `never`
     required: true,
     sparse: true,
-    type: String,
+    type: Schema.Types.String,
     unique: true
   },
   /**
@@ -51,7 +51,7 @@ const NotificationsSchema = new Schema({
   }
 });
 
-export const UserSchema = new Schema(
+const UserSchema = new Schema(
   {
     /**
      * @see https://docs.expo.io/versions/latest/sdk/constants/#constantsinstallationid
@@ -62,6 +62,9 @@ export const UserSchema = new Schema(
       type: Schema.Types.String,
       unique: true
     },
+    /**
+     * User's notifications preferences.
+     */
     notifications: {
       type: NotificationsSchema
     }
