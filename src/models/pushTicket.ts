@@ -9,11 +9,13 @@ const PushTicketErrorDetailsSchema = new Schema({
       'MessageTooBig',
       'MessageRateExceeded'
     ],
-    type: Schema.Types.String,
-    unique: true
+    type: Schema.Types.String
   }
 });
 
+/**
+ * @see https://docs.expo.io/versions/latest/guides/push-notifications/#push-ticket-format
+ */
 const PushTicketSchema = new Schema(
   {
     /**
@@ -26,7 +28,7 @@ const PushTicketSchema = new Schema(
      * Error message.
      */
     message: {
-      required: function(): boolean {
+      required: function (): boolean {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore Using this syntax from mongoose docs.
         return this.status === 'error';
@@ -39,10 +41,20 @@ const PushTicketSchema = new Schema(
     receiptId: {
       type: Schema.Types.String
     },
+    /**
+     * Ticket status
+     */
     status: {
       enum: ['ok', 'error'],
       required: true,
       type: Schema.Types.String
+    },
+    /**
+     * The user associated to the ticket.
+     */
+    userId: {
+      ref: 'User',
+      type: Schema.Types.ObjectId
     }
   },
   { strict: 'throw', timestamps: true }

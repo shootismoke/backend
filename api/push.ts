@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
-import Expo from 'expo-server-sdk';
+import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
@@ -10,7 +10,7 @@ import {
   universalFetch,
   whitelisted
 } from '../src/push';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+import { connectToDatabase, IS_PROD, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -19,7 +19,7 @@ export default async function(
   res: NowResponse
 ): Promise<void> {
   try {
-    if (!whitelisted(req)) {
+    if (IS_PROD && !whitelisted(req)) {
       res.status(401);
       res.send({
         status: 'error',
@@ -50,12 +50,27 @@ export default async function(
         // FIXME add retries + timeout
         const { value } = await universalFetch(user.notifications.universalId);
 
-        return constructExpoMessage(user, value);
+        return {
+          userId: user._id,
+          message: constructExpoMessage(user, value)
+        };
       })
     );
-    const validMessages = messages.filter(isExpoPushMessage);
-    const tickets = await sendBatchToExpo(new Expo(), validMessages);
-    await PushTicket.insertMany(tickets);
+    // Find the messages that are valid
+    const validMessages = messages.filter(({ message }) =>
+      isExpoPushMessage(message)
+    );
+    // Send all the messages, we get the tickets
+    const tickets = await sendBatchToExpo(
+      new Expo(),
+      validMessages.map(({ message }) => message as ExpoPushMessage)
+    );
+    await PushTicket.insertMany(
+      tickets.map((ticket, index) => ({
+        ...ticket,
+        userId: validMessages[index].userId
+      }))
+    );
 
     res.send({
       status: 'ok',
