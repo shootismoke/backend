@@ -2,8 +2,8 @@ import { NowRequest, NowResponse } from '@now/node';
 import { Expo, ExpoPushReceiptId } from 'expo-server-sdk';
 
 import { IPushTicket, PushTicket } from '../src/models';
-import { handleReceipts, whitelisted } from '../src/push';
-import { connectToDatabase, IS_PROD, logger, sentrySetup } from '../src/util';
+import { assertWhitelistedIP, handleReceipts } from '../src/push';
+import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -15,13 +15,7 @@ export default async function(
   res: NowResponse
 ): Promise<void> {
   try {
-    if (IS_PROD && !whitelisted(req)) {
-      res.status(401);
-      res.send({
-        status: 'error',
-        details: `Not a whitelisted IP address`
-      });
-
+    if (!assertWhitelistedIP(req, res)) {
       return;
     }
 

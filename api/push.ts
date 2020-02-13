@@ -3,15 +3,15 @@ import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
+  assertWhitelistedIP,
   constructExpoMessage,
   ExpoPushSuccessTicket,
   findUsersForNotifications,
   isExpoPushMessage,
   sendBatchToExpo,
-  universalFetch,
-  whitelisted
+  universalFetch
 } from '../src/push';
-import { connectToDatabase, IS_PROD, logger, sentrySetup } from '../src/util';
+import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -23,13 +23,7 @@ export default async function(
   res: NowResponse
 ): Promise<void> {
   try {
-    if (IS_PROD && !whitelisted(req)) {
-      res.status(401);
-      res.send({
-        status: 'error',
-        details: `Not a whitelisted IP address`
-      });
-
+    if (!assertWhitelistedIP(req, res)) {
       return;
     }
 
