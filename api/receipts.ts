@@ -7,6 +7,9 @@ import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
+/**
+ * Handle push notifications receipts.
+ */
 export default async function(
   _req: NowRequest,
   res: NowResponse

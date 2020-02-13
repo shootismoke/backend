@@ -15,6 +15,9 @@ import { connectToDatabase, IS_PROD, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
+/**
+ * Send push notifications to all relevant users.
+ */
 export default async function(
   req: NowRequest,
   res: NowResponse
