@@ -103,14 +103,14 @@ describeApollo('users::updateUser', client => {
       });
 
       expect(res.errors && res.errors[0].message).toContain(
-        'User validation failed: notifications.universalId: foo is not a valid universalId, notifications: Validation failed:universalId:foo is not a valid universalId'
+        'User validation failed: notifications.universalId: foo is not a valid universalId, notifications: Validation failed: universalId: foo is not a valid universalId'
       );
 
       done();
     });
   });
 
-  it.only('should be able to create notifications', async done => {
+  it('should be able to create notifications', async done => {
     const { mutate } = await client;
 
     const res = await mutate({

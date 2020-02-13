@@ -7,7 +7,7 @@ describe('whitelisted', () => {
     expect(
       whitelisted(({
         headers: {
-          'x-real-ip': '198.27.83.222'
+          'x-forwarded-for': '198.27.83.222'
         }
       } as unknown) as NowRequest)
     ).toBe(true);
@@ -25,7 +25,7 @@ describe('whitelisted', () => {
     expect(
       whitelisted(({
         headers: {
-          'x-real-ip': 'foo'
+          'x-forwarded-for': 'foo'
         }
       } as unknown) as NowRequest)
     ).toBe(false);
