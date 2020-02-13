@@ -1,9 +1,19 @@
 import { Frequency, User } from '@shootismoke/graphql';
-import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
+import {
+  Expo,
+  ExpoPushMessage,
+  ExpoPushReceipt,
+  ExpoPushReceiptId,
+  ExpoPushTicket
+} from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
 import { logger } from '../util';
 import { pm25ToCigarettes } from './provider';
+
+// https://github.com/expo/expo-server-sdk-node/pull/33
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ExpoPushSuccessTicket = any;
 
 /**
  * Check if a value is an Error or an ExpoPushMessage.
@@ -92,4 +102,39 @@ export async function sendBatchToExpo(
   }
 
   return tickets;
+}
+
+/**
+ * Handle Expo push receipts.
+ *
+ * @param expo - Expo class instance.
+ * @param receiptIds - The receipt IDs to handle.
+ * @param onOk - Handler on successful receipt.
+ * @param onError - Handler on error receipt.
+ */
+export async function handleReceipts(
+  expo: Expo,
+  receiptIds: string[],
+  onOk: (receiptId: ExpoPushReceiptId, receipt: ExpoPushReceipt) => void,
+  onError: (receiptId: ExpoPushReceiptId, receipt: ExpoPushReceipt) => void
+): Promise<void> {
+  const receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+  for (const chunk of receiptIdChunks) {
+    try {
+      const receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+      console.log(receipts);
+
+      // The receipts specify whether Apple or Google successfully received the
+      // notification and information about an error, if one occurred.
+      for (const [receiptId, receipt] of Object.entries(receipts)) {
+        if (receipt.status === 'ok') {
+          onOk(receiptId, receipt);
+        } else if (receipt.status === 'error') {
+          onError(receiptId, receipt);
+        }
+      }
+    } catch (error) {
+      logger.error(error);
+    }
+  }
 }

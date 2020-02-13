@@ -1,14 +1,14 @@
 import { Frequency, User as IUser } from '@shootismoke/graphql';
 import { Document } from 'mongoose';
 
-import { User } from '../models';
+import { PushTicket, User } from '../models';
 import { findTimezonesAt } from '../util';
 
 /**
  * Show notifications at these hours of the day
  */
 const NOTIFICATION_HOUR = {
-  daily: 9,
+  daily: 22,
   weekly: 21,
   monthly: 21
 };
@@ -33,10 +33,30 @@ export async function findUsersForNotifications(
     timezones = findTimezonesAt(NOTIFICATION_HOUR.monthly);
   }
 
-  return User.find({
-    'notifications.frequency': frequency,
-    'notifications.timezone': {
-      $in: timezones
+  return User.aggregate([
+    // Get all users matching frequency and timezone.
+    {
+      $match: {
+        'notifications.frequency': frequency,
+        'notifications.timezone': {
+          $in: timezones
+        }
+      }
+    },
+    // Check if user has any active pushTickets from Expo.
+    {
+      $lookup: {
+        as: 'pushTickets',
+        from: PushTicket.collection.name,
+        localField: '_id',
+        foreignField: 'userId'
+      }
+    },
+    // Only return users with no puchTickets.
+    {
+      $match: {
+        pushTickets: { $size: 0 }
+      }
     }
-  });
+  ]);
 }

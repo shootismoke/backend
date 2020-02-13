@@ -1,6 +1,14 @@
 import { ExpoPushTicket } from 'expo-server-sdk';
 import { Document, model, Schema } from 'mongoose';
 
+export type IPushTicket = Omit<
+  ExpoPushTicket & {
+    receiptId?: string;
+    userId: string;
+  },
+  'id'
+>;
+
 const PushTicketErrorDetailsSchema = new Schema({
   error: {
     enum: [
@@ -28,7 +36,7 @@ const PushTicketSchema = new Schema(
      * Error message.
      */
     message: {
-      required: function (): boolean {
+      required: function(): boolean {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore Using this syntax from mongoose docs.
         return this.status === 'error';
@@ -54,13 +62,14 @@ const PushTicketSchema = new Schema(
      */
     userId: {
       ref: 'User',
+      required: true,
       type: Schema.Types.ObjectId
     }
   },
   { strict: 'throw', timestamps: true }
 );
 
-export const PushTicket = model<ExpoPushTicket & Document>(
+export const PushTicket = model<IPushTicket & Document>(
   'PushTicket',
   PushTicketSchema
 );

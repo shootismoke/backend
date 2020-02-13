@@ -117,3 +117,12 @@ describe('sendBatchToExpo', () => {
     done();
   });
 });
+
+describe('handleReceipts', () => {
+  it('should correctly call onOk and onError', () => {
+    const expo = ({
+      chunkPushNotifications: jest.fn(<T>(a: T[]) => a.map(value => [value])),
+      sendPushNotificationsAsync: jest.fn(() => Promise.resolve([]))
+    } as unknown) as Expo;
+  });
+});

@@ -4,6 +4,7 @@ import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 import { PushTicket } from '../src/models';
 import {
   constructExpoMessage,
+  ExpoPushSuccessTicket,
   findUsersForNotifications,
   isExpoPushMessage,
   sendBatchToExpo,
@@ -38,6 +39,8 @@ export default async function(
       )
     ).flat();
 
+    console.log(users);
+
     // Craft a push notification message for each user
     const messages = await Promise.all(
       users.map(async user => {
@@ -60,7 +63,7 @@ export default async function(
     const validMessages = messages.filter(({ message }) =>
       isExpoPushMessage(message)
     );
-    // Send all the messages, we get the tickets
+    // Send the valid messages, we get the tickets
     const tickets = await sendBatchToExpo(
       new Expo(),
       validMessages.map(({ message }) => message as ExpoPushMessage)
@@ -68,6 +71,7 @@ export default async function(
     await PushTicket.insertMany(
       tickets.map((ticket, index) => ({
         ...ticket,
+        receiptId: (ticket as ExpoPushSuccessTicket).id,
         userId: validMessages[index].userId
       }))
     );
@@ -79,6 +83,7 @@ export default async function(
   } catch (error) {
     logger.error(error);
 
+    res.status(500);
     res.send({
       status: 'error',
       details: error.message
