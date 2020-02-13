@@ -13,11 +13,38 @@ import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
-export default async function(
-  _req: NowRequest,
+/**
+ * Whitelist this endpoint to only IP addresses from easycron.com.
+ *
+ * @see https://www.easycron.com/ips
+ */
+function whitelisted(req: NowRequest): boolean {
+  const whitelist = [
+    '198.27.83.222',
+    '198.27.81.205',
+    '198.27.81.189',
+    '198.27.81.189',
+    '2607:5300:60:24de::',
+    '2607:5300:60:22cd::',
+    '2607:5300:60:22bd::',
+    '2607:5300:60:4b6e::'
+  ];
+
+  return whitelist.includes(req.headers.forwarded || '');
+}
+
+export default async function (
+  req: NowRequest,
   res: NowResponse
 ): Promise<void> {
   try {
+    if (!whitelisted(req)) {
+      res.send({
+        status: 'error',
+        details: `${req.headers.forwarded} is not allowed`
+      });
+    }
+
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     // Fetch all users to whom we should show a notification
