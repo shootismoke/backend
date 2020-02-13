@@ -7,31 +7,12 @@ import {
   findUsersForNotifications,
   isExpoPushMessage,
   sendBatchToExpo,
-  universalFetch
+  universalFetch,
+  whitelisted
 } from '../src/push';
 import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
-
-/**
- * Whitelist this endpoint to only IP addresses from easycron.com.
- *
- * @see https://www.easycron.com/ips
- */
-function whitelisted(req: NowRequest): boolean {
-  const whitelist = [
-    '198.27.83.222',
-    '198.27.81.205',
-    '198.27.81.189',
-    '198.27.81.189',
-    '2607:5300:60:24de::',
-    '2607:5300:60:22cd::',
-    '2607:5300:60:22bd::',
-    '2607:5300:60:4b6e::'
-  ];
-
-  return whitelist.includes(req.headers['x-real-ip'] as string);
-}
 
 export default async function (
   req: NowRequest,
@@ -39,9 +20,10 @@ export default async function (
 ): Promise<void> {
   try {
     if (!whitelisted(req)) {
+      res.status(401);
       res.send({
         status: 'error',
-        details: `${req.headers.forwarded} is not allowed`
+        details: `Not a whitelisted IP address`
       });
     }
 
@@ -73,20 +55,16 @@ export default async function (
     const tickets = await sendBatchToExpo(new Expo(), validMessages);
     await PushTicket.insertMany(tickets);
 
-    res.send(
-      JSON.stringify({
-        status: 'ok',
-        details: `Successfully sent ${validMessages.length}/${messages.length} push notifications`
-      })
-    );
+    res.send({
+      status: 'ok',
+      details: `Successfully sent ${validMessages.length}/${messages.length} push notifications`
+    });
   } catch (error) {
     logger.error(error);
 
-    res.send(
-      JSON.stringify({
-        status: 'error',
-        details: error.message
-      })
-    );
+    res.send({
+      status: 'error',
+      details: error.message
+    });
   }
 }
