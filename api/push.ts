@@ -14,7 +14,7 @@ import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
-export default async function (
+export default async function(
   req: NowRequest,
   res: NowResponse
 ): Promise<void> {
@@ -25,6 +25,8 @@ export default async function (
         status: 'error',
         details: `Not a whitelisted IP address`
       });
+
+      return;
     }
 
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
