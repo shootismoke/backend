@@ -3,9 +3,7 @@ import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
 import { logger } from '../util';
-import { pm25ToCigarettes, universalFetch } from './provider';
-
-const expo = new Expo();
+import { pm25ToCigarettes } from './provider';
 
 /**
  * Check if a value is an Error or an ExpoPushMessage.
@@ -35,13 +33,14 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
  *
  * @param user - The user to construct the message for
  */
-export async function constructExpoMessage(
-  user: User & Document
-): Promise<Error | ExpoPushMessage> {
+export function constructExpoMessage(
+  user: User & Document,
+  cigarrettes: number
+): Error | ExpoPushMessage {
   try {
     if (!user.notifications) {
       throw new Error(
-        `User ${user.id} cannot not have notifications, as per our query. qed.`
+        `User ${user.id} cannot not have notifications, as per our db query. qed.`
       );
     }
 
@@ -51,15 +50,12 @@ export async function constructExpoMessage(
       );
     }
 
-    // FIXME add retries + timeout
-    const { value } = await universalFetch(user.notifications.universalId);
-
     return {
-      body: getMessageBody(value, user.notifications.frequency),
+      body: getMessageBody(cigarrettes, user.notifications.frequency),
       title: 'Sh**t! I Smoke',
       to: user.notifications.expoPushToken,
       sound: 'default'
-    } as ExpoPushMessage;
+    };
   } catch (error) {
     logger.error(error);
 
@@ -74,6 +70,7 @@ export async function constructExpoMessage(
  * @param messages - The messages to send.
  */
 export async function sendBatchToExpo(
+  expo: Expo,
   messages: ExpoPushMessage[]
 ): Promise<ExpoPushTicket[]> {
   const chunks = expo.chunkPushNotifications(messages);
@@ -84,14 +81,13 @@ export async function sendBatchToExpo(
   for (const chunk of chunks) {
     try {
       const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-      console.log(ticketChunk);
       tickets.push(...ticketChunk);
       // NOTE: If a ticket contains an error code in ticket.details.error, you
       // must handle it appropriately. The error codes are listed in the Expo
       // documentation:
       // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

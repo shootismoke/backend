@@ -1,11 +1,13 @@
 import { NowRequest, NowResponse } from '@now/node';
+import Expo from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
   constructExpoMessage,
   findUsersForNotifications,
   isExpoPushMessage,
-  sendBatchToExpo
+  sendBatchToExpo,
+  universalFetch
 } from '../src/push';
 import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
@@ -25,10 +27,23 @@ export default async function(
       )
     ).flat();
 
-    // Self-explanatory
-    const messages = await Promise.all(users.map(constructExpoMessage));
+    // Craft a push notification message for each user
+    const messages = await Promise.all(
+      users.map(async user => {
+        if (!user.notifications) {
+          throw new Error(
+            `User ${user.id} cannot not have notifications, as per our db query. qed.`
+          );
+        }
+
+        // FIXME add retries + timeout
+        const { value } = await universalFetch(user.notifications.universalId);
+
+        return constructExpoMessage(user, value);
+      })
+    );
     const validMessages = messages.filter(isExpoPushMessage);
-    const tickets = await sendBatchToExpo(validMessages);
+    const tickets = await sendBatchToExpo(new Expo(), validMessages);
     await PushTicket.insertMany(tickets);
 
     res.send(
