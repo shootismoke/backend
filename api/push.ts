@@ -25,7 +25,6 @@ export default async function(
       )
     ).flat();
 
-    // Self-explanatory
     const messages = await Promise.all(users.map(constructExpoMessage));
     const validMessages = messages.filter(isExpoPushMessage);
     const tickets = await sendBatchToExpo(validMessages);
