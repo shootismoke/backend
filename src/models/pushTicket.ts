@@ -37,11 +37,6 @@ const PushTicketSchema = new Schema(
      * Receipt id.
      */
     receiptId: {
-      required: function(): boolean {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore Using this syntax from mongoose docs.
-        return this.status === 'ok';
-      },
       type: Schema.Types.String
     },
     status: {

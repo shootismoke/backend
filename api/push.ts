@@ -28,9 +28,7 @@ export default async function(
     // Self-explanatory
     const messages = await Promise.all(users.map(constructExpoMessage));
     const validMessages = messages.filter(isExpoPushMessage);
-    console.log('validMessages', validMessages);
     const tickets = await sendBatchToExpo(validMessages);
-    console.log('tickets', tickets);
     await PushTicket.insertMany(tickets);
 
     res.send(
