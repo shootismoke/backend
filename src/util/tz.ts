@@ -35,8 +35,10 @@ function isDstObserved(now = new Date()): boolean {
  * Find all the timezones whose current hour is `hour`.
  *
  * @param hour - The hour we would like to find the timezones.
+ * @param now - The base hour, for example use `new Date()` to find the
+ * timzones at `hour` right now.
  */
-export function findTimezonesAt(hour: number, now = new Date()): string[] {
+export function findTimezonesAt(hour: number, now: Date): string[] {
   // Get offet in the [-10, 13] range
   let offset = mod(hour - now.getUTCHours(), 24);
   if (offset > 13) {

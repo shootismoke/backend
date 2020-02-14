@@ -45,7 +45,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
  */
 export function constructExpoMessage(
   user: User & Document,
-  cigarrettes: number
+  pm25: number
 ): Error | ExpoPushMessage {
   try {
     if (!user.notifications) {
@@ -61,7 +61,7 @@ export function constructExpoMessage(
     }
 
     return {
-      body: getMessageBody(cigarrettes, user.notifications.frequency),
+      body: getMessageBody(pm25, user.notifications.frequency),
       title: 'Sh**t! I Smoke',
       to: user.notifications.expoPushToken,
       sound: 'default'

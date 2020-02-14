@@ -7,6 +7,7 @@ module.exports = {
   ...tsJest,
   ...jestMongoDb,
   collectCoverageFrom: [
+    '**/api/**/*.ts',
     '**/src/**/*.ts',
     '!**/index.ts', // index.ts only re-exports stuff
     '!**/testUtil.ts' // These files are used in tests
