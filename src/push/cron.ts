@@ -28,7 +28,7 @@ export function assertWhitelistedIP(
   const ip = req.headers['x-forwarded-for'] as string;
   const isWhitelisted = IS_DEV || whitelist.includes(ip);
   if (!isWhitelisted) {
-    res.status(401);
+    res.status(403);
     res.send({
       status: 'error',
       details: `IP address not whitelisted: ${ip}`
