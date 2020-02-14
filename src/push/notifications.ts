@@ -14,11 +14,38 @@ const NOTIFICATION_HOUR = {
 };
 
 /**
+ * Based on the time now and the frequency of notifications, find the timezones
+ * that should receive a notifications now.
+ *
+ * @param frequency - The frequency of notifications.
+ * @param now - The time now.
+ */
+export function getTimezones(frequency: Frequency, now: Date): string[] {
+  let timezones: string[] = [];
+  if (frequency === 'daily') {
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.daily, now);
+  } else if (frequency === 'weekly' && now.getUTCDay() === 0) {
+    // Show weekly notifications on Sundays
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.weekly, now);
+  } else if (frequency === 'monthly' && now.getUTCDate() === 1) {
+    // Show monthly notifications on the 1st of the month
+    timezones = findTimezonesAt(NOTIFICATION_HOUR.monthly, now);
+  }
+
+  return timezones;
+}
+
+/**
  * Generate the mongodb users aggregation pipeline for finding users to send
  * notifications to.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function usersPipeline(frequency: Frequency, timezones: string[]): any[] {
+export function usersPipeline(
+  frequency: Frequency,
+  now: Date
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any[] {
+  const timezones = getTimezones(frequency, now);
+
   return [
     // Get all users matching frequency and timezone.
     {
@@ -53,19 +80,8 @@ function usersPipeline(frequency: Frequency, timezones: string[]): any[] {
  * @param frequency - The frequency to show the timezones.
  */
 export async function findUsersForNotifications(
-  frequency: Frequency
+  frequency: Frequency,
+  now = new Date()
 ): Promise<(IUser & Document)[]> {
-  const today = new Date();
-  let timezones: string[] = [];
-  if (frequency === 'daily') {
-    timezones = findTimezonesAt(NOTIFICATION_HOUR.daily);
-  } else if (frequency === 'weekly' && today.getUTCDay() === 0) {
-    // Show weekly notifications on Sundays
-    timezones = findTimezonesAt(NOTIFICATION_HOUR.weekly);
-  } else if (frequency === 'monthly' && today.getUTCDate() === 1) {
-    // Show monthly notifications on the 1st of the month
-    timezones = findTimezonesAt(NOTIFICATION_HOUR.monthly);
-  }
-
-  return User.aggregate(usersPipeline(frequency, timezones));
+  return User.aggregate(usersPipeline(frequency, now));
 }
