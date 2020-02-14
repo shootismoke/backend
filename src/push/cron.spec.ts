@@ -1,6 +1,6 @@
-import { NowRequest, NowResponse } from '@now/node';
+import { Request, Response } from 'express';
 
-import { assertWhitelistedIP } from './cron';
+import { whitelistIPMiddleware } from './cron';
 
 describe('whitelisted', () => {
   it('should allow a correct ip', () => {
@@ -8,18 +8,20 @@ describe('whitelisted', () => {
       status: jest.fn(),
       send: jest.fn(),
       end: jest.fn()
-    } as unknown) as NowResponse;
+    } as unknown) as Response;
+    const next = jest.fn();
 
-    expect(
-      assertWhitelistedIP(
-        ({
-          headers: {
-            'x-forwarded-for': '198.27.83.222'
-          }
-        } as unknown) as NowRequest,
-        res
-      )
-    ).toBe(true);
+    whitelistIPMiddleware(
+      ({
+        headers: {
+          'x-forwarded-for': '198.27.83.222'
+        }
+      } as unknown) as Request,
+      res,
+      next
+    );
+
+    expect(next).toHaveBeenCalledTimes(1);
   });
 
   it('should block an empty', () => {
@@ -27,16 +29,18 @@ describe('whitelisted', () => {
       status: jest.fn(),
       send: jest.fn(),
       end: jest.fn()
-    } as unknown) as NowResponse;
+    } as unknown) as Response;
+    const next = jest.fn();
 
-    expect(
-      assertWhitelistedIP(
-        ({
-          headers: {}
-        } as unknown) as NowRequest,
-        res
-      )
-    ).toBe(false);
+    whitelistIPMiddleware(
+      ({
+        headers: {}
+      } as unknown) as Request,
+      res,
+      next
+    );
+
+    expect(res.status).toHaveBeenCalledWith(403); // eslint-disable-line @typescript-eslint/unbound-method
   });
 
   it('should whitelist a correct ip', () => {
@@ -44,17 +48,19 @@ describe('whitelisted', () => {
       status: jest.fn(),
       send: jest.fn(),
       end: jest.fn()
-    } as unknown) as NowResponse;
+    } as unknown) as Response;
+    const next = jest.fn();
 
-    expect(
-      assertWhitelistedIP(
-        ({
-          headers: {
-            'x-forwarded-for': 'foo'
-          }
-        } as unknown) as NowRequest,
-        res
-      )
-    ).toBe(false);
+    whitelistIPMiddleware(
+      ({
+        headers: {
+          'x-forwarded-for': 'foo'
+        }
+      } as unknown) as Request,
+      res,
+      next
+    );
+
+    expect(res.status).toHaveBeenCalledWith(403); // eslint-disable-line @typescript-eslint/unbound-method
   });
 });

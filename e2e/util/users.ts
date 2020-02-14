@@ -6,7 +6,7 @@ import pMemoize from 'p-memoize';
 import { CREATE_USER } from '../graphql/users/gql';
 
 function getUser(name: string) {
-  return async function (
+  return async function(
     client: Promise<ApolloServerTestClient>,
     additionalInputs: Partial<CreateUserInput> = {}
   ): Promise<User> {

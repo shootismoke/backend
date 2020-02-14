@@ -1,4 +1,4 @@
-import { NowRequest, NowResponse } from '@now/node';
+import { NextFunction, Request, Response } from 'express';
 
 import { IS_DEV } from '../util';
 
@@ -21,20 +21,28 @@ const whitelist = [
 /**
  * Check that the request comes form a whitelisted IP address.
  */
-export function assertWhitelistedIP(
-  req: NowRequest,
-  res: NowResponse
-): boolean {
+export function isWhitelisted(ip: string): boolean {
+  return IS_DEV || whitelist.includes(ip);
+}
+
+/**
+ * Express-like middleware that whitelists the IP address.
+ */
+export function whitelistIPMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
   const ip = req.headers['x-forwarded-for'] as string;
-  const isWhitelisted = IS_DEV || whitelist.includes(ip);
-  if (!isWhitelisted) {
+
+  if (!isWhitelisted(ip)) {
     res.status(403);
     res.send({
       status: 'error',
       details: `IP address not whitelisted: ${ip}`
     });
     res.end();
+  } else {
+    next();
   }
-
-  return isWhitelisted;
 }

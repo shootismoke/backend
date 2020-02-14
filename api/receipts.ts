@@ -2,23 +2,16 @@ import { NowRequest, NowResponse } from '@now/node';
 import { Expo, ExpoPushReceiptId } from 'expo-server-sdk';
 
 import { IPushTicket, PushTicket } from '../src/models';
-import { assertWhitelistedIP, handleReceipts } from '../src/push';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+import { handleReceipts, whitelistIPMiddleware } from '../src/push';
+import { chain, connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
 /**
  * Handle push notifications receipts.
  */
-export default async function(
-  req: NowRequest,
-  res: NowResponse
-): Promise<void> {
+async function receipts(_req: NowRequest, res: NowResponse): Promise<void> {
   try {
-    if (!assertWhitelistedIP(req, res)) {
-      return;
-    }
-
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     const tickets = await PushTicket.find({
@@ -72,3 +65,5 @@ export default async function(
     });
   }
 }
+
+export default chain(whitelistIPMiddleware)(receipts);
