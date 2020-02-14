@@ -1,4 +1,4 @@
-import { describeApollo } from '../util';
+import { describeApollo } from '../../util';
 import { CREATE_USER } from './gql';
 
 const ALICE = {

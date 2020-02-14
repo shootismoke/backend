@@ -5,30 +5,23 @@ import promiseAny from 'p-any';
 
 import { PushTicket } from '../src/models';
 import {
-  assertWhitelistedIP,
   constructExpoMessage,
   ExpoPushSuccessTicket,
   findUsersForNotifications,
   isExpoPushMessage,
   sendBatchToExpo,
-  universalFetch
+  universalFetch,
+  whitelistIPMiddleware
 } from '../src/push';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+import { chain, connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
 /**
  * Send push notifications to all relevant users.
  */
-export default async function(
-  req: NowRequest,
-  res: NowResponse
-): Promise<void> {
+async function push(_req: NowRequest, res: NowResponse): Promise<void> {
   try {
-    if (!assertWhitelistedIP(req, res)) {
-      return;
-    }
-
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     // Fetch all users to whom we should show a notification
@@ -99,3 +92,5 @@ export default async function(
     });
   }
 }
+
+export default chain(whitelistIPMiddleware)(push);
