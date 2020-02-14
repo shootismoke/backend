@@ -2,6 +2,11 @@ import { NowRequest, NowResponse } from '@now/node';
 
 import { IS_DEV } from '../util';
 
+/**
+ * Whitelist an endpoint to only IP addresses from easycron.com.
+ *
+ * @see https://www.easycron.com/ips
+ */
 const whitelist = [
   '198.27.83.222',
   '198.27.81.205',
@@ -14,27 +19,19 @@ const whitelist = [
 ];
 
 /**
- * Whitelist an endpoint to only IP addresses from easycron.com.
- *
- * @see https://www.easycron.com/ips
- */
-function whitelisted(req: NowRequest): boolean {
-  return whitelist.includes(req.headers['x-forwarded-for'] as string);
-}
-
-/**
  * Check that the request comes form a whitelisted IP address.
  */
 export function assertWhitelistedIP(
   req: NowRequest,
   res: NowResponse
 ): boolean {
-  const isWhitelisted = IS_DEV || whitelisted(req);
+  const ip = req.headers['x-forwarded-for'] as string;
+  const isWhitelisted = IS_DEV || whitelist.includes(ip);
   if (!isWhitelisted) {
-    res.status(401);
+    res.status(403);
     res.send({
       status: 'error',
-      details: `Not a whitelisted IP address`
+      details: `IP address not whitelisted: ${ip}`
     });
     res.end();
   }
