@@ -9,6 +9,15 @@ export const CREATE_USER = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query($expoInstallationId: ID!) {
+    getUser(expoInstallationId: $expoInstallationId) {
+      _id
+      expoInstallationId
+    }
+  }
+`;
+
 export const UPDATE_USER = gql`
   mutation($expoInstallationId: ID!, $input: UpdateUserInput!) {
     updateUser(expoInstallationId: $expoInstallationId, input: $input) {

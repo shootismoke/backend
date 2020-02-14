@@ -9,7 +9,34 @@ function assertHawkAuthenticated(context: ApolloContext): void {
   }
 }
 
+function assertUser(
+  user: IUser | null,
+  expoInstallationId: string
+): asserts user is IUser {
+  if (!user) {
+    const e = new Error(
+      `No user with expoInstallationId "${expoInstallationId}" found`
+    );
+    logger.error(e);
+    throw e;
+  }
+}
+
 export const userResolvers: Resolvers<ApolloContext> = {
+  Query: {
+    getUser: async (
+      _parent,
+      { expoInstallationId },
+      context
+    ): Promise<IUser> => {
+      assertHawkAuthenticated(context);
+
+      const user = await User.findOne({ expoInstallationId });
+      assertUser(user, expoInstallationId);
+
+      return user;
+    }
+  },
   Mutation: {
     createUser: async (_parent, { input }, context): Promise<IUser> => {
       assertHawkAuthenticated(context);
@@ -36,13 +63,7 @@ export const userResolvers: Resolvers<ApolloContext> = {
         expoInstallationId
       });
 
-      if (!user) {
-        const e = new Error(
-          `No user with expoInstallationId "${expoInstallationId}" found`
-        );
-        logger.error(e);
-        throw e;
-      }
+      assertUser(user, expoInstallationId);
 
       Object.assign(user, input);
 
