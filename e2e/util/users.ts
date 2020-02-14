@@ -3,10 +3,10 @@ import { ApolloServerTestClient } from 'apollo-server-testing';
 import deepmerge from 'deepmerge';
 import pMemoize from 'p-memoize';
 
-import { CREATE_USER } from '../users/gql';
+import { CREATE_USER } from '../graphql/users/gql';
 
 function getUser(name: string) {
-  return async function(
+  return async function (
     client: Promise<ApolloServerTestClient>,
     additionalInputs: Partial<CreateUserInput> = {}
   ): Promise<User> {

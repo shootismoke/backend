@@ -1,5 +1,5 @@
-import { PushTicket } from '../../src/models';
-import { ALICE_ID, BOB_ID, describeApollo, getAlice, getBob } from '../util';
+import { PushTicket } from '../../../src/models';
+import { ALICE_ID, BOB_ID, describeApollo, getAlice, getBob } from '../../util';
 import { UPDATE_USER } from './gql';
 
 const ALICE_1 = {

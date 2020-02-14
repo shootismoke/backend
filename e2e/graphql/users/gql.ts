@@ -1,4 +1,4 @@
-import { gql } from '../util';
+import { gql } from '../../util';
 
 export const CREATE_USER = gql`
   mutation($input: CreateUserInput!) {
