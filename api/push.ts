@@ -1,5 +1,7 @@
 import { NowRequest, NowResponse } from '@now/node';
+import retry from 'async-retry';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
+import promiseAny from 'p-any';
 
 import { PushTicket } from '../src/models';
 import {
@@ -30,27 +32,39 @@ export default async function(
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     // Fetch all users to whom we should show a notification
-    const users = (
-      await Promise.all(
-        (['daily', 'weekly', 'monthly'] as const).map(findUsersForNotifications)
-      )
-    ).flat();
+    const users = await findUsersForNotifications();
 
     // Craft a push notification message for each user
     const messages = await Promise.all(
       users.map(async user => {
-        if (!user.notifications) {
-          throw new Error(
-            `User ${user.id} cannot not have notifications, as per our db query. qed.`
-          );
-        }
+        // Find the PM2.5 value at the user's last known station (universalId)
+        const pm25 = await promiseAny([
+          // If anything throws, we retry
+          retry(
+            async () => {
+              if (!user.notifications) {
+                throw new Error(
+                  `User ${user.id} cannot not have notifications, as per our db query. qed.`
+                );
+              }
 
-        // FIXME add retries + timeout
-        const { value } = await universalFetch(user.notifications.universalId);
+              const { value } = await universalFetch(
+                user.notifications.universalId
+              );
+
+              return value;
+            },
+            {
+              retries: 5
+            }
+          ),
+          // Timeout after 5s, because the whole Now function only runs 10s
+          new Promise<number>((_resolve, reject) => setTimeout(reject, 5000))
+        ]);
 
         return {
           userId: user._id,
-          message: constructExpoMessage(user, value)
+          message: constructExpoMessage(user, pm25)
         };
       })
     );

@@ -78,10 +78,18 @@ export function usersPipeline(
  * Find in DB all users to show notifications with frequency `frequency`.
  *
  * @param frequency - The frequency to show the timezones.
+ * @todo Unpure.
  */
-export async function findUsersForNotifications(
-  frequency: Frequency,
-  now = new Date()
-): Promise<(IUser & Document)[]> {
-  return User.aggregate(usersPipeline(frequency, now));
+export async function findUsersForNotifications(): Promise<
+  (IUser & Document)[]
+> {
+  const now = new Date();
+  // Return a tuple [dailyUsers, weeklyUsers, monthlyUsers]
+  const allUsers = await Promise.all(
+    (['daily', 'weekly', 'monthly'] as const).map(frequency =>
+      User.aggregate(usersPipeline(frequency, now))
+    )
+  );
+
+  return allUsers.flat();
 }
