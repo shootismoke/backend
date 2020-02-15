@@ -43,19 +43,18 @@ describe('constructExpoMessage', () => {
   } as User & Document;
 
   it('should return Error on wrong notifications', () => {
-    expect(
+    expect(() =>
       constructExpoMessage(
         { ...user, notifications: undefined } as User & Document,
         42
       )
-    ).toEqual(
-      new Error(
-        'User undefined cannot not have notifications, as per our db query. qed.'
-      )
+    ).toThrowError(
+      new Error('User alice has notifications, as per our db query. qed.')
     );
   });
+
   it('should return Error on wrong notifications', () => {
-    expect(
+    expect(() =>
       constructExpoMessage(
         {
           ...user,
@@ -63,7 +62,7 @@ describe('constructExpoMessage', () => {
         } as User & Document,
         42
       )
-    ).toEqual(new Error('Push token foo is not a valid Expo push token'));
+    ).toThrowError(new Error('Invalid ExpoPushToken: foo'));
   });
 
   it('should work for daily', () => {

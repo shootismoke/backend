@@ -1,10 +1,11 @@
+import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@now/node';
 import Expo from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
+  expoMessageForUser,
   ExpoPushSuccessTicket,
-  fetchPM25ForUser,
   findUsersForNotifications,
   isPromiseFulfilled,
   isPromiseRejected,
@@ -13,7 +14,7 @@ import {
   UserExpoMessage,
   whitelistIPMiddleware
 } from '../src/push';
-import { chain, connectToDatabase, logger, sentrySetup } from '../src/util';
+import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -31,7 +32,7 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore Wait for es2020.promise to land in TS
     const messages = (await Promise.allSettled(
-      users.map(fetchPM25ForUser)
+      users.map(expoMessageForUser)
     )) as PromiseSettledResult<UserExpoMessage>[];
 
     // Log the users with errors
@@ -42,8 +43,7 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
 
     // Find the messages that are valid
     const validMessages = messages.filter(isPromiseFulfilled);
-
-    // Send the valid messages, we get the tickets
+    // Send the valid messages to Expo Push Server, we get the tickets
     const tickets = await sendBatchToExpo(
       new Expo(),
       validMessages.map(({ value: { pushMessage } }) => pushMessage)

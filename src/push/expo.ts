@@ -104,6 +104,12 @@ export function constructExpoMessage(
 ): ExpoPushMessage {
   assertUserNotifications(user);
 
+  if (!Expo.isExpoPushToken(user.notifications.expoPushToken)) {
+    throw new Error(
+      `Invalid ExpoPushToken: ${user.notifications.expoPushToken}`
+    );
+  }
+
   return {
     body: getMessageBody(pm25, user.notifications.frequency),
     title: 'Sh**t! I Smoke',

@@ -79,11 +79,11 @@ async function universalFetch(universalId: string): Promise<OpenAQFormat> {
 }
 
 /**
- * Fetch the PM2.5 raw concentration at our user's station.
+ * Generate the correct expo message for our user.
  *
  * @param user - User in our DB.
  */
-export async function fetchPM25ForUser(
+export async function expoMessageForUser(
   user: User & Document
 ): Promise<UserExpoMessage> {
   try {
