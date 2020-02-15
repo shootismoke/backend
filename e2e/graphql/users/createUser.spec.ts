@@ -48,7 +48,6 @@ describeApollo('users::createUser', client => {
     });
 
     if (!res.data) {
-      console.error(res);
       return done.fail('No data in response');
     }
 
@@ -71,7 +70,6 @@ describeApollo('users::createUser', client => {
     });
 
     if (!res1.data || !res2.data) {
-      console.error(res1, res2);
       return done.fail('No data in response');
     }
 

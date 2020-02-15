@@ -122,10 +122,7 @@ describeApollo('users::updateUser', client => {
       }
     });
 
-    console.log(res);
-
     if (!res.data) {
-      console.error(res);
       return done.fail('No data in response');
     }
 
@@ -146,7 +143,6 @@ describeApollo('users::updateUser', client => {
     });
 
     if (!res.data) {
-      console.error(res);
       return done.fail('No data in response');
     }
 

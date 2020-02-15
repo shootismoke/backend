@@ -1,6 +1,6 @@
 import { CreateUserInput, User } from '@shootismoke/graphql';
 import { ApolloServerTestClient } from 'apollo-server-testing';
-import deepmerge from 'deepmerge';
+import assignDeep from 'assign-deep';
 import pMemoize from 'p-memoize';
 
 import { CREATE_USER } from '../graphql/users/gql';
@@ -12,7 +12,7 @@ function getUser(name: string) {
   ): Promise<User> {
     const { mutate } = await client;
 
-    const input = deepmerge(
+    const input = assignDeep(
       {
         expoInstallationId: `id_${name}`
       },
@@ -24,7 +24,6 @@ function getUser(name: string) {
     });
 
     if (!createRes.data) {
-      console.error(createRes);
       throw new Error(`Failed to create user ${name}`);
     }
 

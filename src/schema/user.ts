@@ -9,6 +9,7 @@ export const userSchema = gql`
   }
 
   type Notifications {
+    _id: ID!
     expoPushToken: ID!
     frequency: Frequency!
     timezone: String!

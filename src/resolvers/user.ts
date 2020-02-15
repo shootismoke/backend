@@ -1,4 +1,5 @@
 import { Resolvers, User as IUser } from '@shootismoke/graphql';
+import assignDeep from 'assign-deep';
 
 import { PushTicket, User } from '../models';
 import { ApolloContext, logger } from '../util';
@@ -68,12 +69,11 @@ export const userResolvers: Resolvers<ApolloContext> = {
       const user = await User.findOne({
         expoInstallationId
       });
-
       assertUser(user, expoInstallationId);
 
-      Object.assign(user, input);
+      assignDeep(user, input);
 
-      await user.save({ validateBeforeSave: true });
+      const newUser = await user.save({ validateBeforeSave: true });
 
       // Everytime we update user, we also delete all the pushTickets he/she
       // might have.
@@ -81,7 +81,7 @@ export const userResolvers: Resolvers<ApolloContext> = {
         userId: user._id
       });
 
-      return user;
+      return newUser;
     }
   }
 };
