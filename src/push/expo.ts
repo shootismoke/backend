@@ -68,7 +68,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 
   return `Shoot! You smoked ${
     frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
-  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
+    } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
 
 /**
@@ -83,7 +83,7 @@ export function constructExpoMessage(
   try {
     if (!user.notifications) {
       throw new Error(
-        `User ${user.id} cannot not have notifications, as per our db query. qed.`
+        `User ${user._id} cannot not have notifications, as per our db query. qed.`
       );
     }
 

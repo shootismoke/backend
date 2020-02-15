@@ -1,5 +1,9 @@
 import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
+import { User } from '@shootismoke/graphql';
+import retry from 'async-retry';
+
+import { constructExpoMessage, UserExpoMessage } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
@@ -28,13 +32,13 @@ async function providerFetch(
   const normalized =
     provider === 'aqicn'
       ? aqicn.normalizeByStation(
-          await aqicn.fetchByStation(station, {
-            token: process.env.AQICN_TOKEN as string
-          })
-        )
+        await aqicn.fetchByStation(station, {
+          token: process.env.AQICN_TOKEN as string
+        })
+      )
       : provider === 'waqi'
-      ? waqi.normalizeByStation(await waqi.fetchByStation(station))
-      : openaq.normalizeByStation(
+        ? waqi.normalizeByStation(await waqi.fetchByStation(station))
+        : openaq.normalizeByStation(
           await openaq.fetchByStation(station, {
             limit: 1,
             parameter: ['pm25']
@@ -57,9 +61,7 @@ async function providerFetch(
  *
  * @param universalId - The universalId of the station
  */
-export async function universalFetch(
-  universalId: string
-): Promise<OpenAQFormat> {
+async function universalFetch(universalId: string): Promise<OpenAQFormat> {
   const [provider, station] = universalId.split('|');
 
   if (!AllProviders.includes(provider)) {
@@ -69,4 +71,45 @@ export async function universalFetch(
   }
 
   return await providerFetch(provider as AllProviders, station);
+}
+
+/**
+ * Fetch the PM2.5 raw concentration at our user's station.
+ *
+ * @param user - User in our DB.
+ */
+export async function fetchPM25ForUser(user: User): Promise<UserExpoMessage> {
+  try {
+    // Find the PM2.5 value at the user's last known station (universalId)
+    const pm25 = await Promise.race([
+      // If anything throws, we retry
+      retry(
+        async () => {
+          if (!user.notifications) {
+            throw new Error(
+              `User ${user._id} cannot not have notifications, as per our db query. qed.`
+            );
+          }
+
+          const { value } = await universalFetch(
+            user.notifications.universalId
+          );
+
+          return value;
+        },
+        { retries: 5 }
+      ),
+      // Timeout after 5s, because the whole Now function only runs 10s
+      new Promise<number>((_resolve, reject) =>
+        setTimeout(() => reject(new Error('universalFetch timed out')), 5000)
+      )
+    ]);
+
+    return {
+      userId: user._id,
+      pushMessage: constructExpoMessage(user, pm25)
+    };
+  } catch (error) {
+    throw new Error(`User ${user._id}: ${error.message}`);
+  }
 }

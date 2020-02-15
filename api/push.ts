@@ -1,5 +1,4 @@
 import { NowRequest, NowResponse } from '@now/node';
-import retry from 'async-retry';
 import Expo from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
@@ -33,46 +32,7 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore Wait for es2020.promise to land in TS
     const messages = (await Promise.allSettled(
-      users.map(async user => {
-        try {
-          // Find the PM2.5 value at the user's last known station (universalId)
-          const pm25 = await Promise.race([
-            // If anything throws, we retry
-            retry(
-              async () => {
-                if (!user.notifications) {
-                  throw new Error(
-                    `User ${user.id} cannot not have notifications, as per our db query. qed.`
-                  );
-                }
-
-                const { value } = await universalFetch(
-                  user.notifications.universalId
-                );
-
-                return value;
-              },
-              {
-                retries: 5
-              }
-            ),
-            // Timeout after 5s, because the whole Now function only runs 10s
-            new Promise<number>((_resolve, reject) =>
-              setTimeout(
-                () => reject(new Error('universalFetch timed out')),
-                5000
-              )
-            )
-          ]);
-
-          return {
-            userId: user._id,
-            pushMessage: constructExpoMessage(user, pm25)
-          };
-        } catch (error) {
-          throw new Error(`User ${user._id}: ${error.message}`);
-        }
-      })
+      users.map()
     )) as PromiseSettledResult<UserExpoMessage>[];
 
     // Log the users with errors
