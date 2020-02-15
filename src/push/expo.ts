@@ -68,7 +68,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 
   return `Shoot! You smoked ${
     frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
-    } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
+  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
 
 /**
@@ -101,21 +101,15 @@ export function assertUserNotifications(
 export function constructExpoMessage(
   user: User & Document,
   pm25: number
-): Error | ExpoPushMessage {
-  try {
-    assertUserNotifications(user);
+): ExpoPushMessage {
+  assertUserNotifications(user);
 
-    return {
-      body: getMessageBody(pm25, user.notifications.frequency),
-      title: 'Sh**t! I Smoke',
-      to: user.notifications.expoPushToken,
-      sound: 'default'
-    };
-  } catch (error) {
-    logger.error(error);
-
-    return error as Error;
-  }
+  return {
+    body: getMessageBody(pm25, user.notifications.frequency),
+    title: 'Sh**t! I Smoke',
+    to: user.notifications.expoPushToken,
+    sound: 'default'
+  };
 }
 
 /**

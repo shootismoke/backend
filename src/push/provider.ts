@@ -2,6 +2,7 @@ import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
 import { User } from '@shootismoke/graphql';
 import retry from 'async-retry';
+import { Document } from 'mongoose';
 
 import {
   assertUserNotifications,
@@ -36,13 +37,13 @@ async function providerFetch(
   const normalized =
     provider === 'aqicn'
       ? aqicn.normalizeByStation(
-        await aqicn.fetchByStation(station, {
-          token: process.env.AQICN_TOKEN as string
-        })
-      )
+          await aqicn.fetchByStation(station, {
+            token: process.env.AQICN_TOKEN as string
+          })
+        )
       : provider === 'waqi'
-        ? waqi.normalizeByStation(await waqi.fetchByStation(station))
-        : openaq.normalizeByStation(
+      ? waqi.normalizeByStation(await waqi.fetchByStation(station))
+      : openaq.normalizeByStation(
           await openaq.fetchByStation(station, {
             limit: 1,
             parameter: ['pm25']
@@ -82,7 +83,9 @@ async function universalFetch(universalId: string): Promise<OpenAQFormat> {
  *
  * @param user - User in our DB.
  */
-export async function fetchPM25ForUser(user: User): Promise<UserExpoMessage> {
+export async function fetchPM25ForUser(
+  user: User & Document
+): Promise<UserExpoMessage> {
   try {
     // Find the PM2.5 value at the user's last known station (universalId)
     const pm25 = await Promise.race([
