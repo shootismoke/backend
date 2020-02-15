@@ -14,6 +14,12 @@ export const GET_USER = gql`
     getUser(expoInstallationId: $expoInstallationId) {
       _id
       expoInstallationId
+      notifications {
+        expoPushToken
+        frequency
+        timezone
+        universalId
+      }
     }
   }
 `;

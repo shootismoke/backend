@@ -1,4 +1,5 @@
 import { Resolvers, User as IUser } from '@shootismoke/graphql';
+import assignDeep from 'assign-deep';
 
 import { PushTicket, User } from '../models';
 import { ApolloContext, logger } from '../util';
@@ -26,6 +27,32 @@ function assertUser(
     logger.error(e);
     throw e;
   }
+}
+
+/**
+ * Converts an object to a dotified object.
+ *
+ * @param obj - Object to dotift
+ * @see https://github.com/Automattic/mongoose/issues/5285#issuecomment-408072161
+ */
+export function dotify(obj: object): object {
+  const res = {} as Record<string, any>;
+
+  function recurse(obj: Record<string, any>, current?: string): void {
+    for (const key in obj) {
+      const value = obj[key];
+      const newKey = current ? current + '.' + key : key;
+      if (value && typeof value === 'object') {
+        recurse(value, newKey);
+      } else {
+        res[newKey] = value;
+      }
+    }
+  }
+
+  recurse(obj);
+
+  return res;
 }
 
 export const userResolvers: Resolvers<ApolloContext> = {
@@ -68,12 +95,11 @@ export const userResolvers: Resolvers<ApolloContext> = {
       const user = await User.findOne({
         expoInstallationId
       });
-
       assertUser(user, expoInstallationId);
 
-      Object.assign(user, input);
+      assignDeep(user, input);
 
-      await user.save({ validateBeforeSave: true });
+      const newUser = await user.save({ validateBeforeSave: true });
 
       // Everytime we update user, we also delete all the pushTickets he/she
       // might have.
@@ -81,7 +107,7 @@ export const userResolvers: Resolvers<ApolloContext> = {
         userId: user._id
       });
 
-      return user;
+      return newUser;
     }
   }
 };

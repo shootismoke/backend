@@ -37,7 +37,6 @@ describeApollo('users::createUser', client => {
     });
 
     if (!res.data) {
-      console.error(res);
       return done.fail('No data in response');
     }
 
