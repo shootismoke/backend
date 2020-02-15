@@ -2,7 +2,33 @@ import { User } from '@shootismoke/graphql';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
-import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
+import {
+  constructExpoMessage,
+  handleReceipts,
+  isPromiseFulfilled,
+  isPromiseRejected,
+  sendBatchToExpo
+} from './expo';
+
+describe('Promise.allSettled', () => {
+  it('should work with a fulfilled Promise', () => {
+    const p = {
+      status: 'fulfilled' as const,
+      value: 2
+    };
+    expect(isPromiseFulfilled(p)).toBe(true);
+    expect(isPromiseRejected(p)).toBe(false);
+  });
+
+  it('should work with a rejected Promise', () => {
+    const p = {
+      status: 'rejected' as const,
+      reason: 'foo'
+    };
+    expect(isPromiseFulfilled(p)).toBe(false);
+    expect(isPromiseRejected(p)).toBe(true);
+  });
+});
 
 describe('constructExpoMessage', () => {
   const user = {
