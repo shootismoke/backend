@@ -3,7 +3,11 @@ import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
 import { User } from '@shootismoke/graphql';
 import retry from 'async-retry';
 
-import { constructExpoMessage, UserExpoMessage } from './expo';
+import {
+  assertUserNotifications,
+  constructExpoMessage,
+  UserExpoMessage
+} from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
@@ -85,11 +89,7 @@ export async function fetchPM25ForUser(user: User): Promise<UserExpoMessage> {
       // If anything throws, we retry
       retry(
         async () => {
-          if (!user.notifications) {
-            throw new Error(
-              `User ${user._id} cannot not have notifications, as per our db query. qed.`
-            );
-          }
+          assertUserNotifications(user);
 
           const { value } = await universalFetch(
             user.notifications.universalId

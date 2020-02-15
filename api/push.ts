@@ -3,14 +3,13 @@ import Expo from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
-  constructExpoMessage,
   ExpoPushSuccessTicket,
+  fetchPM25ForUser,
   findUsersForNotifications,
   isPromiseFulfilled,
   isPromiseRejected,
   PromiseSettledResult,
   sendBatchToExpo,
-  universalFetch,
   UserExpoMessage,
   whitelistIPMiddleware
 } from '../src/push';
@@ -32,7 +31,7 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore Wait for es2020.promise to land in TS
     const messages = (await Promise.allSettled(
-      users.map()
+      users.map(fetchPM25ForUser)
     )) as PromiseSettledResult<UserExpoMessage>[];
 
     // Log the users with errors

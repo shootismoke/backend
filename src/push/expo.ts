@@ -1,4 +1,4 @@
-import { Frequency, User } from '@shootismoke/graphql';
+import { Frequency, Notifications, User } from '@shootismoke/graphql';
 import {
   Expo,
   ExpoPushMessage,
@@ -72,6 +72,28 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 }
 
 /**
+ * A user that has notifications.
+ */
+interface UserWithNotifications extends User {
+  notifications: Notifications;
+}
+
+/**
+ * Asserts user has notifications.
+ *
+ * @param user - User to test if she/he has notifications.
+ */
+export function assertUserNotifications(
+  user: User
+): asserts user is UserWithNotifications {
+  if (!user.notifications) {
+    throw new Error(
+      `User ${user._id} has notifications, as per our db query. qed.`
+    );
+  }
+}
+
+/**
  * For a user, construct a personalized ExpoPushMessage.
  *
  * @param user - The user to construct the message for
@@ -81,17 +103,7 @@ export function constructExpoMessage(
   pm25: number
 ): Error | ExpoPushMessage {
   try {
-    if (!user.notifications) {
-      throw new Error(
-        `User ${user._id} cannot not have notifications, as per our db query. qed.`
-      );
-    }
-
-    if (!Expo.isExpoPushToken(user.notifications.expoPushToken)) {
-      throw new Error(
-        `Push token ${user.notifications.expoPushToken} is not a valid Expo push token`
-      );
-    }
+    assertUserNotifications(user);
 
     return {
       body: getMessageBody(pm25, user.notifications.frequency),
