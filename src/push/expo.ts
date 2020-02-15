@@ -142,6 +142,8 @@ export async function sendBatchToExpo(
       // documentation:
       // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
     } catch (error) {
+      // On error when sending push notifications, we log the error, but move
+      // on with the loop.
       logger.error(error);
     }
   }
@@ -178,6 +180,8 @@ export async function handleReceipts(
         }
       }
     } catch (error) {
+      // On error when sending push notifications, we log the error, but move
+      // on with the loop.
       logger.error(error);
     }
   }
