@@ -1,19 +1,20 @@
+import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@now/node';
-import retry from 'async-retry';
-import Expo, { ExpoPushMessage } from 'expo-server-sdk';
-import promiseAny from 'p-any';
+import Expo from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
-  constructExpoMessage,
+  expoMessageForUser,
   ExpoPushSuccessTicket,
   findUsersForNotifications,
-  isExpoPushMessage,
+  isPromiseFulfilled,
+  isPromiseRejected,
+  PromiseSettledResult,
   sendBatchToExpo,
-  universalFetch,
+  UserExpoMessage,
   whitelistIPMiddleware
 } from '../src/push';
-import { chain, connectToDatabase, logger, sentrySetup } from '../src/util';
+import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();
 
@@ -28,53 +29,30 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     const users = await findUsersForNotifications();
 
     // Craft a push notification message for each user
-    const messages = await Promise.all(
-      users.map(async user => {
-        // Find the PM2.5 value at the user's last known station (universalId)
-        const pm25 = await promiseAny([
-          // If anything throws, we retry
-          retry(
-            async () => {
-              if (!user.notifications) {
-                throw new Error(
-                  `User ${user.id} cannot not have notifications, as per our db query. qed.`
-                );
-              }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore Wait for es2020.promise to land in TS
+    const messages = (await Promise.allSettled(
+      users.map(expoMessageForUser)
+    )) as PromiseSettledResult<UserExpoMessage>[];
 
-              const { value } = await universalFetch(
-                user.notifications.universalId
-              );
+    // Log the users with errors
+    messages
+      .filter(isPromiseRejected)
+      .map(({ reason }) => reason)
+      .forEach(error => logger.error(new Error(error)));
 
-              return value;
-            },
-            {
-              retries: 5
-            }
-          ),
-          // Timeout after 5s, because the whole Now function only runs 10s
-          new Promise<number>((_resolve, reject) => setTimeout(reject, 5000))
-        ]);
-
-        return {
-          userId: user._id,
-          message: constructExpoMessage(user, pm25)
-        };
-      })
-    );
     // Find the messages that are valid
-    const validMessages = messages.filter(({ message }) =>
-      isExpoPushMessage(message)
-    );
-    // Send the valid messages, we get the tickets
+    const validMessages = messages.filter(isPromiseFulfilled);
+    // Send the valid messages to Expo Push Server, we get the tickets
     const tickets = await sendBatchToExpo(
       new Expo(),
-      validMessages.map(({ message }) => message as ExpoPushMessage)
+      validMessages.map(({ value: { pushMessage } }) => pushMessage)
     );
     await PushTicket.insertMany(
       tickets.map((ticket, index) => ({
         ...ticket,
         receiptId: (ticket as ExpoPushSuccessTicket).id,
-        userId: validMessages[index].userId
+        userId: validMessages[index].value.userId
       }))
     );
 

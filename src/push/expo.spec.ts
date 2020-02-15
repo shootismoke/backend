@@ -5,21 +5,28 @@ import { Document } from 'mongoose';
 import {
   constructExpoMessage,
   handleReceipts,
-  isExpoPushMessage,
+  isPromiseFulfilled,
+  isPromiseRejected,
   sendBatchToExpo
 } from './expo';
 
-describe('isExpoPushMessage', () => {
-  it('should return false for Error', () => {
-    expect(isExpoPushMessage(new Error())).toBe(false);
+describe('Promise.allSettled', () => {
+  it('should work with a fulfilled Promise', () => {
+    const p = {
+      status: 'fulfilled' as const,
+      value: 2
+    };
+    expect(isPromiseFulfilled(p)).toBe(true);
+    expect(isPromiseRejected(p)).toBe(false);
   });
 
-  it('should return true for message', () => {
-    expect(
-      isExpoPushMessage({
-        to: 'foo' // we don't actually check for correct ExpoPushToken here
-      })
-    ).toBe(true);
+  it('should work with a rejected Promise', () => {
+    const p = {
+      status: 'rejected' as const,
+      reason: 'foo'
+    };
+    expect(isPromiseFulfilled(p)).toBe(false);
+    expect(isPromiseRejected(p)).toBe(true);
   });
 });
 
@@ -36,19 +43,18 @@ describe('constructExpoMessage', () => {
   } as User & Document;
 
   it('should return Error on wrong notifications', () => {
-    expect(
+    expect(() =>
       constructExpoMessage(
         { ...user, notifications: undefined } as User & Document,
         42
       )
-    ).toEqual(
-      new Error(
-        'User undefined cannot not have notifications, as per our db query. qed.'
-      )
+    ).toThrowError(
+      new Error('User alice has notifications, as per our db query. qed.')
     );
   });
+
   it('should return Error on wrong notifications', () => {
-    expect(
+    expect(() =>
       constructExpoMessage(
         {
           ...user,
@@ -56,7 +62,7 @@ describe('constructExpoMessage', () => {
         } as User & Document,
         42
       )
-    ).toEqual(new Error('Push token foo is not a valid Expo push token'));
+    ).toThrowError(new Error('Invalid ExpoPushToken: foo'));
   });
 
   it('should work for daily', () => {

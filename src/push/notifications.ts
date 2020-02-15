@@ -5,7 +5,7 @@ import { PushTicket, User } from '../models';
 import { findTimezonesAt } from '../util';
 
 /**
- * Show notifications at these hours of the day
+ * Show notifications at these hours of the day.
  */
 const NOTIFICATION_HOUR = {
   daily: 9,

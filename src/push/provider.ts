@@ -1,9 +1,16 @@
-import {
-  AllProviders,
-  OpenAQFormat,
-  ProviderPromise
-} from '@shootismoke/dataproviders';
+import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
+import { User } from '@shootismoke/graphql';
+import retry from 'async-retry';
+import { Document } from 'mongoose';
+
+import {
+  assertUserNotifications,
+  constructExpoMessage,
+  UserExpoMessage
+} from './expo';
+
+type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
 /**
  * Convert raw pm25 level to number of cigarettes. 1 cigarette is equivalent of
@@ -23,13 +30,26 @@ export function pm25ToCigarettes(rawPm25: number): number {
  *
  * @param normalized - The normalized data to process
  */
-async function providerFetch<DataByGps, DataByStation, Options>(
-  provider: ProviderPromise<DataByGps, DataByStation, Options>,
+async function providerFetch(
+  provider: AllProviders,
   station: string
 ): Promise<OpenAQFormat> {
-  const normalized = provider.normalizeByStation(
-    await provider.fetchByStation(station)
-  );
+  const normalized =
+    provider === 'aqicn'
+      ? aqicn.normalizeByStation(
+          await aqicn.fetchByStation(station, {
+            token: process.env.AQICN_TOKEN as string
+          })
+        )
+      : provider === 'waqi'
+      ? waqi.normalizeByStation(await waqi.fetchByStation(station))
+      : openaq.normalizeByStation(
+          await openaq.fetchByStation(station, {
+            limit: 1,
+            parameter: ['pm25']
+          })
+        );
+
   const pm25 = normalized.filter(({ parameter }) => parameter === 'pm25');
 
   if (pm25.length) {
@@ -46,12 +66,8 @@ async function providerFetch<DataByGps, DataByStation, Options>(
  *
  * @param universalId - The universalId of the station
  */
-export async function universalFetch(
-  universalId: string
-): Promise<OpenAQFormat> {
+async function universalFetch(universalId: string): Promise<OpenAQFormat> {
   const [provider, station] = universalId.split('|');
-
-  const providers = { aqicn, openaq, waqi };
 
   if (!AllProviders.includes(provider)) {
     throw new Error(
@@ -59,10 +75,44 @@ export async function universalFetch(
     );
   }
 
-  return await providerFetch(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore FIXME why doesn't this work?
-    providers[provider as keyof typeof providers],
-    station
-  );
+  return await providerFetch(provider as AllProviders, station);
+}
+
+/**
+ * Generate the correct expo message for our user.
+ *
+ * @param user - User in our DB.
+ */
+export async function expoMessageForUser(
+  user: User & Document
+): Promise<UserExpoMessage> {
+  try {
+    // Find the PM2.5 value at the user's last known station (universalId)
+    const pm25 = await Promise.race([
+      // If anything throws, we retry
+      retry(
+        async () => {
+          assertUserNotifications(user);
+
+          const { value } = await universalFetch(
+            user.notifications.universalId
+          );
+
+          return value;
+        },
+        { retries: 5 }
+      ),
+      // Timeout after 5s, because the whole Now function only runs 10s
+      new Promise<number>((_resolve, reject) =>
+        setTimeout(() => reject(new Error('universalFetch timed out')), 5000)
+      )
+    ]);
+
+    return {
+      userId: user._id,
+      pushMessage: constructExpoMessage(user, pm25)
+    };
+  } catch (error) {
+    throw new Error(`User ${user._id}: ${error.message}`);
+  }
 }

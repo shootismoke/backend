@@ -1,4 +1,4 @@
-import { Frequency, User } from '@shootismoke/graphql';
+import { Frequency, Notifications, User } from '@shootismoke/graphql';
 import {
   Expo,
   ExpoPushMessage,
@@ -16,12 +16,45 @@ import { pm25ToCigarettes } from './provider';
 export type ExpoPushSuccessTicket = any;
 
 /**
- * Check if a value is an Error or an ExpoPushMessage.
+ * From the Promise.allSettled spec.
+ * @see https://github.com/microsoft/TypeScript/pull/34065/files#diff-64d620455dae680966727ed5c2ccd4d6R6
  */
-export function isExpoPushMessage(
-  e: Error | ExpoPushMessage
-): e is ExpoPushMessage {
-  return !(e instanceof Error);
+interface PromiseFulfilledResult<T> {
+  status: 'fulfilled';
+  value: T;
+}
+interface PromiseRejectedResult {
+  status: 'rejected';
+  reason: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+export type PromiseSettledResult<T> =
+  | PromiseFulfilledResult<T>
+  | PromiseRejectedResult;
+
+/**
+ * Check if a Promise is fulfilled.
+ */
+export function isPromiseFulfilled<T>(
+  p: PromiseSettledResult<T>
+): p is PromiseFulfilledResult<T> {
+  return p.status === 'fulfilled';
+}
+
+/**
+ * Check if a Promise is rejected.
+ */
+export function isPromiseRejected<T>(
+  p: PromiseSettledResult<T>
+): p is PromiseRejectedResult {
+  return p.status === 'rejected';
+}
+
+/**
+ * An Expo message associated with the user.
+ */
+export interface UserExpoMessage {
+  userId: string;
+  pushMessage: ExpoPushMessage;
 }
 
 /**
@@ -39,6 +72,28 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 }
 
 /**
+ * A user that has notifications.
+ */
+interface UserWithNotifications extends User {
+  notifications: Notifications;
+}
+
+/**
+ * Asserts user has notifications.
+ *
+ * @param user - User to test if she/he has notifications.
+ */
+export function assertUserNotifications(
+  user: User
+): asserts user is UserWithNotifications {
+  if (!user.notifications) {
+    throw new Error(
+      `User ${user._id} has notifications, as per our db query. qed.`
+    );
+  }
+}
+
+/**
  * For a user, construct a personalized ExpoPushMessage.
  *
  * @param user - The user to construct the message for
@@ -46,31 +101,21 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 export function constructExpoMessage(
   user: User & Document,
   pm25: number
-): Error | ExpoPushMessage {
-  try {
-    if (!user.notifications) {
-      throw new Error(
-        `User ${user.id} cannot not have notifications, as per our db query. qed.`
-      );
-    }
+): ExpoPushMessage {
+  assertUserNotifications(user);
 
-    if (!Expo.isExpoPushToken(user.notifications.expoPushToken)) {
-      throw new Error(
-        `Push token ${user.notifications.expoPushToken} is not a valid Expo push token`
-      );
-    }
-
-    return {
-      body: getMessageBody(pm25, user.notifications.frequency),
-      title: 'Sh**t! I Smoke',
-      to: user.notifications.expoPushToken,
-      sound: 'default'
-    };
-  } catch (error) {
-    logger.error(error);
-
-    return error as Error;
+  if (!Expo.isExpoPushToken(user.notifications.expoPushToken)) {
+    throw new Error(
+      `Invalid ExpoPushToken: ${user.notifications.expoPushToken}`
+    );
   }
+
+  return {
+    body: getMessageBody(pm25, user.notifications.frequency),
+    title: 'Sh**t! I Smoke',
+    to: user.notifications.expoPushToken,
+    sound: 'default'
+  };
 }
 
 /**
@@ -97,6 +142,8 @@ export async function sendBatchToExpo(
       // documentation:
       // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
     } catch (error) {
+      // On error when sending push notifications, we log the error, but move
+      // on with the loop.
       logger.error(error);
     }
   }
@@ -133,6 +180,8 @@ export async function handleReceipts(
         }
       }
     } catch (error) {
+      // On error when sending push notifications, we log the error, but move
+      // on with the loop.
       logger.error(error);
     }
   }
