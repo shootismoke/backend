@@ -5,19 +5,27 @@ import { Document } from 'mongoose';
 import {
   constructExpoMessage,
   handleReceipts,
-  isExpoPushMessage,
+  isUserExpoMessage,
   sendBatchToExpo
 } from './expo';
 
-describe('isExpoPushMessage', () => {
+describe('isUserExpoMessage', () => {
   it('should return false for Error', () => {
-    expect(isExpoPushMessage(new Error())).toBe(false);
+    expect(
+      isUserExpoMessage({
+        reason: 'foo',
+        status: 'rejected'
+      })
+    ).toBe(false);
   });
 
   it('should return true for message', () => {
     expect(
-      isExpoPushMessage({
-        to: 'foo' // we don't actually check for correct ExpoPushToken here
+      isUserExpoMessage({
+        pushMessage: {
+          to: 'foo' // we don't actually check for correct ExpoPushToken here
+        },
+        userId: 'bar'
       })
     ).toBe(true);
   });

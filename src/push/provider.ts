@@ -1,9 +1,7 @@
-import {
-  AllProviders,
-  OpenAQFormat,
-  ProviderPromise
-} from '@shootismoke/dataproviders';
+import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
+
+type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
 /**
  * Convert raw pm25 level to number of cigarettes. 1 cigarette is equivalent of
@@ -23,13 +21,26 @@ export function pm25ToCigarettes(rawPm25: number): number {
  *
  * @param normalized - The normalized data to process
  */
-async function providerFetch<DataByGps, DataByStation, Options>(
-  provider: ProviderPromise<DataByGps, DataByStation, Options>,
+async function providerFetch(
+  provider: AllProviders,
   station: string
 ): Promise<OpenAQFormat> {
-  const normalized = provider.normalizeByStation(
-    await provider.fetchByStation(station)
-  );
+  const normalized =
+    provider === 'aqicn'
+      ? aqicn.normalizeByStation(
+          await aqicn.fetchByStation(station, {
+            token: process.env.AQICN_TOKEN as string
+          })
+        )
+      : provider === 'waqi'
+      ? waqi.normalizeByStation(await waqi.fetchByStation(station))
+      : openaq.normalizeByStation(
+          await openaq.fetchByStation(station, {
+            limit: 1,
+            parameter: ['pm25']
+          })
+        );
+
   const pm25 = normalized.filter(({ parameter }) => parameter === 'pm25');
 
   if (pm25.length) {
@@ -51,18 +62,11 @@ export async function universalFetch(
 ): Promise<OpenAQFormat> {
   const [provider, station] = universalId.split('|');
 
-  const providers = { aqicn, openaq, waqi };
-
   if (!AllProviders.includes(provider)) {
     throw new Error(
       `universalFetch: Unrecognized universalId "${universalId}".`
     );
   }
 
-  return await providerFetch(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore FIXME why doesn't this work?
-    providers[provider as keyof typeof providers],
-    station
-  );
+  return await providerFetch(provider as AllProviders, station);
 }

@@ -16,12 +16,31 @@ import { pm25ToCigarettes } from './provider';
 export type ExpoPushSuccessTicket = any;
 
 /**
+ * From the Promise.allSettled spec.
+ * @see https://github.com/microsoft/TypeScript/pull/34065/files#diff-64d620455dae680966727ed5c2ccd4d6R6
+ */
+export interface PromiseRejectedResult {
+  status: 'rejected';
+  reason: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+/**
+ * An Expo message associated with the user.
+ */
+export interface UserExpoMessage {
+  userId: string;
+  pushMessage: ExpoPushMessage;
+}
+
+/**
  * Check if a value is an Error or an ExpoPushMessage.
  */
-export function isExpoPushMessage(
-  e: Error | ExpoPushMessage
-): e is ExpoPushMessage {
-  return !(e instanceof Error);
+export function isUserExpoMessage(
+  e: UserExpoMessage | PromiseRejectedResult
+): e is UserExpoMessage {
+  return !!(
+    (e as UserExpoMessage).pushMessage && (e as UserExpoMessage).pushMessage.to
+  );
 }
 
 /**

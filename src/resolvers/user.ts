@@ -3,12 +3,18 @@ import { Resolvers, User as IUser } from '@shootismoke/graphql';
 import { PushTicket, User } from '../models';
 import { ApolloContext, logger } from '../util';
 
+/**
+ * Assert that this endpoint is protected by Hawk.
+ */
 function assertHawkAuthenticated(context: ApolloContext): void {
   if (context.isHawkAuthenticated !== true) {
     throw new Error(context.isHawkAuthenticated);
   }
 }
 
+/**
+ * Assert that we have a user.
+ */
 function assertUser(
   user: IUser | null,
   expoInstallationId: string
