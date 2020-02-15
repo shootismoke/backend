@@ -24,6 +24,7 @@ export const UPDATE_USER = gql`
       _id
       expoInstallationId
       notifications {
+        _id
         expoPushToken
         frequency
         timezone
