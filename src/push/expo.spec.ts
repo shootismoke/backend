@@ -2,34 +2,7 @@ import { User } from '@shootismoke/graphql';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
-import {
-  constructExpoMessage,
-  handleReceipts,
-  isUserExpoMessage,
-  sendBatchToExpo
-} from './expo';
-
-describe('isUserExpoMessage', () => {
-  it('should return false for Error', () => {
-    expect(
-      isUserExpoMessage({
-        reason: 'foo',
-        status: 'rejected'
-      })
-    ).toBe(false);
-  });
-
-  it('should return true for message', () => {
-    expect(
-      isUserExpoMessage({
-        pushMessage: {
-          to: 'foo' // we don't actually check for correct ExpoPushToken here
-        },
-        userId: 'bar'
-      })
-    ).toBe(true);
-  });
-});
+import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
 
 describe('constructExpoMessage', () => {
   const user = {

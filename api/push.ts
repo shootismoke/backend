@@ -7,8 +7,9 @@ import {
   constructExpoMessage,
   ExpoPushSuccessTicket,
   findUsersForNotifications,
-  isUserExpoMessage,
-  PromiseRejectedResult,
+  isPromiseFulfilled,
+  isPromiseRejected,
+  PromiseSettledResult,
   sendBatchToExpo,
   universalFetch,
   UserExpoMessage,
@@ -66,32 +67,33 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
 
           return {
             userId: user._id,
-            message: constructExpoMessage(user, pm25)
+            pushMessage: constructExpoMessage(user, pm25)
           };
         } catch (error) {
           throw new Error(`User ${user._id}: ${error.message}`);
         }
       })
-    )) as (UserExpoMessage | PromiseRejectedResult)[];
+    )) as PromiseSettledResult<UserExpoMessage>[];
 
     // Log the users with errors
     messages
-      .filter(message => !isUserExpoMessage(message))
-      .forEach(error => logger.error((error as PromiseRejectedResult).reason));
+      .filter(isPromiseRejected)
+      .map(({ reason }) => reason)
+      .forEach(error => logger.error(new Error(error)));
 
     // Find the messages that are valid
-    const validMessages = messages.filter(isUserExpoMessage);
+    const validMessages = messages.filter(isPromiseFulfilled);
 
     // Send the valid messages, we get the tickets
     const tickets = await sendBatchToExpo(
       new Expo(),
-      validMessages.map(({ pushMessage }) => pushMessage)
+      validMessages.map(({ value: { pushMessage } }) => pushMessage)
     );
     await PushTicket.insertMany(
       tickets.map((ticket, index) => ({
         ...ticket,
         receiptId: (ticket as ExpoPushSuccessTicket).id,
-        userId: validMessages[index].userId
+        userId: validMessages[index].value.userId
       }))
     );
 

@@ -19,9 +19,34 @@ export type ExpoPushSuccessTicket = any;
  * From the Promise.allSettled spec.
  * @see https://github.com/microsoft/TypeScript/pull/34065/files#diff-64d620455dae680966727ed5c2ccd4d6R6
  */
-export interface PromiseRejectedResult {
+interface PromiseFulfilledResult<T> {
+  status: 'fulfilled';
+  value: T;
+}
+interface PromiseRejectedResult {
   status: 'rejected';
   reason: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+export type PromiseSettledResult<T> =
+  | PromiseFulfilledResult<T>
+  | PromiseRejectedResult;
+
+/**
+ * Check if a Promise is fulfilled.
+ */
+export function isPromiseFulfilled<T>(
+  p: PromiseSettledResult<T>
+): p is PromiseFulfilledResult<T> {
+  return p.status === 'fulfilled';
+}
+
+/**
+ * Check if a Promise is rejected.
+ */
+export function isPromiseRejected<T>(
+  p: PromiseSettledResult<T>
+): p is PromiseRejectedResult {
+  return p.status === 'rejected';
 }
 
 /**
@@ -30,17 +55,6 @@ export interface PromiseRejectedResult {
 export interface UserExpoMessage {
   userId: string;
   pushMessage: ExpoPushMessage;
-}
-
-/**
- * Check if a value is an Error or an ExpoPushMessage.
- */
-export function isUserExpoMessage(
-  e: UserExpoMessage | PromiseRejectedResult
-): e is UserExpoMessage {
-  return !!(
-    (e as UserExpoMessage).pushMessage && (e as UserExpoMessage).pushMessage.to
-  );
 }
 
 /**
