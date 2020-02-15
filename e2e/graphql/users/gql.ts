@@ -5,6 +5,13 @@ export const CREATE_USER = gql`
     createUser(input: $input) {
       _id
       expoInstallationId
+      notifications {
+        _id
+        expoPushToken
+        frequency
+        timezone
+        universalId
+      }
     }
   }
 `;
@@ -15,6 +22,7 @@ export const GET_USER = gql`
       _id
       expoInstallationId
       notifications {
+        _id
         expoPushToken
         frequency
         timezone
