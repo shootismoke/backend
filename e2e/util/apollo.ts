@@ -14,6 +14,7 @@ export const MONGO_TEST_DB = `${process.env.MONGO_URL}`.slice(0, -1);
  */
 export async function reset(testName: string): Promise<ApolloServerTestClient> {
   const uri = `${MONGO_TEST_DB}-${testName}`;
+  process.env.MONGODB_ATLAS_URI = uri;
   const server = await createServer({ uri });
   await mongoose.connection.dropDatabase();
 

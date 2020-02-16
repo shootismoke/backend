@@ -4,19 +4,11 @@ import { ObjectID } from 'mongodb';
 import { push } from '../api/push';
 import { PushTicket } from '../src/models';
 import { findTimezonesAt } from '../src/util';
-import {
-  ALICE_ID,
-  describeApollo,
-  getAlice,
-  MONGO_TEST_DB,
-  teardown,
-  UPDATE_USER
-} from './util';
+import { ALICE_ID, describeApollo, getAlice, UPDATE_USER } from './util';
 
 describeApollo('push', client => {
   beforeAll(async done => {
     jest.setTimeout(10000);
-    process.env.MONGODB_ATLAS_URI = `${MONGO_TEST_DB}-push`;
 
     await getAlice(client);
 
@@ -73,10 +65,7 @@ describeApollo('push', client => {
     }
   });
 
-  afterAll(async done => {
+  afterAll(() => {
     jest.setTimeout(5000);
-    await teardown();
-
-    done();
   });
 });

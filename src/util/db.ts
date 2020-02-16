@@ -1,4 +1,4 @@
-import { connect } from 'mongoose';
+import { connect, connection } from 'mongoose';
 
 import { logger } from './logger';
 
@@ -9,16 +9,18 @@ import { logger } from './logger';
  * @param uri - MongoDB connection string
  */
 export async function connectToDatabase(uri?: string): Promise<void> {
-  // If uri is not specified, we take from ENV variable
-  const dbUri = uri || process.env.MONGODB_ATLAS_URI;
+  // If there's already a connection, we do nothing
+  if (connection.readyState === 1) {
+    return;
+  }
 
-  if (!dbUri) {
-    const e = new Error('process.env.MONGODB_ATLAS_URI is not defined');
+  if (!uri) {
+    const e = new Error('connectToDatabase: `uri` is not defined');
     logger.error(e);
     throw e;
   }
 
-  await connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 }
 
 /**
