@@ -1,6 +1,12 @@
 import { PushTicket } from '../../../src/models';
-import { ALICE_ID, BOB_ID, describeApollo, getAlice, getBob } from '../../util';
-import { UPDATE_USER } from './gql';
+import {
+  ALICE_ID,
+  BOB_ID,
+  describeApollo,
+  getAlice,
+  getBob,
+  UPDATE_USER
+} from '../../util';
 
 const ALICE_1 = {
   notifications: {

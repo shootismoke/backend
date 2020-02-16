@@ -1,6 +1,6 @@
 import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@now/node';
-import Expo from 'expo-server-sdk';
+import { Expo } from 'expo-server-sdk';
 
 import { PushTicket } from '../src/models';
 import {
@@ -21,7 +21,7 @@ sentrySetup();
 /**
  * Send push notifications to all relevant users.
  */
-async function push(_req: NowRequest, res: NowResponse): Promise<void> {
+export async function push(_req: NowRequest, res: NowResponse): Promise<void> {
   try {
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
