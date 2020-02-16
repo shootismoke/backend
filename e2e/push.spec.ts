@@ -1,4 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
+import { ObjectID } from 'mongodb';
 
 import { push } from '../api/push';
 import { PushTicket } from '../src/models';
@@ -54,11 +55,15 @@ describeApollo('push', client => {
       // Check that the coorect tickets have been created
       const pushTickets = await PushTicket.find();
       const alice = await getAlice(client);
-      expect(pushTickets).toMatchObject([
+      expect(pushTickets.map(m => m.toJSON())).toMatchObject([
         {
+          __v: 0,
+          _id: expect.any(ObjectID),
           receiptId: 'foo',
           status: 'ok',
-          userId: alice._id
+          userId: new ObjectID(alice._id),
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date)
         }
       ]);
 
