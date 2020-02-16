@@ -3,7 +3,7 @@ import { ApolloServerTestClient } from 'apollo-server-testing';
 import assignDeep from 'assign-deep';
 import pMemoize from 'p-memoize';
 
-import { CREATE_USER } from '../graphql/users/gql';
+import { CREATE_USER } from './gql';
 
 function getUser(name: string) {
   return async function(

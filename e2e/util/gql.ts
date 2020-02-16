@@ -1,4 +1,4 @@
-import { gql } from '../../util';
+import { gql } from 'apollo-server-micro';
 
 export const CREATE_USER = gql`
   mutation($input: CreateUserInput!) {

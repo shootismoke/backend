@@ -6,8 +6,6 @@ import mongoose from 'mongoose';
 
 import { createServer } from '../../src/apollo';
 
-export { gql } from 'apollo-server-micro';
-
 // process.env.MONGO_URL ends with '?', which we remove
 export const MONGO_TEST_DB = `${process.env.MONGO_URL}`.slice(0, -1);
 
@@ -16,6 +14,7 @@ export const MONGO_TEST_DB = `${process.env.MONGO_URL}`.slice(0, -1);
  */
 export async function reset(testName: string): Promise<ApolloServerTestClient> {
   const uri = `${MONGO_TEST_DB}-${testName}`;
+  process.env.MONGODB_ATLAS_URI = uri;
   const server = await createServer({ uri });
   await mongoose.connection.dropDatabase();
 

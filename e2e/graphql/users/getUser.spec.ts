@@ -1,5 +1,4 @@
-import { ALICE_ID, describeApollo, getAlice } from '../../util';
-import { GET_USER } from './gql';
+import { ALICE_ID, describeApollo, GET_USER, getAlice } from '../../util';
 
 describeApollo('users::createUser', client => {
   beforeAll(async done => {

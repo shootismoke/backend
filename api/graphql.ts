@@ -3,4 +3,9 @@ import { sentrySetup } from '../src/util';
 
 sentrySetup();
 
-export default nowApollo({ server: { path: '/api/graphql' } });
+export default nowApollo({
+  db: {
+    uri: process.env.MONGODB_ATLAS_URI
+  },
+  server: { path: '/api/graphql' }
+});

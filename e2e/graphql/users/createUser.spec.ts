@@ -1,5 +1,4 @@
-import { describeApollo } from '../../util';
-import { CREATE_USER } from './gql';
+import { CREATE_USER, describeApollo } from '../../util';
 
 const ALICE = {
   expoInstallationId: 'id_alice'

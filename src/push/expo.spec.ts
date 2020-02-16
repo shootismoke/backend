@@ -31,21 +31,21 @@ describe('Promise.allSettled', () => {
 });
 
 describe('constructExpoMessage', () => {
-  const user = {
+  const user = ({
     _id: 'alice',
     expoInstallationId: 'id_alice',
     notifications: {
       expoPushToken: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
       frequency: 'daily',
       timezone: 'Europe/Berlin',
-      universalId: 'openaq|FR4002'
+      universalId: 'openaq|FR04002'
     }
-  } as User & Document;
+  } as unknown) as User & Document;
 
   it('should return Error on wrong notifications', () => {
     expect(() =>
       constructExpoMessage(
-        { ...user, notifications: undefined } as User & Document,
+        ({ ...user, notifications: undefined } as unknown) as User & Document,
         42
       )
     ).toThrowError(
@@ -56,10 +56,10 @@ describe('constructExpoMessage', () => {
   it('should return Error on wrong notifications', () => {
     expect(() =>
       constructExpoMessage(
-        {
+        ({
           ...user,
           notifications: { ...user.notifications, expoPushToken: 'foo' }
-        } as User & Document,
+        } as unknown) as User & Document,
         42
       )
     ).toThrowError(new Error('Invalid ExpoPushToken: foo'));
@@ -77,10 +77,10 @@ describe('constructExpoMessage', () => {
   it('should work for weekly', () => {
     expect(
       constructExpoMessage(
-        {
+        ({
           ...user,
           notifications: { ...user.notifications, frequency: 'weekly' }
-        } as User & Document,
+        } as unknown) as User & Document,
         42
       )
     ).toEqual({
@@ -94,10 +94,10 @@ describe('constructExpoMessage', () => {
   it('should work for monthly', () => {
     expect(
       constructExpoMessage(
-        {
+        ({
           ...user,
           notifications: { ...user.notifications, frequency: 'monthly' }
-        } as User & Document,
+        } as unknown) as User & Document,
         42
       )
     ).toEqual({
