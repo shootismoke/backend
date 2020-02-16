@@ -3,10 +3,10 @@
   "alias": ["staging.shootismoke.now.sh"],
   "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
   "env": {
-    "AQICN_TOKEN": "@shootismoke-staging-aqicn-token",
-    "ENGINE_API_KEY": "@shootismoke-staging-engine-api-key",
-    "HAWK_KEY_1_5_0": "@shootismoke-staging-hawk-key-1-5-0",
-    "MONGODB_ATLAS_URI": "@shootismoke-staging-mongodb-atlas-uri",
+    "AQICN_TOKEN": "@backend-staging-aqicn-token",
+    "ENGINE_API_KEY": "@backend-staging-engine-api-key",
+    "HAWK_KEY_1_5_0": "@backend-staging-hawk-key-1-5-0",
+    "MONGODB_ATLAS_URI": "@backend-staging-mongodb-atlas-uri",
     "SENTRY_DSN": ""
   },
   "public": false,
