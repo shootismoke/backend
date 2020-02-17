@@ -71,7 +71,6 @@ function roundTo1Decimal(n: number): number {
  */
 function getMessageBody(pm25: number, frequency: Frequency): string {
   const dailyCigarettes = pm25ToCigarettes(pm25);
-  // Round to 1 decimal
 
   if (frequency === 'daily') {
     return `Shoot! You'll smoke ${roundTo1Decimal(
