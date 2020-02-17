@@ -1,6 +1,7 @@
-# Dist
+# Dist & generated
 lib
 *.tsbuildinfo
+scripts/backend.graphql
 
 # Test-related directories
 coverage

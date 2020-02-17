@@ -1,0 +1,17 @@
+name: apollo
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  apollo-graph-manager:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: yarn install
+      - name: Upload GraphQL schema to Apollo Graph manager
+        run: |
+          yarn graphql:schema
+          yarn graphql:manager --key ${{ secrets.ENGINE_API_KEY }}
