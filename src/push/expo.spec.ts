@@ -67,9 +67,9 @@ describe('constructExpoMessage', () => {
 
   it('should work for daily', () => {
     expect(constructExpoMessage(user, 42)).toEqual({
-      body: "Shoot! You'll smoke 1.9090909090909092 cigarettes today",
+      body: "Shoot! You'll smoke 1.9 cigarettes today",
       sound: 'default',
-      title: 'Sh**t! I Smoke',
+      title: 'Daily forecast',
       to: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]'
     });
   });
@@ -84,9 +84,9 @@ describe('constructExpoMessage', () => {
         42
       )
     ).toEqual({
-      body: 'Shoot! You smoked 13.363636363636363 cigarettes in the past week.',
+      body: 'Shoot! You smoked 13.4 cigarettes in the past week.',
       sound: 'default',
-      title: 'Sh**t! I Smoke',
+      title: 'Weekly report',
       to: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]'
     });
   });
@@ -101,9 +101,9 @@ describe('constructExpoMessage', () => {
         42
       )
     ).toEqual({
-      body: 'Shoot! You smoked 57.27272727272727 cigarettes in the past month.',
+      body: 'Shoot! You smoked 57.3 cigarettes in the past month.',
       sound: 'default',
-      title: 'Sh**t! I Smoke',
+      title: 'Monthly report',
       to: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]'
     });
   });
