@@ -1,7 +1,7 @@
 import { NowRequest, NowResponse } from '@now/node';
 import { ObjectID } from 'mongodb';
 
-import { push } from '../api/push';
+import { push } from '../src/api/push';
 import { PushTicket } from '../src/models';
 import { findTimezonesAt } from '../src/util';
 import { ALICE_ID, describeApollo, getAlice, UPDATE_USER } from './util';

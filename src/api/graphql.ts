@@ -1,5 +1,5 @@
-import { nowApollo } from '../src/apollo';
-import { sentrySetup } from '../src/util';
+import { nowApollo } from '../apollo';
+import { sentrySetup } from '../util';
 
 sentrySetup();
 

@@ -1,20 +1,23 @@
-import { ALICE_ID, CREATE_USER, describeApollo } from '../../util';
+import { describeApollo, GET_OR_CREATE_USER } from '../../util';
 
 const ALICE = {
-  expoInstallationId: ALICE_ID
+  expoInstallationId: 'id_alice'
+};
+const BOB = {
+  expoInstallationId: 'id_bob'
 };
 
-describeApollo('users::createUser', client => {
+describeApollo('users::getOrCreateUser', client => {
   it('should always require input', async done => {
     const { mutate } = await client;
 
     const res = await mutate({
-      mutation: CREATE_USER,
+      mutation: GET_OR_CREATE_USER,
       variables: {}
     });
 
     expect(res.errors && res.errors[0].message).toBe(
-      'Variable "$input" of required type "CreateUserInput!" was not provided.'
+      'Variable "$input" of required type "GetOrCreateUserInput!" was not provided.'
     );
 
     done();
@@ -24,7 +27,7 @@ describeApollo('users::createUser', client => {
     const { mutate } = await client;
 
     const res = await mutate({
-      mutation: CREATE_USER,
+      mutation: GET_OR_CREATE_USER,
       variables: { input: {} }
     });
 
@@ -39,7 +42,7 @@ describeApollo('users::createUser', client => {
     const { mutate } = await client;
 
     const res = await mutate({
-      mutation: CREATE_USER,
+      mutation: GET_OR_CREATE_USER,
       variables: { input: ALICE }
     });
 
@@ -47,23 +50,29 @@ describeApollo('users::createUser', client => {
       return done.fail('No data in response');
     }
 
-    expect(res.data.createUser._id).toBeDefined();
-    expect(res.data.createUser).toMatchObject(ALICE);
+    expect(res.data.getOrCreateUser._id).toBeDefined();
+    expect(res.data.getOrCreateUser).toMatchObject(ALICE);
 
     done();
   });
 
-  it('should validate unique expoInstallationId', async done => {
+  it('should be idempotent', async done => {
     const { mutate } = await client;
 
-    const res = await mutate({
-      mutation: CREATE_USER,
-      variables: { input: ALICE }
+    const res1 = await mutate({
+      mutation: GET_OR_CREATE_USER,
+      variables: { input: BOB }
+    });
+    const res2 = await mutate({
+      mutation: GET_OR_CREATE_USER,
+      variables: { input: BOB }
     });
 
-    expect(res.errors && res.errors[0].message).toBe(
-      'E11000 duplicate key error dup key: { : "id_alice" }'
-    );
+    if (!res1.data || !res2.data) {
+      return done.fail('No data in response');
+    }
+
+    expect(res1.data.getOrCreateUser._id).toBe(res2.data.getOrCreateUser._id);
 
     done();
   });

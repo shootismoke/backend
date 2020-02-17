@@ -48,6 +48,15 @@ export const userResolvers: Resolvers<ApolloContext> = {
     createUser: async (_parent, { input }, context): Promise<IUser> => {
       assertHawkAuthenticated(context);
 
+      const user = new User(input);
+      await user.save();
+
+      return user;
+    },
+    // @ts-ignore
+    getOrCreateUser: async (_parent, { input }, context): Promise<IUser> => {
+      assertHawkAuthenticated(context);
+
       let user = await User.findOne({
         expoInstallationId: input.expoInstallationId
       });

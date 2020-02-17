@@ -33,6 +33,10 @@ export const userSchema = gql`
     expoInstallationId: ID!
   }
 
+  input GetOrCreateUserInput {
+    expoInstallationId: ID!
+  }
+
   input UpdateUserInput {
     notifications: NotificationsInput
   }

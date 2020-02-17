@@ -1,6 +1,6 @@
 import { ALICE_ID, describeApollo, GET_USER, getAlice } from '../../util';
 
-describeApollo('users::createUser', client => {
+describeApollo('users::getUser', client => {
   beforeAll(async done => {
     await getAlice(client);
 
@@ -17,7 +17,7 @@ describeApollo('users::createUser', client => {
       }
     });
 
-    expect(res.errors && res.errors[0].message).toContain(
+    expect(res.errors && res.errors[0].message).toBe(
       'No user with expoInstallationId "foo" found'
     );
 

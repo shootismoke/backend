@@ -2,7 +2,7 @@ import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@now/node';
 import { Expo } from 'expo-server-sdk';
 
-import { PushTicket } from '../src/models';
+import { PushTicket } from '../models';
 import {
   expoMessageForUser,
   ExpoPushSuccessTicket,
@@ -13,8 +13,8 @@ import {
   sendBatchToExpo,
   UserExpoMessage,
   whitelistIPMiddleware
-} from '../src/push';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+} from '../push';
+import { connectToDatabase, logger, sentrySetup } from '../util';
 
 sentrySetup();
 
