@@ -48,6 +48,18 @@ export const userResolvers: Resolvers<ApolloContext> = {
     createUser: async (_parent, { input }, context): Promise<IUser> => {
       assertHawkAuthenticated(context);
 
+      const user = new User(input);
+      await user.save();
+
+      return user;
+    },
+    /**
+     * This mutation is not conventional, but is what our frontend needs right
+     * now. Might be deprecated in the future.
+     */
+    getOrCreateUser: async (_parent, { input }, context): Promise<IUser> => {
+      assertHawkAuthenticated(context);
+
       let user = await User.findOne({
         expoInstallationId: input.expoInstallationId
       });

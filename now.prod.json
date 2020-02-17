@@ -2,7 +2,7 @@
   "name": "backend-production",
   "version": 2,
   "alias": ["shootismoke.now.sh"],
-  "builds": [{ "src": "/api/**/*.ts", "use": "@now/node" }],
+  "builds": [{ "src": "/src/api/**/*.ts", "use": "@now/node" }],
   "env": {
     "AQICN_TOKEN": "@backend-production-aqicn-token",
     "ENGINE_API_KEY": "@backend-production-engine-api-key",
@@ -14,15 +14,15 @@
   "routes": [
     {
       "src": "/api/graphql",
-      "dest": "/api/graphql.ts"
+      "dest": "/src/api/graphql.ts"
     },
     {
       "src": "/api/push",
-      "dest": "/api/push.ts"
+      "dest": "/src/api/push.ts"
     },
     {
       "src": "/api/receipts",
-      "dest": "/api/receipts.ts"
+      "dest": "/src/api/receipts.ts"
     }
   ],
   "scope": "shootismoke"

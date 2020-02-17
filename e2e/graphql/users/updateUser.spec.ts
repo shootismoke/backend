@@ -53,7 +53,7 @@ describeApollo('users::updateUser', client => {
         }
       });
 
-      expect(res.errors && res.errors[0].message).toContain(
+      expect(res.errors && res.errors[0].message).toBe(
         'No user with expoInstallationId "foo" found'
       );
 
@@ -109,7 +109,7 @@ describeApollo('users::updateUser', client => {
         }
       });
 
-      expect(res.errors && res.errors[0].message).toContain(
+      expect(res.errors && res.errors[0].message).toBe(
         'User validation failed: notifications.universalId: foo is not a valid universalId, notifications: Validation failed: universalId: foo is not a valid universalId'
       );
 
@@ -168,8 +168,8 @@ describeApollo('users::updateUser', client => {
       }
     });
 
-    expect(res.errors && res.errors[0].message).toContain(
-      'E11000 duplicate key error'
+    expect(res.errors && res.errors[0].message).toBe(
+      'E11000 duplicate key error dup key: { : "token_alice_2" }'
     );
 
     done();

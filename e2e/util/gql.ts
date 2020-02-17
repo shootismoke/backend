@@ -32,6 +32,22 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_OR_CREATE_USER = gql`
+  mutation($input: GetOrCreateUserInput!) {
+    getOrCreateUser(input: $input) {
+      _id
+      expoInstallationId
+      notifications {
+        _id
+        expoPushToken
+        frequency
+        timezone
+        universalId
+      }
+    }
+  }
+`;
+
 export const UPDATE_USER = gql`
   mutation($expoInstallationId: ID!, $input: UpdateUserInput!) {
     updateUser(expoInstallationId: $expoInstallationId, input: $input) {
