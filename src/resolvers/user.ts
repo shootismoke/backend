@@ -53,7 +53,6 @@ export const userResolvers: Resolvers<ApolloContext> = {
 
       return user;
     },
-    // @ts-ignore
     getOrCreateUser: async (_parent, { input }, context): Promise<IUser> => {
       assertHawkAuthenticated(context);
 
