@@ -7,3 +7,24 @@
 # @shootismoke/backend
 
 Backend for the [Sh\*\*t! I Smoke](https://shootismoke.github.io) mobile app.
+
+## Deploying to Production
+
+1. Upload newest GraphQL schema to Apollo Graph Manager
+
+```bash
+yarn graphql:schema
+yarn graphql:manager --key "<ENGINE_API_KEY>"
+```
+
+2. Deploy to ZEIT Now `backend-production`
+
+```bash
+yarn now:prod
+```
+
+3. Set alias of latest deployed `backend-production` to correct URL
+
+```bash
+yarn now:prod --prod
+```

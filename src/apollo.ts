@@ -40,8 +40,11 @@ export async function createServer(options?: DbOptions): Promise<ApolloServer> {
           apiKey: process.env.ENGINE_API_KEY
         }
       : undefined,
-    typeDefs,
-    resolvers
+    resolvers,
+    // Disable subscriptions
+    // https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
+    subscriptions: false,
+    typeDefs
   });
 
   return server;
