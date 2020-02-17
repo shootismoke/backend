@@ -58,17 +58,29 @@ export interface UserExpoMessage {
 }
 
 /**
+ * Round a number to 1 decimal.
+ *
+ * @param n - The number to round.
+ */
+function roundTo1Decimal(n: number): number {
+  return Math.round(n * 10) / 10;
+}
+
+/**
  * Generate the body of the push notification message.
  */
 function getMessageBody(pm25: number, frequency: Frequency): string {
   const dailyCigarettes = pm25ToCigarettes(pm25);
+
   if (frequency === 'daily') {
-    return `Shoot! You'll smoke ${dailyCigarettes} cigarettes today`;
+    return `Shoot! You'll smoke ${roundTo1Decimal(
+      dailyCigarettes
+    )} cigarettes today`;
   }
 
-  return `Shoot! You smoked ${
+  return `Shoot! You smoked ${roundTo1Decimal(
     frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
-  } cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
+  )} cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
 
 /**
@@ -104,16 +116,21 @@ export function constructExpoMessage(
 ): ExpoPushMessage {
   assertUserNotifications(user);
 
-  if (!Expo.isExpoPushToken(user.notifications.expoPushToken)) {
-    throw new Error(
-      `Invalid ExpoPushToken: ${user.notifications.expoPushToken}`
-    );
+  const { frequency, expoPushToken } = user.notifications;
+
+  if (!Expo.isExpoPushToken(expoPushToken)) {
+    throw new Error(`Invalid ExpoPushToken: ${expoPushToken}`);
   }
 
   return {
-    body: getMessageBody(pm25, user.notifications.frequency),
-    title: 'Sh**t! I Smoke',
-    to: user.notifications.expoPushToken,
+    body: getMessageBody(pm25, frequency),
+    title:
+      frequency === 'daily'
+        ? 'Daily forecast'
+        : frequency === 'weekly'
+        ? 'Weekly report'
+        : 'Monthly report',
+    to: expoPushToken,
     sound: 'default'
   };
 }

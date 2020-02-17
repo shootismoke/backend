@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node';
-import { ApolloServer } from 'apollo-server-micro';
+import { ApolloServer, Config } from 'apollo-server-micro';
 import { ServerRegistration } from 'apollo-server-micro/dist/ApolloServer';
 
 import { resolvers } from './resolvers';
@@ -10,7 +10,36 @@ interface DbOptions {
   uri?: string;
 }
 
+/**
+ * Variable that will hold cached Apollo server.
+ */
 let server: ApolloServer | undefined;
+
+/**
+ * Config to pass into Apollo server.
+ */
+export const apolloServerConfig: Config = {
+  context: async (a): Promise<ApolloContext> => {
+    if (process.env.NODE_ENV !== 'production') {
+      return { isHawkAuthenticated: true };
+    }
+
+    const isHawkAuthenticated = await hawk(a.req);
+
+    // add the user to the context
+    return { isHawkAuthenticated };
+  },
+  engine: process.env.ENGINE_API_KEY
+    ? {
+        apiKey: process.env.ENGINE_API_KEY
+      }
+    : undefined,
+  resolvers,
+  // Disable subscriptions
+  // https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
+  subscriptions: false,
+  typeDefs
+};
 /**
  * Create and return an Apollo server
  *
@@ -23,29 +52,7 @@ export async function createServer(options?: DbOptions): Promise<ApolloServer> {
 
   await connectToDatabase(options && options.uri);
 
-  // eslint-disable-next-line require-atomic-updates
-  server = new ApolloServer({
-    context: async (a): Promise<ApolloContext> => {
-      if (process.env.NODE_ENV !== 'production') {
-        return { isHawkAuthenticated: true };
-      }
-
-      const isHawkAuthenticated = await hawk(a.req);
-
-      // add the user to the context
-      return { isHawkAuthenticated };
-    },
-    engine: process.env.ENGINE_API_KEY
-      ? {
-          apiKey: process.env.ENGINE_API_KEY
-        }
-      : undefined,
-    resolvers,
-    // Disable subscriptions
-    // https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
-    subscriptions: false,
-    typeDefs
-  });
+  server = new ApolloServer(apolloServerConfig);
 
   return server;
 }
