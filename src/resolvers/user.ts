@@ -53,6 +53,10 @@ export const userResolvers: Resolvers<ApolloContext> = {
 
       return user;
     },
+    /**
+     * This mutation is not conventional, but is what our frontend needs right
+     * now. Might be deprecated in the future.
+     */
     getOrCreateUser: async (_parent, { input }, context): Promise<IUser> => {
       assertHawkAuthenticated(context);
 
