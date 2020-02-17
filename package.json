@@ -20,7 +20,7 @@
     "@now/node": "^1.4.1",
     "@sentry/node": "^5.12.3",
     "@shootismoke/convert": "^0.2.8",
-    "@shootismoke/dataproviders": "^0.2.9",
+    "@shootismoke/dataproviders": "^0.2.17",
     "@shootismoke/graphql": "^0.2.16",
     "@types/async-retry": "^1.4.1",
     "@types/mongodb": "^3.3.16",
