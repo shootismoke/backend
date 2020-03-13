@@ -14,12 +14,20 @@ export function sentrySetup(): void {
 }
 
 /**
+ * List of errors that we don't want to send to Sentry, as not to spam it.
+ */
+const excludedErrors = ['No user with expoInstallationId'];
+
+/**
  * Send an error to Sentry, or if sentry is not set up, just log it.
  *
  * @param error - Error to log
  */
 function error(error: Error): void {
-  if (IS_SENTRY_SET_UP) {
+  if (
+    IS_SENTRY_SET_UP &&
+    !excludedErrors.some(msg => error.message.includes(msg))
+  ) {
     captureException(error);
   } else {
     console.error(error.message);
