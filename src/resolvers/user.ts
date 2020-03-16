@@ -35,11 +35,10 @@ export const userResolvers: Resolvers<ApolloContext> = {
       _parent,
       { expoInstallationId },
       context
-    ): Promise<IUser> => {
+    ): Promise<IUser | null> => {
       assertHawkAuthenticated(context);
 
       const user = await User.findOne({ expoInstallationId });
-      assertUser(user, expoInstallationId);
 
       return user;
     }
@@ -50,24 +49,6 @@ export const userResolvers: Resolvers<ApolloContext> = {
 
       const user = new User(input);
       await user.save();
-
-      return user;
-    },
-    /**
-     * This mutation is not conventional, but is what our frontend needs right
-     * now. Might be deprecated in the future.
-     */
-    getOrCreateUser: async (_parent, { input }, context): Promise<IUser> => {
-      assertHawkAuthenticated(context);
-
-      let user = await User.findOne({
-        expoInstallationId: input.expoInstallationId
-      });
-
-      if (!user) {
-        user = new User(input);
-        await user.save();
-      }
 
       return user;
     },

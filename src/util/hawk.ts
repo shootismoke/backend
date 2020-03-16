@@ -30,6 +30,10 @@ const CREDENTIALS: Record<string, Credential> = {
   'shootismoke-production-v1.5.1': {
     algorithm: 'sha256',
     key: process.env.HAWK_KEY_1_5_0 as string
+  },
+  'shootismoke-production-v1.5.2': {
+    algorithm: 'sha256',
+    key: process.env.HAWK_KEY_1_5_0 as string
   }
 };
 

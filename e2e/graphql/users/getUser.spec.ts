@@ -17,9 +17,7 @@ describeApollo('users::getUser', client => {
       }
     });
 
-    expect(res.errors && res.errors[0].message).toBe(
-      'No user with expoInstallationId "foo" found'
-    );
+    expect(res.data).toEqual({ getUser: null });
 
     done();
   });
