@@ -13,7 +13,7 @@
     "graphql:schema": "ts-node ./scripts/generateSchema > scripts/backend.graphql",
     "graphql:manager": "apollo service:push --localSchemaFile ./scripts/backend.graphql",
     "lint": "tsc --noEmit && eslint --ext ts .",
-    "now:prod": "mv .now .now.temp && now -A now.prod.json",
+    "now:prod": "now -A now.prod.json",
     "start": "now dev",
     "test": "jest"
   },
@@ -24,7 +24,7 @@
     "@sentry/node": "^5.14.2",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.17",
-    "@shootismoke/graphql": "^0.2.18",
+    "@shootismoke/graphql": "^0.2.19",
     "@types/async-retry": "^1.4.1",
     "@types/mongodb": "^3.5.2",
     "@types/mongoose": "^5.7.6",
