@@ -8,8 +8,8 @@ import { ApolloContext, logger } from '../util';
  * Assert that this endpoint is protected by Hawk.
  */
 function assertHawkAuthenticated(context: ApolloContext): void {
-  if (context.isHawkAuthenticated !== true) {
-    throw new Error(context.isHawkAuthenticated);
+  if (context instanceof Error) {
+    throw context;
   }
 }
 

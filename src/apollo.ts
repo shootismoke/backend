@@ -4,7 +4,7 @@ import { ServerRegistration } from 'apollo-server-micro/dist/ApolloServer';
 
 import { resolvers } from './resolvers';
 import { typeDefs } from './typeDefs';
-import { ApolloContext, connectToDatabase, hawk } from './util';
+import { ApolloContext, connectToDatabase, CREDENTIALS, hawk } from './util';
 
 interface DbOptions {
   uri?: string;
@@ -21,13 +21,20 @@ let server: ApolloServer | undefined;
 export const apolloServerConfig: Config = {
   context: async (a): Promise<ApolloContext> => {
     if (process.env.NODE_ENV !== 'production') {
-      return { isHawkAuthenticated: true };
+      return {
+        hawk: {
+          credentials: CREDENTIALS['shootismoke-development']
+        }
+      };
     }
 
-    const isHawkAuthenticated = await hawk(a.req);
+    try {
+      const result = await hawk(a.req);
 
-    // add the user to the context
-    return { isHawkAuthenticated };
+      return { hawk: result };
+    } catch (error) {
+      return { hawk: error };
+    }
   },
   engine: process.env.ENGINE_API_KEY
     ? {
