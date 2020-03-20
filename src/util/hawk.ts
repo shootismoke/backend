@@ -48,6 +48,9 @@ function credentialsFunc(id: string): Credentials {
   };
 }
 
+/**
+ * Successful result from `Hawk.server.authenticate` function.
+ */
 export interface HawkResult {
   credentials: Credentials;
 }
@@ -75,7 +78,7 @@ export async function hawk(req: Request): Promise<HawkResult> {
     throw new ApolloError(
       `Hawk: ${error.message}`,
       'UNAUTHENTICATED',
-      error.output?.payload?.attributes
+      error.output && error.output.payload && error.output.payload.attributes
     );
   }
 }
