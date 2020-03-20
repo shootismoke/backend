@@ -49,7 +49,7 @@ function credentialsFunc(id: string): Credentials {
 }
 
 /**
- * Successful esult from `Hawk.server.authenticate` function.
+ * Successful result from `Hawk.server.authenticate` function.
  */
 export interface HawkResult {
   credentials: Credentials;
