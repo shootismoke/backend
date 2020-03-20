@@ -1,4 +1,5 @@
 import Hawk from '@hapi/hawk';
+import { ApolloError } from 'apollo-server-micro';
 import { Request } from 'express';
 
 import { IS_PROD } from './constants';
@@ -57,7 +58,7 @@ export interface HawkResult {
  *
  * @param req - The incoming express request
  */
-export async function hawk(req: Request): Promise<HawkResult | Error> {
+export async function hawk(req: Request): Promise<HawkResult> {
   try {
     // Authenticate incoming request
     const result = await Hawk.server.authenticate(req, credentialsFunc, {
@@ -69,11 +70,12 @@ export async function hawk(req: Request): Promise<HawkResult | Error> {
 
     return result;
   } catch (error) {
-    if (error.message === 'Stale timestamp') {
-      console.log(error);
-
-      return new Error(`Hawk: ${error.message}`);
-    }
-    return new Error(`Hawk: ${error.message}`);
+    // Add the attributes of the error (e.g. offset in case of stale timestamp)
+    // in the GraphQL error extensions
+    throw new ApolloError(
+      `Hawk: ${error.message}`,
+      'UNAUTHENTICATED',
+      error.output?.payload?.attributes
+    );
   }
 }
