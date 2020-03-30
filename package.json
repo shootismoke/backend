@@ -21,7 +21,7 @@
     "@amaurymartiny/now-middleware": "^0.1.1",
     "@hapi/hawk": "^8.0.0",
     "@now/node": "^1.5.0",
-    "@sentry/node": "^5.15.0",
+    "@sentry/node": "^5.15.4",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.23",
     "@shootismoke/graphql": "^0.2.22",
