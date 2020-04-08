@@ -1,3 +1,6 @@
 {
-  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig"
+  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig",
+  "compilerOptions": {
+    "lib": ["es2020.promise"]
+  }
 }
