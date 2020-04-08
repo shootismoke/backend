@@ -18,16 +18,16 @@ interface Credentials {
 export const CREDENTIALS: Record<string, Credentials> = {
   'shootismoke-default': {
     algorithm: 'sha256',
-    key: process.env.HAWK_KEY_1_5_0 as string
+    key: process.env.HAWK_KEY_1_5_0 as string,
   },
   'shootismoke-development': {
     algorithm: 'sha256',
-    key: process.env.HAWK_KEY_1_5_0 as string
+    key: process.env.HAWK_KEY_1_5_0 as string,
   },
   'shootismoke-production-v1.5': {
     algorithm: 'sha256',
-    key: process.env.HAWK_KEY_1_5_0 as string
-  }
+    key: process.env.HAWK_KEY_1_5_0 as string,
+  },
 };
 
 // Credentials lookup function
@@ -44,7 +44,7 @@ function credentialsFunc(id: string): Credentials {
 
   return {
     algorithm: 'sha256',
-    key: CREDENTIALS[id].key
+    key: CREDENTIALS[id].key,
   };
 }
 
@@ -68,7 +68,7 @@ export async function hawk(req: Request): Promise<HawkResult> {
       // The client constructs the port as 443, because in production we use
       // https. But somehow, in the `req`, object, the port is 80, even in
       // production. Here we just force the port to 443 in production.
-      port: IS_PROD ? 443 : undefined
+      port: IS_PROD ? 443 : undefined,
     });
 
     return result;

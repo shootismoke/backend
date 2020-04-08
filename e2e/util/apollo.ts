@@ -1,6 +1,6 @@
 import {
   ApolloServerTestClient,
-  createTestClient
+  createTestClient,
 } from 'apollo-server-testing';
 import mongoose from 'mongoose';
 
@@ -38,7 +38,7 @@ export function describeApollo(
   const client = reset(testName);
 
   describe(testName, () => {
-    beforeAll(async done => {
+    beforeAll(async (done) => {
       await client;
 
       done();
@@ -46,7 +46,7 @@ export function describeApollo(
 
     fn(client);
 
-    afterAll(async done => {
+    afterAll(async (done) => {
       await teardown();
 
       done();

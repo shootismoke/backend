@@ -49,7 +49,7 @@ export function findTimezonesAt(hour: number, now: Date): string[] {
   const isDstNow = isDstObserved();
 
   const tzs = timezones.filter(
-    tz =>
+    (tz) =>
       offset ===
       (tz.isdst && !isDstNow
         ? Math.floor(tz.offset - 1) // Now is not DST, we remove an hour to this tz that's following DST

@@ -7,7 +7,7 @@ import { Document } from 'mongoose';
 import {
   assertUserNotifications,
   constructExpoMessage,
-  UserExpoMessage
+  UserExpoMessage,
 } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
@@ -38,7 +38,7 @@ async function providerFetch(
     provider === 'aqicn'
       ? aqicn.normalizeByStation(
           await aqicn.fetchByStation(station, {
-            token: process.env.AQICN_TOKEN as string
+            token: process.env.AQICN_TOKEN as string,
           })
         )
       : provider === 'waqi'
@@ -46,7 +46,7 @@ async function providerFetch(
       : openaq.normalizeByStation(
           await openaq.fetchByStation(station, {
             limit: 1,
-            parameter: ['pm25']
+            parameter: ['pm25'],
           })
         );
 
@@ -105,12 +105,12 @@ export async function expoMessageForUser(
       // Timeout after 5s, because the whole Now function only runs 10s
       new Promise<number>((_resolve, reject) =>
         setTimeout(() => reject(new Error('universalFetch timed out')), 5000)
-      )
+      ),
     ]);
 
     return {
       userId: user._id,
-      pushMessage: constructExpoMessage(user, pm25)
+      pushMessage: constructExpoMessage(user, pm25),
     };
   } catch (error) {
     throw new Error(`User ${user._id}: ${error.message}`);

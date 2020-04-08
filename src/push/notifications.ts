@@ -10,7 +10,7 @@ import { findTimezonesAt } from '../util';
 const NOTIFICATION_HOUR = {
   daily: 9,
   weekly: 21,
-  monthly: 21
+  monthly: 21,
 };
 
 /**
@@ -52,9 +52,9 @@ export function usersPipeline(
       $match: {
         'notifications.frequency': frequency,
         'notifications.timezone': {
-          $in: timezones
-        }
-      }
+          $in: timezones,
+        },
+      },
     },
     // Check if user has any active pushTickets from Expo.
     {
@@ -62,15 +62,15 @@ export function usersPipeline(
         as: 'pushTickets',
         from: PushTicket.collection.name,
         localField: '_id',
-        foreignField: 'userId'
-      }
+        foreignField: 'userId',
+      },
     },
     // Only return users with no puchTickets.
     {
       $match: {
-        pushTickets: { $size: 0 }
-      }
-    }
+        pushTickets: { $size: 0 },
+      },
+    },
   ];
 }
 
@@ -86,7 +86,7 @@ export async function findUsersForNotifications(): Promise<
   const now = new Date();
   // Return a tuple [dailyUsers, weeklyUsers, monthlyUsers]
   const allUsers = await Promise.all(
-    (['daily', 'weekly', 'monthly'] as const).map(frequency =>
+    (['daily', 'weekly', 'monthly'] as const).map((frequency) =>
       User.aggregate(usersPipeline(frequency, now))
     )
   );

@@ -15,10 +15,10 @@ const PushTicketErrorDetailsSchema = new Schema({
       'DeviceNotRegistered',
       'InvalidCredentials',
       'MessageTooBig',
-      'MessageRateExceeded'
+      'MessageRateExceeded',
     ],
-    type: Schema.Types.String
-  }
+    type: Schema.Types.String,
+  },
 });
 
 /**
@@ -30,24 +30,24 @@ const PushTicketSchema = new Schema(
      * Error details.
      */
     details: {
-      type: PushTicketErrorDetailsSchema
+      type: PushTicketErrorDetailsSchema,
     },
     /**
      * Error message.
      */
     message: {
-      required: function(): boolean {
+      required: function (): boolean {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore Using this syntax from mongoose docs.
         return this.status === 'error';
       },
-      type: Schema.Types.String
+      type: Schema.Types.String,
     },
     /**
      * Receipt id.
      */
     receiptId: {
-      type: Schema.Types.String
+      type: Schema.Types.String,
     },
     /**
      * Ticket status
@@ -55,7 +55,7 @@ const PushTicketSchema = new Schema(
     status: {
       enum: ['ok', 'error'],
       required: true,
-      type: Schema.Types.String
+      type: Schema.Types.String,
     },
     /**
      * The user associated to the ticket.
@@ -63,8 +63,8 @@ const PushTicketSchema = new Schema(
     userId: {
       ref: 'User',
       required: true,
-      type: Schema.Types.ObjectId
-    }
+      type: Schema.Types.ObjectId,
+    },
   },
   { strict: 'throw', timestamps: true }
 );

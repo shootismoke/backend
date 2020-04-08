@@ -50,7 +50,7 @@ describe('findTimezonesAt', () => {
       'Africa/Porto-Novo',
       'Africa/Tunis',
       'Etc/GMT-1',
-      'Africa/Windhoek'
+      'Africa/Windhoek',
     ]);
   });
 
@@ -58,7 +58,7 @@ describe('findTimezonesAt', () => {
     expect(findTimezonesAt(23, new Date('2020-08-12T01:27:21.771Z'))).toEqual([
       'America/Noronha',
       'Atlantic/South_Georgia',
-      'Etc/GMT+2'
+      'Etc/GMT+2',
     ]);
   });
 });

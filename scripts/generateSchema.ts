@@ -10,7 +10,7 @@
 import { printSchema } from 'graphql';
 import {
   IExecutableSchemaDefinition,
-  makeExecutableSchema
+  makeExecutableSchema,
 } from 'graphql-tools';
 
 import { apolloServerConfig } from '../src/apollo';

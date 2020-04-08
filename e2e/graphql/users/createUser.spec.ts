@@ -1,16 +1,16 @@
 import { ALICE_ID, CREATE_USER, describeApollo } from '../../util';
 
 const ALICE = {
-  expoInstallationId: ALICE_ID
+  expoInstallationId: ALICE_ID,
 };
 
-describeApollo('users::createUser', client => {
-  it('should always require input', async done => {
+describeApollo('users::createUser', (client) => {
+  it('should always require input', async (done) => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: {}
+      variables: {},
     });
 
     expect(res.errors && res.errors[0].message).toBe(
@@ -20,12 +20,12 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it('should require expoInstallationId', async done => {
+  it('should require expoInstallationId', async (done) => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: {} }
+      variables: { input: {} },
     });
 
     expect(res.errors && res.errors[0].message).toBe(
@@ -35,12 +35,12 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it('should create a user', async done => {
+  it('should create a user', async (done) => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: ALICE }
+      variables: { input: ALICE },
     });
 
     if (!res.data) {
@@ -53,12 +53,12 @@ describeApollo('users::createUser', client => {
     done();
   });
 
-  it('should validate unique expoInstallationId', async done => {
+  it('should validate unique expoInstallationId', async (done) => {
     const { mutate } = await client;
 
     const res = await mutate({
       mutation: CREATE_USER,
-      variables: { input: ALICE }
+      variables: { input: ALICE },
     });
 
     expect(res.errors && res.errors[0].message).toBe(

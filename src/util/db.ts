@@ -28,5 +28,5 @@ export async function connectToDatabase(uri?: string): Promise<void> {
  */
 export const dbTimestamps = {
   createdAt: 'firstUpdated',
-  updatedAt: 'lastUpdated'
+  updatedAt: 'lastUpdated',
 };

@@ -5,7 +5,7 @@ sentrySetup();
 
 export default nowApollo({
   db: {
-    uri: process.env.MONGODB_ATLAS_URI
+    uri: process.env.MONGODB_ATLAS_URI,
   },
-  server: { path: '/api/graphql' }
+  server: { path: '/api/graphql' },
 });

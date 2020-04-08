@@ -8,7 +8,7 @@ describe('getTimezones', () => {
       'America/Scoresbysund',
       'Atlantic/Azores',
       'Atlantic/Cape_Verde',
-      'Etc/GMT+1'
+      'Etc/GMT+1',
     ]);
   });
 
@@ -25,7 +25,7 @@ describe('getTimezones', () => {
       'Pacific/Ponape',
       'Asia/Sakhalin',
       'Asia/Ust-Nera',
-      'Asia/Vladivostok'
+      'Asia/Vladivostok',
     ]);
   });
 
@@ -48,7 +48,7 @@ describe('getTimezones', () => {
       'Pacific/Ponape',
       'Asia/Sakhalin',
       'Asia/Ust-Nera',
-      'Asia/Vladivostok'
+      'Asia/Vladivostok',
     ]);
   });
 
@@ -72,26 +72,26 @@ describe('usersPipeline', () => {
               'America/Scoresbysund',
               'Atlantic/Azores',
               'Atlantic/Cape_Verde',
-              'Etc/GMT+1'
-            ]
-          }
-        }
+              'Etc/GMT+1',
+            ],
+          },
+        },
       },
       {
         $lookup: {
           as: 'pushTickets',
           foreignField: 'userId',
           from: 'pushtickets',
-          localField: '_id'
-        }
+          localField: '_id',
+        },
       },
       {
         $match: {
           pushTickets: {
-            $size: 0
-          }
-        }
-      }
+            $size: 0,
+          },
+        },
+      },
     ]);
   });
 });

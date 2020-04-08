@@ -6,7 +6,7 @@ import pMemoize from 'p-memoize';
 import { CREATE_USER } from './gql';
 
 function getUser(name: string) {
-  return async function(
+  return async function (
     client: Promise<ApolloServerTestClient>,
     additionalInputs: Partial<CreateUserInput> = {}
   ): Promise<User> {
@@ -14,13 +14,13 @@ function getUser(name: string) {
 
     const input = assignDeep(
       {
-        expoInstallationId: `id_${name}`
+        expoInstallationId: `id_${name}`,
       },
       additionalInputs
     );
     const createRes = await mutate({
       mutation: CREATE_USER,
-      variables: { input }
+      variables: { input },
     });
 
     if (!createRes.data) {

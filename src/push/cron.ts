@@ -15,7 +15,7 @@ const whitelist = [
   '2607:5300:60:24de::',
   '2607:5300:60:22cd::',
   '2607:5300:60:22bd::',
-  '2607:5300:60:4b6e::'
+  '2607:5300:60:4b6e::',
 ];
 
 /**
@@ -39,7 +39,7 @@ export function whitelistIPMiddleware(
     res.status(403);
     res.send({
       status: 'error',
-      details: `IP address not whitelisted: ${ip}`
+      details: `IP address not whitelisted: ${ip}`,
     });
     res.end();
   } else {
