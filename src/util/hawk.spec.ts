@@ -7,7 +7,7 @@ import { hawk } from './hawk';
 function createReq({
   crendentialsId,
   credentialsKey,
-  timestamp = Math.round(new Date().getTime() / 1000)
+  timestamp = Math.round(new Date().getTime() / 1000),
 }: {
   crendentialsId: string;
   credentialsKey: string;
@@ -22,25 +22,29 @@ function createReq({
       credentials: {
         algorithm: 'sha256',
         id: crendentialsId,
-        key: credentialsKey
-      }
+        key: credentialsKey,
+      },
     }
   );
 
-  return ({
-    headers: {
-      host: 'example.com',
-      authorization: header
-    },
-    method: 'GET',
-    nonce: 'Ygvqdz',
-    port: 80,
-    url: '/resource/4?filter=a'
-  } as unknown) as Request;
+  return (
+    ({
+      headers: {
+        host: 'example.com',
+        authorization: header,
+      },
+      method: 'GET',
+      nonce: 'Ygvqdz',
+      port: 80,
+      url: '/resource/4?filter=a',
+    } as
+      unknown) as
+    Request
+  );
 }
 
 describe('hawk', () => {
-  it('should throw an error on invalid id', async done => {
+  it('should throw an error on invalid id', async (done) => {
     const req = createReq({ crendentialsId: 'foo', credentialsKey: 'bar' });
 
     try {
@@ -54,7 +58,7 @@ describe('hawk', () => {
     done();
   });
 
-  it('should return "Unauthorized" on a plain request', async done => {
+  it('should return "Unauthorized" on a plain request', async (done) => {
     const req = createReq({ crendentialsId: 'foo', credentialsKey: 'bar' });
     delete req.headers.authorization;
 
@@ -67,11 +71,11 @@ describe('hawk', () => {
     done();
   });
 
-  it('should return "Stale timestamp" along with offset', async done => {
+  it('should return "Stale timestamp" along with offset', async (done) => {
     const req = createReq({
       crendentialsId: 'shootismoke-development',
       credentialsKey: process.env.HAWK_KEY_1_5_0 as string,
-      timestamp: Math.round(new Date().getTime() / 1000) - 5000 // Add a 5s offset
+      timestamp: Math.round(new Date().getTime() / 1000) - 5000, // Add a 5s offset
     });
 
     try {
@@ -83,24 +87,24 @@ describe('hawk', () => {
         ts: expect.any(Number),
         tsm: expect.any(String),
         error: 'Stale timestamp',
-        code: 'UNAUTHENTICATED'
+        code: 'UNAUTHENTICATED',
       });
     }
 
     done();
   });
 
-  it('should work', async done => {
+  it('should work', async (done) => {
     const req = createReq({
       crendentialsId: 'shootismoke-development',
-      credentialsKey: process.env.HAWK_KEY_1_5_0 as string
+      credentialsKey: process.env.HAWK_KEY_1_5_0 as string,
     });
 
     const result = await hawk(req);
 
     expect(result.credentials).toMatchObject({
       algorithm: 'sha256',
-      key: process.env.HAWK_KEY_1_5_0
+      key: process.env.HAWK_KEY_1_5_0,
     });
 
     done();

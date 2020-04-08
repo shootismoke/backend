@@ -8,7 +8,7 @@ import { IS_SENTRY_SET_UP } from './constants';
 export function sentrySetup(): void {
   if (process.env.SENTRY_DSN) {
     init({
-      dsn: process.env.SENTRY_DSN
+      dsn: process.env.SENTRY_DSN,
     });
   }
 }
@@ -27,5 +27,5 @@ function error(error: Error): void {
 }
 
 export const logger = {
-  error
+  error,
 };

@@ -6,8 +6,8 @@ import { PushTicket } from '../src/models';
 import { findTimezonesAt } from '../src/util';
 import { ALICE_ID, describeApollo, getAlice, UPDATE_USER } from './util';
 
-describeApollo('push', client => {
-  beforeAll(async done => {
+describeApollo('push', (client) => {
+  beforeAll(async (done) => {
     jest.setTimeout(10000);
 
     await getAlice(client);
@@ -26,20 +26,23 @@ describeApollo('push', client => {
             expoPushToken: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
             frequency: 'daily',
             timezone: timezones[0],
-            universalId: 'openaq|FR04002'
-          }
-        }
-      }
+            universalId: 'openaq|FR04002',
+          },
+        },
+      },
     });
 
     done();
   });
 
-  it('should correctly send push notifications', async done => {
+  it('should correctly send push notifications', async (done) => {
     const req = {} as NowRequest;
-    const res = ({
-      send: jest.fn()
-    } as unknown) as NowResponse;
+    const res =
+      ({
+        send: jest.fn(),
+      } as
+        unknown) as
+      NowResponse;
 
     try {
       await push(req, res);
@@ -47,7 +50,7 @@ describeApollo('push', client => {
       // Check that the coorect tickets have been created
       const pushTickets = await PushTicket.find();
       const alice = await getAlice(client);
-      expect(pushTickets.map(m => m.toJSON())).toMatchObject([
+      expect(pushTickets.map((m) => m.toJSON())).toMatchObject([
         {
           __v: 0,
           _id: expect.any(ObjectID),
@@ -55,8 +58,8 @@ describeApollo('push', client => {
           status: 'ok',
           userId: new ObjectID(alice._id),
           createdAt: expect.any(Date),
-          updatedAt: expect.any(Date)
-        }
+          updatedAt: expect.any(Date),
+        },
       ]);
 
       done();

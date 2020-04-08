@@ -16,7 +16,7 @@ async function receipts(_req: NowRequest, res: NowResponse): Promise<void> {
     await connectToDatabase(process.env.MONGODB_ATLAS_URI);
 
     const tickets = await PushTicket.find({
-      receiptId: { $exists: true }
+      receiptId: { $exists: true },
     });
     // Mapping of receiptId->userId
     const receiptsMapping = tickets.reduce((acc, ticket) => {
@@ -27,34 +27,34 @@ async function receipts(_req: NowRequest, res: NowResponse): Promise<void> {
 
     // Handle the receiptIds
     const receiptIds: ExpoPushReceiptId[] = tickets.map(
-      ticket => ticket.receiptId as ExpoPushReceiptId
+      (ticket) => ticket.receiptId as ExpoPushReceiptId
     );
     const okReceiptIds: ExpoPushReceiptId[] = []; // Store the ids that are good
     const errorReceipts: IPushTicket[] = []; // Store the receipts that are bad
     await handleReceipts(
       new Expo(),
       receiptIds,
-      receiptId => {
+      (receiptId) => {
         okReceiptIds.push(receiptId);
       },
       (receiptId, receipt) => {
         errorReceipts.push({
           ...receipt,
           receiptId,
-          userId: receiptsMapping[receiptId]
+          userId: receiptsMapping[receiptId],
         });
       }
     );
 
     await PushTicket.deleteMany({
       receiptId: {
-        $in: okReceiptIds
-      }
+        $in: okReceiptIds,
+      },
     });
 
     res.send({
       status: 'ok',
-      details: `Cleaned ${okReceiptIds.length} push tickets`
+      details: `Cleaned ${okReceiptIds.length} push tickets`,
     });
   } catch (error) {
     logger.error(error);
@@ -62,7 +62,7 @@ async function receipts(_req: NowRequest, res: NowResponse): Promise<void> {
     res.status(500);
     res.send({
       status: 'error',
-      details: error.message
+      details: error.message,
     });
   }
 }

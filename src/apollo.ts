@@ -23,8 +23,8 @@ export const apolloServerConfig: Config = {
     if (process.env.NODE_ENV !== 'production') {
       return {
         hawk: {
-          credentials: CREDENTIALS['shootismoke-development']
-        }
+          credentials: CREDENTIALS['shootismoke-development'],
+        },
       };
     }
 
@@ -38,14 +38,14 @@ export const apolloServerConfig: Config = {
   },
   engine: process.env.ENGINE_API_KEY
     ? {
-        apiKey: process.env.ENGINE_API_KEY
+        apiKey: process.env.ENGINE_API_KEY,
       }
     : undefined,
   resolvers,
   // Disable subscriptions
   // https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
   subscriptions: false,
-  typeDefs
+  typeDefs,
 };
 /**
  * Create and return an Apollo server
@@ -76,7 +76,7 @@ interface Options {
 export function nowApollo(
   options?: Options
 ): (req: NowRequest, res: NowResponse) => Promise<void> {
-  return async function(req: NowRequest, res: NowResponse): Promise<void> {
+  return async function (req: NowRequest, res: NowResponse): Promise<void> {
     const server = await createServer(options && options.db);
 
     server.createHandler(options && options.server)(req, res);

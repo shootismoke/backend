@@ -13,7 +13,7 @@ const NotificationsSchema = new Schema({
     required: true,
     sparse: true,
     type: Schema.Types.String,
-    unique: true
+    unique: true,
   },
   /**
    * Frequency of notifications
@@ -22,14 +22,14 @@ const NotificationsSchema = new Schema({
     default: 'never',
     enum: FREQUENCY,
     required: true,
-    type: Schema.Types.String
+    type: Schema.Types.String,
   },
   /**
    * User's timezone
    */
   timezone: {
     required: true,
-    type: Schema.Types.String
+    type: Schema.Types.String,
   },
   /**
    * Station of the user to get the notifications. The value is an universalId,
@@ -46,9 +46,9 @@ const NotificationsSchema = new Schema({
         const [provider, station] = universalId.split('|');
 
         return !!station && AllProviders.includes(provider);
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 const UserSchema = new Schema(
@@ -60,14 +60,14 @@ const UserSchema = new Schema(
       index: true,
       required: true,
       type: Schema.Types.String,
-      unique: true
+      unique: true,
     },
     /**
      * User's notifications preferences.
      */
     notifications: {
-      type: NotificationsSchema
-    }
+      type: NotificationsSchema,
+    },
   },
   { strict: 'throw', timestamps: true }
 );

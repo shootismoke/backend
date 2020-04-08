@@ -4,7 +4,7 @@ import {
   ExpoPushMessage,
   ExpoPushReceipt,
   ExpoPushReceiptId,
-  ExpoPushTicket
+  ExpoPushTicket,
 } from 'expo-server-sdk';
 import { Document } from 'mongoose';
 
@@ -131,7 +131,7 @@ export function constructExpoMessage(
         ? 'Weekly report'
         : 'Monthly report',
     to: expoPushToken,
-    sound: 'default'
+    sound: 'default',
   };
 }
 

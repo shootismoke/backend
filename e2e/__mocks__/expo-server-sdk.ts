@@ -1,7 +1,7 @@
 import {
   Expo as ExpoBase,
   ExpoPushMessage,
-  ExpoPushTicket
+  ExpoPushTicket,
 } from 'expo-server-sdk';
 
 export {
@@ -10,7 +10,7 @@ export {
   ExpoPushReceipt,
   ExpoPushReceiptId,
   ExpoPushTicket,
-  ExpoPushToken
+  ExpoPushToken,
 } from 'expo-server-sdk';
 
 export class Expo {

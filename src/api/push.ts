@@ -12,7 +12,7 @@ import {
   PromiseSettledResult,
   sendBatchToExpo,
   UserExpoMessage,
-  whitelistIPMiddleware
+  whitelistIPMiddleware,
 } from '../push';
 import { connectToDatabase, logger, sentrySetup } from '../util';
 
@@ -31,15 +31,15 @@ export async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     // Craft a push notification message for each user
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore Wait for es2020.promise to land in TS
-    const messages = (await Promise.allSettled(
-      users.map(expoMessageForUser)
-    )) as PromiseSettledResult<UserExpoMessage>[];
+    const messages =
+      (await Promise.allSettled(users.map(expoMessageForUser))) as
+      PromiseSettledResult<UserExpoMessage>[];
 
     // Log the users with errors
     messages
       .filter(isPromiseRejected)
       .map(({ reason }) => reason)
-      .forEach(error => logger.error(new Error(error)));
+      .forEach((error) => logger.error(new Error(error)));
 
     // Find the messages that are valid
     const validMessages = messages.filter(isPromiseFulfilled);
@@ -52,13 +52,13 @@ export async function push(_req: NowRequest, res: NowResponse): Promise<void> {
       tickets.map((ticket, index) => ({
         ...ticket,
         receiptId: (ticket as ExpoPushSuccessTicket).id,
-        userId: validMessages[index].value.userId
+        userId: validMessages[index].value.userId,
       }))
     );
 
     res.send({
       status: 'ok',
-      details: `Successfully sent ${validMessages.length}/${messages.length} push notifications`
+      details: `Successfully sent ${validMessages.length}/${messages.length} push notifications`,
     });
   } catch (error) {
     logger.error(error);
@@ -66,7 +66,7 @@ export async function push(_req: NowRequest, res: NowResponse): Promise<void> {
     res.status(500);
     res.send({
       status: 'error',
-      details: error.message
+      details: error.message,
     });
   }
 }

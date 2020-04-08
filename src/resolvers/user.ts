@@ -41,7 +41,7 @@ export const userResolvers: Resolvers<ApolloContext> = {
       const user = await User.findOne({ expoInstallationId });
 
       return user;
-    }
+    },
   },
   Mutation: {
     createUser: async (_parent, { input }, context): Promise<IUser> => {
@@ -60,7 +60,7 @@ export const userResolvers: Resolvers<ApolloContext> = {
       assertHawkAuthenticated(context);
 
       const user = await User.findOne({
-        expoInstallationId
+        expoInstallationId,
       });
       assertUser(user, expoInstallationId);
 
@@ -71,10 +71,10 @@ export const userResolvers: Resolvers<ApolloContext> = {
       // Everytime we update user, we also delete all the pushTickets he/she
       // might have.
       await PushTicket.deleteMany({
-        userId: user._id
+        userId: user._id,
       });
 
       return newUser;
-    }
-  }
+    },
+  },
 };
