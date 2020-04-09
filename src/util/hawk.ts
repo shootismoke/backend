@@ -11,7 +11,7 @@ interface Credentials {
 }
 
 /**
- * Mapping of id->key credentials. Note: for now, this ampping holds both
+ * Mapping of id->key credentials. Note: for now, this mapping holds both
  * staging and production ids. For example, `shootismoke-default` should never
  * be a valid id for production.
  */
@@ -26,13 +26,16 @@ export const CREDENTIALS: Record<string, Credentials> = {
   },
   'shootismoke-production-v1.5': {
     algorithm: 'sha256',
+    /**
+     * This is the Hawk key introduced in version 1.5.0.
+     */
     key: process.env.HAWK_KEY_1_5_0 as string,
   },
 };
 
 // Credentials lookup function
 function credentialsFunc(id: string): Credentials {
-  if (id.startsWith('shootismoke-production-v1.5')) {
+  if (id.startsWith('shootismoke-production-v')) {
     return CREDENTIALS['shootismoke-production-v1.5'];
   }
 
