@@ -11,7 +11,7 @@ interface Credentials {
 }
 
 /**
- * Mapping of id->key credentials. Note: for now, this ampping holds both
+ * Mapping of id->key credentials. Note: for now, this mapping holds both
  * staging and production ids. For example, `shootismoke-default` should never
  * be a valid id for production.
  */
