@@ -2672,7 +2672,7 @@ apollo-server-caching@^0.5.1:
   dependencies:
     lru-cache "^5.0.0"
 
-apollo-server-core@^2.11.0, apollo-server-core@^2.12.0:
+apollo-server-core@^2.12.0:
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.12.0.tgz#980f29788c17f029e7248d331bee1ad2e1f07e5b"
   integrity sha512-BRVdOyZrRJ1ALlmis0vaOLIHHYu5K3UVKAQKIgHkRh/YY0Av4lpeEXr49ELK04LTeh0DG0pQ5YYYhaX1wFcDEw==
@@ -2718,15 +2718,15 @@ apollo-server-errors@^2.4.1:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.4.1.tgz#16ad49de6c9134bfb2b7dede9842e73bb239dbe2"
   integrity sha512-7oEd6pUxqyWYUbQ9TA8tM0NU/3aGtXSEibo6+txUkuHe7QaxfZ2wHRp+pfT1LC1K3RXYjKj61/C2xEO19s3Kdg==
 
-apollo-server-micro@^2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-2.11.0.tgz#78e5b07863026bfcb5749a8f1c39ed1a3749b265"
-  integrity sha512-zJOKSnBjhSSCwFu/QmvwGu0pc6OGEDFIvRbrck+/QnM4mq5OEYHYd3MB9uYHtcjlDMOSMyLBccXYGTTEEZO4OQ==
+apollo-server-micro@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-2.12.0.tgz#18d5363429e6c55be42b25bd8b3c2dd898523b48"
+  integrity sha512-mk3MPTEcRzsFSn1WYdJerXsDv1+tbPc8H359lG614XTpKTqp+sk20pZOIq4sjMOgYx4I7EOvU+Da63KK8oc09A==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.24"
     accept "^3.0.2"
-    apollo-server-core "^2.11.0"
-    apollo-server-types "^0.3.0"
+    apollo-server-core "^2.12.0"
+    apollo-server-types "^0.3.1"
     micro "^9.3.2"
 
 apollo-server-plugin-base@^0.7.1:
@@ -2742,15 +2742,6 @@ apollo-server-testing@^2.12.0:
   integrity sha512-RQk4eE9vcyFglsYlZiL3WfeeykIHX2KfbH7GsTg8RAqzZMu/4J6uX2vo6RRVmvBjYi8q2poH5m41MR+N4pnlEA==
   dependencies:
     apollo-server-core "^2.12.0"
-
-apollo-server-types@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-types/-/apollo-server-types-0.3.0.tgz#01732e5fc6c4a2a522f051d5685c57a8e3dc620e"
-  integrity sha512-FMo7kbTkhph9dfIQ3xDbRLObqmdQH9mwSjxhGsX+JxGMRPPXgd3+GZvCeVKOi/udxh//w1otSeAqItjvbj0tfQ==
-  dependencies:
-    apollo-engine-reporting-protobuf "^0.4.4"
-    apollo-server-caching "^0.5.1"
-    apollo-server-env "^2.4.3"
 
 apollo-server-types@^0.3.1:
   version "0.3.1"
