@@ -34,7 +34,7 @@
     "expo-server-sdk": "^3.5.0",
     "graphql": "^14.6.0",
     "mongodb": "^3.5.5",
-    "mongoose": "^5.9.7",
+    "mongoose": "^5.9.9",
     "timezones.json": "^1.5.2"
   },
   "devDependencies": {
