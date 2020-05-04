@@ -8,14 +8,20 @@ import { IS_DEV } from '../util';
  * @see https://www.easycron.com/ips
  */
 const whitelist = [
+  '192.99.21.124',
+  '167.114.64.88',
+  '167.114.64.21',
   '198.27.83.222',
-  '198.27.81.205',
-  '198.27.81.189',
-  '192.99.36.110',
+  '198.27.81.205', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
+  '198.27.81.189', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
+  '192.99.36.110', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
   '2607:5300:60:24de::',
-  '2607:5300:60:22cd::',
-  '2607:5300:60:22bd::',
-  '2607:5300:60:4b6e::',
+  '2607:5300:60:467c::',
+  '2607:5300:60:6558::',
+  '2607:5300:60:6515::',
+  '2607:5300:60:22cd::', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
+  '2607:5300:60:22bd::', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
+  '2607:5300:60:4b6e::', // TODO Remove after Fri, May 8, 2020 at 09:00:00 UTC
 ];
 
 /**
