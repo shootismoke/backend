@@ -25,10 +25,10 @@
     eslint-plugin-simple-import-sort "^5.0.2"
     prettier "^2.0.1"
 
-"@amaurymartiny/now-middleware@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@amaurymartiny/now-middleware/-/now-middleware-0.1.1.tgz#c4cfd0af300e68629ae5f1c63da2e45ee829fd8b"
-  integrity sha512-Xr0MfyJJMw6Il6+bzjmDlSDA11EBKXctZwlPcZ607FImXBDIW21wV1mD+LBwwPR6h1PharfUmhgirzZIzIFdCA==
+"@amaurymartiny/now-middleware@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@amaurymartiny/now-middleware/-/now-middleware-0.1.2.tgz#98b40e9f2e5532cfc5eea9d6ef654890a40740f6"
+  integrity sha512-J/6U6cD9nK2EdOlT3GR+47Bciy/9hMJlLookLkAsmKS+kXzprVOqen4IEI1S7OeecxoYc0LI0uiCejuQxxN5KA==
   dependencies:
     "@types/express" "^4.17.2"
     express "^4.17.1"
