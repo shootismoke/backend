@@ -17,14 +17,14 @@ yarn graphql:schema
 yarn graphql:manager --key "<ENGINE_API_KEY>"
 ```
 
-2. Deploy to ZEIT Now `backend-production`
+2. Deploy to Vercel `backend-production`
 
 ```bash
-yarn now:prod
+yarn vercel:prod
 ```
 
 3. Set alias of latest deployed `backend-production` to correct URL
 
 ```bash
-yarn now:prod --prod
+yarn vercel:prod --prod
 ```
