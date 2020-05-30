@@ -38,8 +38,8 @@ export const apolloServerConfig: Config = {
   },
   engine: process.env.ENGINE_API_KEY
     ? {
-      apiKey: process.env.ENGINE_API_KEY,
-    }
+        apiKey: process.env.ENGINE_API_KEY,
+      }
     : undefined,
   resolvers,
   // Disable subscriptions
