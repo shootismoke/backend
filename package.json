@@ -13,14 +13,13 @@
     "graphql:schema": "ts-node ./scripts/generateSchema > scripts/backend.graphql",
     "graphql:manager": "apollo service:push --localSchemaFile ./scripts/backend.graphql",
     "lint": "tsc --noEmit && eslint --ext ts .",
-    "now:prod": "now -A now.prod.json",
-    "start": "now dev",
-    "test": "jest"
+    "start": "vercel dev",
+    "test": "jest",
+    "vercel:prod": "vercel -A vercel.prod.json"
   },
   "dependencies": {
-    "@amaurymartiny/now-middleware": "^0.1.2",
+    "@amaurymartiny/now-middleware": "^0.2.0",
     "@hapi/hawk": "^8.0.0",
-    "@now/node": "^1.6.1",
     "@sentry/node": "^5.15.5",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.23",
@@ -28,6 +27,7 @@
     "@types/async-retry": "^1.4.2",
     "@types/mongodb": "^3.5.18",
     "@types/mongoose": "^5.7.21",
+    "@vercel/node": "^1.6.1",
     "apollo-server-micro": "^2.13.1",
     "assign-deep": "^1.0.1",
     "async-retry": "^1.3.1",
@@ -35,7 +35,8 @@
     "graphql": "^14.6.0",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.15",
-    "timezones.json": "^1.5.2"
+    "timezones.json": "^1.5.2",
+    "vercel": "^19.0.1"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.1.0",
@@ -46,7 +47,6 @@
     "dotenv": "^8.2.0",
     "jest": "^25.5.4",
     "lerna": "^3.22.0",
-    "now": "^19.0.1",
     "p-memoize": "^4.0.0",
     "ts-jest": "^25.5.1",
     "ts-node": "^8.10.1",

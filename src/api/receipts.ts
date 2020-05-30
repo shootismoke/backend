@@ -1,5 +1,5 @@
 import { chain } from '@amaurymartiny/now-middleware';
-import { NowRequest, NowResponse } from '@now/node';
+import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushReceiptId } from 'expo-server-sdk';
 
 import { IPushTicket, PushTicket } from '../models';

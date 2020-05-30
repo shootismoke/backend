@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "builds": [{ "src": "/src/api/**/*.ts", "use": "@now/node" }],
+  "builds": [{ "src": "/src/api/**/*.ts", "use": "@vercel/node" }],
   "public": false,
   "routes": [
     {

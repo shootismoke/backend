@@ -1,8 +1,8 @@
 {
   "name": "backend-production",
   "version": 2,
-  "alias": ["shootismoke.now.sh"],
-  "builds": [{ "src": "/src/api/**/*.ts", "use": "@now/node" }],
+  "alias": ["api.shootismoke.now.sh", "shootismoke.now.sh"],
+  "builds": [{ "src": "/src/api/**/*.ts", "use": "@vercel/node" }],
   "env": {
     "AQICN_TOKEN": "@backend-production-aqicn-token",
     "ENGINE_API_KEY": "@backend-production-engine-api-key",

@@ -1,4 +1,4 @@
-import { NowRequest, NowResponse } from '@now/node';
+import { NowRequest, NowResponse } from '@vercel/node';
 import { ApolloServer, Config } from 'apollo-server-micro';
 import { ServerRegistration } from 'apollo-server-micro/dist/ApolloServer';
 
