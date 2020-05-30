@@ -18,7 +18,7 @@
     "vercel:prod": "vercel -A vercel.prod.json"
   },
   "dependencies": {
-    "@amaurymartiny/now-middleware": "^0.1.2",
+    "@amaurymartiny/now-middleware": "^0.2.0",
     "@hapi/hawk": "^8.0.0",
     "@sentry/node": "^5.15.5",
     "@shootismoke/convert": "^0.2.8",
