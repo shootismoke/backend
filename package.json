@@ -25,7 +25,7 @@
     "@shootismoke/dataproviders": "^0.2.23",
     "@shootismoke/graphql": "^0.2.22",
     "@types/async-retry": "^1.4.2",
-    "@types/mongodb": "^3.5.18",
+    "@types/mongodb": "^3.5.20",
     "@types/mongoose": "^5.7.21",
     "@vercel/node": "^1.6.1",
     "apollo-server-micro": "^2.14.1",
