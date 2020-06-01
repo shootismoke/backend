@@ -1,12 +1,12 @@
 import gql from 'graphql-tag';
 
 export const linkSchema = gql`
-  scalar Date
+	scalar Date
 
-  type Query {
-    _: Boolean
-  }
-  type Mutation {
-    _: Boolean
-  }
+	type Query {
+		_: Boolean
+	}
+	type Mutation {
+		_: Boolean
+	}
 `;

@@ -6,29 +6,29 @@ import pMemoize from 'p-memoize';
 import { CREATE_USER } from './gql';
 
 function getUser(name: string) {
-  return async function (
-    client: Promise<ApolloServerTestClient>,
-    additionalInputs: Partial<CreateUserInput> = {}
-  ): Promise<User> {
-    const { mutate } = await client;
+	return async function (
+		client: Promise<ApolloServerTestClient>,
+		additionalInputs: Partial<CreateUserInput> = {}
+	): Promise<User> {
+		const { mutate } = await client;
 
-    const input = assignDeep(
-      {
-        expoInstallationId: `id_${name}`,
-      },
-      additionalInputs
-    );
-    const createRes = await mutate({
-      mutation: CREATE_USER,
-      variables: { input },
-    });
+		const input = assignDeep(
+			{
+				expoInstallationId: `id_${name}`,
+			},
+			additionalInputs
+		);
+		const createRes = await mutate({
+			mutation: CREATE_USER,
+			variables: { input },
+		});
 
-    if (!createRes.data) {
-      throw new Error(`Failed to create user ${name}`);
-    }
+		if (!createRes.data) {
+			throw new Error(`Failed to create user ${name}`);
+		}
 
-    return createRes.data.createUser;
-  };
+		return createRes.data.createUser as User;
+	};
 }
 
 export const getAlice = pMemoize(getUser('alice'));

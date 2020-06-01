@@ -6,11 +6,11 @@ import { IS_SENTRY_SET_UP } from './constants';
  * Set up Sentry, if available.
  */
 export function sentrySetup(): void {
-  if (process.env.SENTRY_DSN) {
-    init({
-      dsn: process.env.SENTRY_DSN,
-    });
-  }
+	if (process.env.SENTRY_DSN) {
+		init({
+			dsn: process.env.SENTRY_DSN,
+		});
+	}
 }
 
 /**
@@ -19,13 +19,13 @@ export function sentrySetup(): void {
  * @param error - Error to log
  */
 function error(error: Error): void {
-  console.error(error.message);
+	console.error(error.message);
 
-  if (IS_SENTRY_SET_UP) {
-    captureException(error);
-  }
+	if (IS_SENTRY_SET_UP) {
+		captureException(error);
+	}
 }
 
 export const logger = {
-  error,
+	error,
 };
