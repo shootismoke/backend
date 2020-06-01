@@ -1,30 +1,30 @@
 import {
-  Expo as ExpoBase,
-  ExpoPushMessage,
-  ExpoPushTicket,
+	Expo as ExpoBase,
+	ExpoPushMessage,
+	ExpoPushTicket,
 } from 'expo-server-sdk';
 
 export {
-  ExpoClientOptions,
-  ExpoPushMessage,
-  ExpoPushReceipt,
-  ExpoPushReceiptId,
-  ExpoPushTicket,
-  ExpoPushToken,
+	ExpoClientOptions,
+	ExpoPushMessage,
+	ExpoPushReceipt,
+	ExpoPushReceiptId,
+	ExpoPushTicket,
+	ExpoPushToken,
 } from 'expo-server-sdk';
 
 export class Expo {
-  static isExpoPushToken(token: string): boolean {
-    return ExpoBase.isExpoPushToken(token);
-  }
+	static isExpoPushToken(token: string): boolean {
+		return ExpoBase.isExpoPushToken(token);
+	}
 
-  chunkPushNotifications(messages: ExpoPushMessage[]): ExpoPushMessage[][] {
-    return [messages];
-  }
+	chunkPushNotifications(messages: ExpoPushMessage[]): ExpoPushMessage[][] {
+		return [messages];
+	}
 
-  sendPushNotificationsAsync(): Promise<ExpoPushTicket[]> {
-    return Promise.resolve([{ id: 'foo', status: 'ok' }]);
-  }
+	sendPushNotificationsAsync(): Promise<ExpoPushTicket[]> {
+		return Promise.resolve([{ id: 'foo', status: 'ok' }]);
+	}
 }
 
 export default Expo;

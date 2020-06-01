@@ -9,24 +9,24 @@ import { logger } from './logger';
  * @param uri - MongoDB connection string
  */
 export async function connectToDatabase(uri?: string): Promise<void> {
-  // If there's already a connection, we do nothing
-  if (connection.readyState === 1) {
-    return;
-  }
+	// If there's already a connection, we do nothing
+	if (connection.readyState === 1) {
+		return;
+	}
 
-  if (!uri) {
-    const e = new Error('connectToDatabase: `uri` is not defined');
-    logger.error(e);
-    throw e;
-  }
+	if (!uri) {
+		const e = new Error('connectToDatabase: `uri` is not defined');
+		logger.error(e);
+		throw e;
+	}
 
-  await connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+	await connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 }
 
 /**
  * Create timestamps for every document in the db, using the openaq format
  */
 export const dbTimestamps = {
-  createdAt: 'firstUpdated',
-  updatedAt: 'lastUpdated',
+	createdAt: 'firstUpdated',
+	updatedAt: 'lastUpdated',
 };

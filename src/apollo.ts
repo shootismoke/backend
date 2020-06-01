@@ -4,10 +4,16 @@ import { ServerRegistration } from 'apollo-server-micro/dist/ApolloServer';
 
 import { resolvers } from './resolvers';
 import { typeDefs } from './typeDefs';
-import { ApolloContext, connectToDatabase, CREDENTIALS, hawk } from './util';
+import {
+	ApolloContext,
+	connectToDatabase,
+	CREDENTIALS,
+	hawk,
+	logger,
+} from './util';
 
 interface DbOptions {
-  uri?: string;
+	uri?: string;
 }
 
 /**
@@ -19,33 +25,33 @@ let server: ApolloServer | undefined;
  * Config to pass into Apollo server.
  */
 export const apolloServerConfig: Config = {
-  context: async (a): Promise<ApolloContext> => {
-    if (process.env.NODE_ENV !== 'production') {
-      return {
-        hawk: {
-          credentials: CREDENTIALS['shootismoke-development'],
-        },
-      };
-    }
+	context: async (a): Promise<ApolloContext> => {
+		if (process.env.NODE_ENV !== 'production') {
+			return {
+				hawk: {
+					credentials: CREDENTIALS['shootismoke-development'],
+				},
+			};
+		}
 
-    try {
-      const result = await hawk(a.req);
+		try {
+			const result = await hawk(a.req);
 
-      return { hawk: result };
-    } catch (error) {
-      return { hawk: error };
-    }
-  },
-  engine: process.env.ENGINE_API_KEY
-    ? {
-        apiKey: process.env.ENGINE_API_KEY,
-      }
-    : undefined,
-  resolvers,
-  // Disable subscriptions
-  // https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
-  subscriptions: false,
-  typeDefs,
+			return { hawk: result };
+		} catch (error) {
+			return { hawk: error };
+		}
+	},
+	engine: process.env.ENGINE_API_KEY
+		? {
+				apiKey: process.env.ENGINE_API_KEY,
+		  }
+		: undefined,
+	resolvers,
+	// Disable subscriptions
+	// https://www.apollographql.com/docs/graph-manager/operation-registry/#4-disable-subscription-support-on-apollo-server
+	subscriptions: false,
+	typeDefs,
 };
 /**
  * Create and return an Apollo server
@@ -53,20 +59,20 @@ export const apolloServerConfig: Config = {
  * @param options - Options for DB creation
  */
 export async function createServer(options?: DbOptions): Promise<ApolloServer> {
-  if (server) {
-    return server;
-  }
+	if (server) {
+		return server;
+	}
 
-  await connectToDatabase(options && options.uri);
+	await connectToDatabase(options && options.uri);
 
-  server = new ApolloServer(apolloServerConfig);
+	server = new ApolloServer(apolloServerConfig);
 
-  return server;
+	return server;
 }
 
 interface Options {
-  db?: DbOptions;
-  server?: ServerRegistration;
+	db?: DbOptions;
+	server?: ServerRegistration;
 }
 
 /**
@@ -74,11 +80,13 @@ interface Options {
  * server
  */
 export function nowApollo(
-  options?: Options
+	options?: Options
 ): (req: NowRequest, res: NowResponse) => Promise<void> {
-  return async function (req: NowRequest, res: NowResponse): Promise<void> {
-    const server = await createServer(options && options.db);
+	return async function (req: NowRequest, res: NowResponse): Promise<void> {
+		const server = await createServer(options && options.db);
 
-    server.createHandler(options && options.server)(req, res);
-  };
+		server
+			.createHandler(options && options.server)(req, res)
+			.catch(logger.error);
+	};
 }

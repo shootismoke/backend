@@ -9,15 +9,16 @@
 
 import { printSchema } from 'graphql';
 import {
-  IExecutableSchemaDefinition,
-  makeExecutableSchema,
+	IExecutableSchemaDefinition,
+	makeExecutableSchema,
 } from 'graphql-tools';
 
 import { apolloServerConfig } from '../src/apollo';
 
 console.log(
-  printSchema(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    makeExecutableSchema(apolloServerConfig as IExecutableSchemaDefinition<any>)
-  )
+	printSchema(
+		makeExecutableSchema(
+			apolloServerConfig as IExecutableSchemaDefinition<unknown>
+		)
+	)
 );

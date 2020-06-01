@@ -5,9 +5,9 @@ import retry from 'async-retry';
 import { Document } from 'mongoose';
 
 import {
-  assertUserNotifications,
-  constructExpoMessage,
-  UserExpoMessage,
+	assertUserNotifications,
+	constructExpoMessage,
+	UserExpoMessage,
 } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
@@ -20,7 +20,7 @@ type AllProviders = 'aqicn' | 'openaq' | 'waqi';
  * @param rawPm25 - The raw PM2.5 level, in ug/m3
  */
 export function pm25ToCigarettes(rawPm25: number): number {
-  return rawPm25 / 22;
+	return rawPm25 / 22;
 }
 
 /**
@@ -31,34 +31,34 @@ export function pm25ToCigarettes(rawPm25: number): number {
  * @param normalized - The normalized data to process
  */
 async function providerFetch(
-  provider: AllProviders,
-  station: string
+	provider: AllProviders,
+	station: string
 ): Promise<OpenAQFormat> {
-  const normalized =
-    provider === 'aqicn'
-      ? aqicn.normalizeByStation(
-          await aqicn.fetchByStation(station, {
-            token: process.env.AQICN_TOKEN as string,
-          })
-        )
-      : provider === 'waqi'
-      ? waqi.normalizeByStation(await waqi.fetchByStation(station))
-      : openaq.normalizeByStation(
-          await openaq.fetchByStation(station, {
-            limit: 1,
-            parameter: ['pm25'],
-          })
-        );
+	const normalized =
+		provider === 'aqicn'
+			? aqicn.normalizeByStation(
+					await aqicn.fetchByStation(station, {
+						token: process.env.AQICN_TOKEN as string,
+					})
+			  )
+			: provider === 'waqi'
+			? waqi.normalizeByStation(await waqi.fetchByStation(station))
+			: openaq.normalizeByStation(
+					await openaq.fetchByStation(station, {
+						limit: 1,
+						parameter: ['pm25'],
+					})
+			  );
 
-  const pm25 = normalized.filter(({ parameter }) => parameter === 'pm25');
+	const pm25 = normalized.filter(({ parameter }) => parameter === 'pm25');
 
-  if (pm25.length) {
-    return pm25[0];
-  } else {
-    throw new Error(
-      `PM2.5 has not been measured by station ${normalized[0].location} right now`
-    );
-  }
+	if (pm25.length) {
+		return pm25[0];
+	} else {
+		throw new Error(
+			`PM2.5 has not been measured by station ${normalized[0].location} right now`
+		);
+	}
 }
 
 /**
@@ -67,15 +67,15 @@ async function providerFetch(
  * @param universalId - The universalId of the station
  */
 async function universalFetch(universalId: string): Promise<OpenAQFormat> {
-  const [provider, station] = universalId.split('|');
+	const [provider, station] = universalId.split('|');
 
-  if (!AllProviders.includes(provider)) {
-    throw new Error(
-      `universalFetch: Unrecognized universalId "${universalId}".`
-    );
-  }
+	if (!AllProviders.includes(provider)) {
+		throw new Error(
+			`universalFetch: Unrecognized universalId "${universalId}".`
+		);
+	}
 
-  return await providerFetch(provider as AllProviders, station);
+	return await providerFetch(provider as AllProviders, station);
 }
 
 /**
@@ -84,35 +84,40 @@ async function universalFetch(universalId: string): Promise<OpenAQFormat> {
  * @param user - User in our DB.
  */
 export async function expoMessageForUser(
-  user: User & Document
+	user: User & Document
 ): Promise<UserExpoMessage> {
-  try {
-    // Find the PM2.5 value at the user's last known station (universalId)
-    const pm25 = await Promise.race([
-      // If anything throws, we retry
-      retry(
-        async () => {
-          assertUserNotifications(user);
+	try {
+		// Find the PM2.5 value at the user's last known station (universalId)
+		const pm25 = await Promise.race([
+			// If anything throws, we retry
+			retry(
+				async () => {
+					assertUserNotifications(user);
 
-          const { value } = await universalFetch(
-            user.notifications.universalId
-          );
+					const { value } = await universalFetch(
+						user.notifications.universalId
+					);
 
-          return value;
-        },
-        { retries: 5 }
-      ),
-      // Timeout after 5s, because the whole Now function only runs 10s
-      new Promise<number>((_resolve, reject) =>
-        setTimeout(() => reject(new Error('universalFetch timed out')), 5000)
-      ),
-    ]);
+					return value;
+				},
+				{ retries: 5 }
+			),
+			// Timeout after 5s, because the whole Now function only runs 10s
+			new Promise<number>((_resolve, reject) =>
+				setTimeout(
+					() => reject(new Error('universalFetch timed out')),
+					5000
+				)
+			),
+		]);
 
-    return {
-      userId: user._id,
-      pushMessage: constructExpoMessage(user, pm25),
-    };
-  } catch (error) {
-    throw new Error(`User ${user._id}: ${error.message}`);
-  }
+		return {
+			userId: user._id,
+			pushMessage: constructExpoMessage(user, pm25),
+		};
+	} catch (error) {
+		throw new Error(
+			`User ${user._id as string}: ${error.message as string}`
+		);
+	}
 }
