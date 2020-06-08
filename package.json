@@ -20,7 +20,7 @@
   "dependencies": {
     "@amaurymartiny/now-middleware": "^0.2.0",
     "@hapi/hawk": "^8.0.0",
-    "@sentry/node": "^5.15.5",
+    "@sentry/node": "^5.16.1",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.23",
     "@shootismoke/graphql": "^0.2.22",
