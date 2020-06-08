@@ -23,7 +23,7 @@
     "@sentry/node": "^5.15.5",
     "@shootismoke/convert": "^0.2.8",
     "@shootismoke/dataproviders": "^0.2.23",
-    "@shootismoke/graphql": "^0.2.22",
+    "@shootismoke/graphql": "^0.2.28",
     "@types/async-retry": "^1.4.2",
     "@types/mongodb": "^3.5.20",
     "@types/mongoose": "^5.7.21",
