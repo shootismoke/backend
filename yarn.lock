@@ -1913,10 +1913,10 @@
     fp-ts "^2.1.1"
     io-ts "^2.0.1"
 
-"@shootismoke/graphql@^0.2.28":
-  version "0.2.28"
-  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.28.tgz#cc69c0fc85d360fd990479dc606ccaec7ec69004"
-  integrity sha512-guRRou4mMhyIkI8/W3I0DNMSC9lYG7OULZMH9kvhSPdXabi3QJ3fakbl+qt75bfx5alhpAA/W8g9eDsO3+s75A==
+"@shootismoke/graphql@^0.2.29":
+  version "0.2.29"
+  resolved "https://registry.yarnpkg.com/@shootismoke/graphql/-/graphql-0.2.29.tgz#0a9b707773519f6a7641ff7769feffc5278b1ca3"
+  integrity sha512-s+eQeIgDt5HPd69WceojTa1eh8zQo+k+RKxXzUbxYZtD6SPb3nKhQWnqcA1Eaj+8Nz/TNeDvye5IguKaWPOglg==
 
 "@sinonjs/commons@^1.7.0":
   version "1.7.0"
