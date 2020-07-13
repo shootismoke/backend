@@ -2354,10 +2354,19 @@
   resolved "https://registry.yarnpkg.com/@vercel/next/-/next-2.6.6.tgz#ec8a4fd8b8b058940010e491de2c41bb25fe1159"
   integrity sha512-1Zx3PqDznaoCtFLd3DfDQ5nBkyr/8UbyUtrDR5aj7TXCi1BQ9jBzO9NGzpRmxZRNkVX4BFQTX2ESEBz8rKbLHw==
 
-"@vercel/node@1.7.0", "@vercel/node@^1.6.1":
+"@vercel/node@1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@vercel/node/-/node-1.7.0.tgz#f90412a05463edc29d34ab6a56abd02867181d66"
   integrity sha512-UaG86cstaCEaNd8N1BAelysofzxi6Grhpg4Tq6UmYJuz7CqmRwsVhsqkK0u0dXFvH1uHjRUGSEwjndpKiAFfFg==
+  dependencies:
+    "@types/node" "*"
+    ts-node "8.9.1"
+    typescript "3.9.3"
+
+"@vercel/node@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@vercel/node/-/node-1.7.2.tgz#85cb8aac661c02dfef6fe752740f5b162e90767b"
+  integrity sha512-XV5lrLC+K/cxsaFj8H2OoGu1zliOqnxcrOnPInI8HmQjR/Tztt+0nzgpt+7sx8wXcrib0Nu7lK303jP7VjSETw==
   dependencies:
     "@types/node" "*"
     ts-node "8.9.1"
