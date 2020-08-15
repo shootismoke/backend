@@ -27,7 +27,7 @@ describeApollo('push', (client) => {
 							'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
 						frequency: 'daily',
 						timezone: timezones[0],
-						universalId: 'openaq|FR04002',
+						universalId: 'openaq|FR04143',
 					},
 				},
 			},
