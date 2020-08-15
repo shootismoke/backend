@@ -38,7 +38,7 @@ describe('constructExpoMessage', () => {
 			expoPushToken: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
 			frequency: 'daily',
 			timezone: 'Europe/Berlin',
-			universalId: 'openaq|FR04002',
+			universalId: 'openaq|FR04143',
 		},
 	} as unknown) as User & Document;
 

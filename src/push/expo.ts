@@ -99,7 +99,7 @@ export function constructExpoMessage(
 	const { frequency, expoPushToken } = user.notifications;
 
 	if (!Expo.isExpoPushToken(expoPushToken)) {
-		throw new Error(`Invalid ExpoPushToken: ${expoPushToken}`);
+		throw new Error(`Invalid ExpoPushToken: ${expoPushToken}`); // eslint-disable-line @typescript-eslint/restrict-template-expressions
 	}
 
 	return {

@@ -27,7 +27,7 @@ describeApollo('push', (client) => {
 							'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
 						frequency: 'daily',
 						timezone: timezones[0],
-						universalId: 'openaq|FR04002',
+						universalId: 'openaq|FR04143',
 					},
 				},
 			},
@@ -39,7 +39,9 @@ describeApollo('push', (client) => {
 	it('should correctly send push notifications', async (done) => {
 		const req = {} as NowRequest;
 		const res = ({
+			status: jest.fn(),
 			send: jest.fn(),
+			end: jest.fn(),
 		} as unknown) as NowResponse;
 
 		try {
