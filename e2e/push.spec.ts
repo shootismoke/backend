@@ -39,7 +39,9 @@ describeApollo('push', (client) => {
 	it('should correctly send push notifications', async (done) => {
 		const req = {} as NowRequest;
 		const res = ({
+			status: jest.fn(),
 			send: jest.fn(),
+			end: jest.fn(),
 		} as unknown) as NowResponse;
 
 		try {
