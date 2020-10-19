@@ -1912,6 +1912,14 @@
     "@types/debug" "^4.1.5"
     debug "^4.1.1"
 
+"@shootismoke/convert@^0.5.7":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@shootismoke/convert/-/convert-0.5.7.tgz#48e4f5dfda7ef63155018d6dc2a3a9dc344d08b2"
+  integrity sha512-soQMK7EmYBl2Y7wDywRrnliVceAUGruiCBDvDJ/SEMqGOiuGwti3ZOTPoQOJiA3QRK/bZ5zfsGpNNAEXKc8YBw==
+  dependencies:
+    "@types/debug" "^4.1.5"
+    debug "^4.1.1"
+
 "@shootismoke/dataproviders@^0.2.28":
   version "0.2.28"
   resolved "https://registry.yarnpkg.com/@shootismoke/dataproviders/-/dataproviders-0.2.28.tgz#e58c1b8828d2ac3fee6a6a762c9c94dc831445e1"
