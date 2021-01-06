@@ -19,6 +19,12 @@ const EmailReportSchema = new Schema({
 		sparse: true,
 		type: Schema.Types.String,
 		unique: true,
+		validate: {
+			validator: (v: string) => {
+				return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v); // eslint-disable-line no-useless-escape
+			},
+			message: 'Please enter a valid email',
+		},
 	},
 	/**
 	 * Frequency of reports.

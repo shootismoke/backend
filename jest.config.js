@@ -1,11 +1,9 @@
 /* eslint-disable */
 
-const jestMongoDb = require('@shelf/jest-mongodb/jest-preset');
 const tsJest = require('ts-jest/jest-preset');
 
 module.exports = {
 	...tsJest,
-	...jestMongoDb,
 	collectCoverageFrom: [
 		'**/api/**/*.ts',
 		'**/src/**/*.ts',

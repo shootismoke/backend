@@ -2,22 +2,13 @@ import axios, { AxiosError } from 'axios';
 import { connection } from 'mongoose';
 
 import { IUser } from '../src/models';
+import { connectToDatabase } from '../src/util';
 
 interface BackendError {
 	error: string;
 }
 
 const BACKEND_URL = 'http://localhost:3000';
-// process.env.MONGO_URL (from mongodb memory mock) ends with '?', which we remove.
-export const MONGO_TEST_DB = `${process.env.MONGO_URL as string}`.slice(0, -1);
-
-/**
- * Reset DB, and setup fresh Apollo server
- */
-function reset(testName: string): void {
-	const uri = `${MONGO_TEST_DB}-${testName}`;
-	process.env.MONGODB_ATLAS_URI = uri;
-}
 
 const user1 = {
 	emailReport: {
@@ -33,10 +24,9 @@ const user1 = {
 };
 
 describe('users::createUser', () => {
-	beforeAll(() => {
-		reset('users::createUser');
-
-		return connection.dropDatabase();
+	beforeAll(async () => {
+		await connectToDatabase();
+		await connection.dropDatabase();
 	});
 
 	function testBadInput<T>(name: string, input: T, expErr: string) {
@@ -78,6 +68,11 @@ describe('users::createUser', () => {
 		'no email',
 		{ ...user1, emailReport: { ...user1.emailReport, email: undefined } },
 		'emailReport.email: Path `email` is required'
+	);
+	testBadInput(
+		'bad email',
+		{ ...user1, emailReport: { ...user1.emailReport, email: 'foo' } },
+		'emailReport.email: Please enter a valid email'
 	);
 	testBadInput(
 		'wrong email frequency',
