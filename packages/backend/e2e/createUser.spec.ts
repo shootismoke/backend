@@ -93,7 +93,7 @@ describe('users::createUser', () => {
 		'expoReport.frequency: `foo` is not a valid enum value for path `frequency`'
 	);
 
-	it('should create a user', async () => {
+	it('should successfully create a user', async () => {
 		const { data } = await axios.post<IUser>(
 			`${BACKEND_URL}/api/users`,
 			user1
@@ -113,4 +113,6 @@ describe('users::createUser', () => {
 		{ ...user1, expoReport: undefined },
 		'E11000 duplicate key error collection: shootismoke.users index: emailReport.email_1 dup key'
 	);
+
+	afterAll(() => connection.close());
 });
