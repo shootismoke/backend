@@ -1,60 +1,81 @@
-import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushSuccessTicket } from 'expo-server-sdk';
 
-import { PushTicket } from '../src/models';
 import {
 	expoMessageForUser,
-	findUsersForNotifications,
-	isPromiseFulfilled,
-	isPromiseRejected,
+	isWhitelisted,
 	sendBatchToExpo,
-	whitelistIPMiddleware,
 } from '../src/expoReport';
-import { connectToDatabase, logger, sentrySetup } from '../src/util';
+import { PushTicket, User } from '../src/models';
+import {
+	assertUser,
+	connectToDatabase,
+	logger,
+	sentrySetup,
+} from '../src/util';
 
 sentrySetup();
 
 /**
- * Send push notifications to all relevant users.
+ * Send push notifications to a particular user.
  */
-async function push(_req: NowRequest, res: NowResponse): Promise<void> {
+export default async function push(
+	req: NowRequest,
+	res: NowResponse
+): Promise<void> {
 	try {
-		await connectToDatabase(process.env.MONGODB_ATLAS_URI);
+		const ip = req.headers['x-forwarded-for'] as string;
 
-		// Fetch all users to whom we should show a notification
-		const users = await findUsersForNotifications();
+		if (!isWhitelisted(ip)) {
+			res.status(403);
+			res.send({
+				error: `IP address not whitelisted: ${ip}`,
+			});
+			res.end();
+		}
 
-		// Craft a push notification message for each user
-		const messages = await Promise.allSettled(
-			users.map(expoMessageForUser)
-		);
+		switch (req.method) {
+			case 'POST': {
+				await connectToDatabase();
 
-		// Log the users with errors
-		messages
-			.filter(isPromiseRejected)
-			.map(({ reason }) => reason as string)
-			.forEach((error) => logger.error(new Error(error)));
+				// TODO We now call this endpoint for each user, at the time specified
+				// for said user in the crontab. Should we double check that the
+				// current time of execution of this function matches the cron
+				// expression in the DB for this user?
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+				const user = await User.findById(req.body.userId).exec();
+				assertUser(user, req.query.userId as string);
 
-		// Find the messages that are valid
-		const validMessages = messages.filter(isPromiseFulfilled);
-		// Send the valid messages to Expo Push Server, we get the tickets
-		const tickets = await sendBatchToExpo(
-			new Expo(),
-			validMessages.map(({ value: { pushMessage } }) => pushMessage)
-		);
-		await PushTicket.insertMany(
-			tickets.map((ticket, index) => ({
-				...ticket,
-				receiptId: (ticket as ExpoPushSuccessTicket).id,
-				userId: validMessages[index].value.userId,
-			}))
-		);
+				// Craft a push notification message for each user
+				const message = await expoMessageForUser(user);
 
-		res.send({
-			status: 'ok',
-			details: `Successfully sent ${validMessages.length}/${messages.length} push notifications`,
-		});
+				// We use the sendBatch function, but we actually only send one push
+				// notification.
+				const [ticket] = await sendBatchToExpo(new Expo(), [
+					message.pushMessage,
+				]);
+				const pushTicket = new PushTicket({
+					...ticket,
+					receiptId: (ticket as ExpoPushSuccessTicket).id,
+					userId: message.pushMessage,
+				});
+				await pushTicket.save();
+
+				res.send({
+					details: `Successfully sent push notification to Expo server, with receiptId ${ticket.receiptId}`,
+				});
+
+				break;
+			}
+
+			default: {
+				res.status(405).json({
+					error: `Unknown request method: ${
+						req.method || 'undefined'
+					}`,
+				});
+			}
+		}
 	} catch (error) {
 		logger.error(error);
 
@@ -64,5 +85,3 @@ async function push(_req: NowRequest, res: NowResponse): Promise<void> {
 		});
 	}
 }
-
-export default chain(whitelistIPMiddleware)(push);

@@ -1,6 +1,21 @@
 import { connect, connection } from 'mongoose';
 
+import { IUser } from '../models';
 import { logger } from './logger';
+
+/**
+ * Assert that we have a user.
+ */
+export function assertUser(
+	user: IUser | null,
+	userId: string
+): asserts user is IUser {
+	if (!user) {
+		const e = new Error(`No user with userId "${userId}" found`);
+		logger.error(e);
+		throw e;
+	}
+}
 
 /**
  * A function for connecting to MongoDB.

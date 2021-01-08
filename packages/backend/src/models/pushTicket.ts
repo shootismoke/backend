@@ -1,13 +1,15 @@
 import { ExpoPushTicket } from 'expo-server-sdk';
 import { Document, model, Schema } from 'mongoose';
 
-export type IPushTicket = Omit<
+type IPushTicketBase = Omit<
 	ExpoPushTicket & {
 		receiptId?: string;
 		userId: string;
 	},
 	'id'
 >;
+
+export interface IPushTicket extends IPushTicketBase, Document {}
 
 const PushTicketErrorDetailsSchema = new Schema({
 	error: {
@@ -69,7 +71,4 @@ const PushTicketSchema = new Schema(
 	{ strict: 'throw', timestamps: true }
 );
 
-export const PushTicket = model<Document<IPushTicket>>(
-	'PushTicket',
-	PushTicketSchema
-);
+export const PushTicket = model<IPushTicket>('PushTicket', PushTicketSchema);

@@ -2,12 +2,13 @@ import { AllProviders } from '@shootismoke/dataproviders';
 import { timeZonesNames } from '@vvo/tzdb';
 import { Document, model, Schema } from 'mongoose';
 
+export type Frequency = 'never' | 'daily' | 'weekly' | 'monthly';
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'];
 
 export interface IEmailReport {
 	_id: string;
 	email: string;
-	frequency: typeof FREQUENCY;
+	frequency: Frequency;
 }
 
 const EmailReportSchema = new Schema({
@@ -40,7 +41,7 @@ const EmailReportSchema = new Schema({
 export interface IExpoReport {
 	_id: string;
 	expoPushToken: string;
-	frequency: typeof FREQUENCY;
+	frequency: Frequency;
 }
 
 const ExpoReportSchema = new Schema({
@@ -66,8 +67,7 @@ const ExpoReportSchema = new Schema({
 	},
 });
 
-export interface IUser {
-	_id: string;
+export interface IUser extends Document {
 	emailReport?: IEmailReport;
 	expoReport?: IExpoReport;
 	lastStationId: string;
@@ -119,4 +119,4 @@ const UserSchema = new Schema(
 	{ strict: 'throw', timestamps: true }
 );
 
-export const User = model<Document<IUser>>('User', UserSchema);
+export const User = model<IUser>('User', UserSchema);

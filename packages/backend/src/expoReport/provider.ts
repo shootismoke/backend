@@ -1,14 +1,9 @@
 import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
-import { User } from '@shootismoke/graphql';
 import retry from 'async-retry';
-import { Document } from 'mongoose';
 
-import {
-	assertUserNotifications,
-	constructExpoMessage,
-	UserExpoMessage,
-} from './expo';
+import { IUser } from '../models';
+import { constructExpoMessage, UserExpoMessage } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
@@ -84,7 +79,7 @@ async function universalFetch(universalId: string): Promise<OpenAQFormat> {
  * @param user - User in our DB.
  */
 export async function expoMessageForUser(
-	user: User & Document
+	user: IUser
 ): Promise<UserExpoMessage> {
 	try {
 		// Find the PM2.5 value at the user's last known station (universalId)
@@ -92,11 +87,7 @@ export async function expoMessageForUser(
 			// If anything throws, we retry
 			retry(
 				async () => {
-					assertUserNotifications(user);
-
-					const { value } = await universalFetch(
-						user.notifications.universalId
-					);
+					const { value } = await universalFetch(user.lastStationId);
 
 					return value;
 				},
@@ -112,12 +103,12 @@ export async function expoMessageForUser(
 		]);
 
 		return {
-			userId: user._id,
+			userId: user._id as string,
 			pushMessage: constructExpoMessage(user, pm25),
 		};
 	} catch (error) {
 		throw new Error(
-			`User ${user._id as string}: ${error.message as string}`
+			`User ${user._id as string}: ${(error as Error).message}`
 		);
 	}
 }

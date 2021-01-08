@@ -1,4 +1,4 @@
-import { Frequency, Notifications, User } from '@shootismoke/graphql';
+import { Frequency } from '@shootismoke/graphql';
 import {
 	Expo,
 	ExpoPushMessage,
@@ -6,28 +6,10 @@ import {
 	ExpoPushReceiptId,
 	ExpoPushTicket,
 } from 'expo-server-sdk';
-import { Document } from 'mongoose';
 
+import { IExpoReport, IUser } from '../models';
 import { logger } from '../util';
 import { pm25ToCigarettes } from './provider';
-
-/**
- * Check if a Promise is fulfilled.
- */
-export function isPromiseFulfilled<T>(
-	p: PromiseSettledResult<T>
-): p is PromiseFulfilledResult<T> {
-	return p.status === 'fulfilled';
-}
-
-/**
- * Check if a Promise is rejected.
- */
-export function isPromiseRejected<T>(
-	p: PromiseSettledResult<T>
-): p is PromiseRejectedResult {
-	return p.status === 'rejected';
-}
 
 /**
  * An Expo message associated with the user.
@@ -66,8 +48,8 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 /**
  * A user that has notifications.
  */
-interface UserWithNotifications extends User {
-	notifications: Notifications;
+interface UserWithExpoReport extends IUser {
+	expoReport: IExpoReport;
 }
 
 /**
@@ -75,12 +57,14 @@ interface UserWithNotifications extends User {
  *
  * @param user - User to test if she/he has notifications.
  */
-export function assertUserNotifications(
-	user: User
-): asserts user is UserWithNotifications {
-	if (!user.notifications) {
+function assertUserWithExpoReport(
+	user: IUser
+): asserts user is UserWithExpoReport {
+	if (!user.expoReport) {
 		throw new Error(
-			`User ${user._id} has notifications, as per our db query. qed.`
+			`User ${
+				user._id as string
+			} has notifications, as per our db query. qed.`
 		);
 	}
 }
@@ -91,12 +75,12 @@ export function assertUserNotifications(
  * @param user - The user to construct the message for
  */
 export function constructExpoMessage(
-	user: User & Document,
+	user: IUser,
 	pm25: number
 ): ExpoPushMessage {
-	assertUserNotifications(user);
+	assertUserWithExpoReport(user);
 
-	const { frequency, expoPushToken } = user.notifications;
+	const { frequency, expoPushToken } = user.expoReport;
 
 	if (!Expo.isExpoPushToken(expoPushToken)) {
 		throw new Error(`Invalid ExpoPushToken: ${expoPushToken}`); // eslint-disable-line @typescript-eslint/restrict-template-expressions
@@ -116,7 +100,7 @@ export function constructExpoMessage(
 }
 
 /**
- * Send a batch of messages to Expo's servers.
+ * Send a batch of messages (push notifications) to Expo's servers.
  *
  * @see https://github.com/expo/expo-server-sdk-node
  * @param messages - The messages to send.
@@ -159,8 +143,8 @@ export async function sendBatchToExpo(
 export async function handleReceipts(
 	expo: Expo,
 	receiptIds: string[],
-	onOk: (receiptId: ExpoPushReceiptId, receipt: ExpoPushReceipt) => void,
-	onError: (receiptId: ExpoPushReceiptId, receipt: ExpoPushReceipt) => void
+	onOk: (_receiptId: ExpoPushReceiptId, _receipt: ExpoPushReceipt) => void,
+	onError: (_receiptId: ExpoPushReceiptId, _receipt: ExpoPushReceipt) => void
 ): Promise<void> {
 	const receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
 	for (const chunk of receiptIdChunks) {

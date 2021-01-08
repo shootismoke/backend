@@ -10,14 +10,12 @@
 		"start": "vercel dev"
 	},
 	"dependencies": {
-		"@amaurymartiny/now-middleware": "^0.2.1",
 		"@sentry/node": "^5.29.2",
 		"@shootismoke/convert": "^0.6.1",
 		"@shootismoke/dataproviders": "^0.6.2",
 		"@shootismoke/graphql": "^0.6.1",
 		"@types/async-retry": "^1.4.2",
 		"@types/mongodb": "^3.6.3",
-		"@types/mongoose": "^5.10.3",
 		"@vercel/node": "^1.8.5",
 		"@vvo/tzdb": "^6.4.1",
 		"assign-deep": "^1.0.1",

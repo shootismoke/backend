@@ -1,5 +1,3 @@
-import { NextFunction, Request, Response } from 'express';
-
 import { IS_PROD } from '../util';
 
 /**
@@ -23,25 +21,4 @@ const whitelist = [
  */
 export function isWhitelisted(ip: string): boolean {
 	return !IS_PROD || whitelist.includes(ip);
-}
-
-/**
- * Express-like middleware that whitelists the IP address.
- */
-export function whitelistIPMiddleware(
-	req: Request,
-	res: Response,
-	next: NextFunction
-): void {
-	const ip = req.headers['x-forwarded-for'] as string;
-
-	if (!isWhitelisted(ip)) {
-		res.status(403);
-		res.send({
-			error: `IP address not whitelisted: ${ip}`,
-		});
-		res.end();
-	} else {
-		next();
-	}
 }

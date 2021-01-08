@@ -1,21 +1,15 @@
 import { NowRequest, NowResponse } from '@vercel/node';
 import assignDeep from 'assign-deep';
 
-import { IUser, PushTicket, User } from '../../src/models';
-import { connectToDatabase, logger, sentrySetup } from '../../src/util';
+import { PushTicket, User } from '../../src/models';
+import {
+	assertUser,
+	connectToDatabase,
+	logger,
+	sentrySetup,
+} from '../../src/util';
 
 sentrySetup();
-
-/**
- * Assert that we have a user.
- */
-function assertUser(user: IUser | null, userId: string): asserts user is IUser {
-	if (!user) {
-		const e = new Error(`No user with userId "${userId}" found`);
-		logger.error(e);
-		throw e;
-	}
-}
 
 export default async function usersUserId(
 	req: NowRequest,
@@ -26,7 +20,7 @@ export default async function usersUserId(
 
 		switch (req.method) {
 			case 'GET': {
-				const user = await User.findById(req.query.userId);
+				const user = await User.findById(req.query.userId).exec();
 				assertUser(user, req.query.userId as string);
 
 				res.status(200).json(user);
@@ -35,7 +29,8 @@ export default async function usersUserId(
 			}
 
 			case 'PATCH': {
-				const user = await User.findById(req.query.userId);
+				const user = await User.findById(req.query.userId).exec();
+				assertUser(user, req.query.userId as string);
 
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				assignDeep(user, req.body);
@@ -45,8 +40,9 @@ export default async function usersUserId(
 				// Everytime we update user, we also delete all the pushTickets he/she
 				// might have.
 				await PushTicket.deleteMany({
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					userId: user._id,
-				});
+				}).exec();
 
 				res.status(200).json(newUser);
 
@@ -55,7 +51,9 @@ export default async function usersUserId(
 
 			default:
 				res.status(405).json({
-					error: `Unknown request method: ${req.method}`,
+					error: `Unknown request method: ${
+						req.method || 'undefined'
+					}`,
 				});
 		}
 	} catch (err) {
