@@ -17,7 +17,7 @@ async function users(req: NowRequest, res: NowResponse): Promise<void> {
 				} catch (err) {
 					res.status(400).json({ error: (err as Error).message });
 
-					return;
+					break;
 				}
 
 				res.status(201).json(user);
@@ -26,7 +26,7 @@ async function users(req: NowRequest, res: NowResponse): Promise<void> {
 			}
 
 			default:
-				res.status(400).json({
+				res.status(405).json({
 					error: `Unknown request method: ${
 						req.method || 'undefined'
 					}`,

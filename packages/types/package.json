@@ -1,0 +1,14 @@
+{
+	"name": "@shootismoke/types",
+	"version": "0.3.0",
+	"author": "Amaury M <amaury@shootismoke.app>",
+	"description": "Backend for Sh**t! I Smoke",
+	"license": "GPL-3.0",
+	"private": true,
+	"repository": "https://github.com/shootismoke/backend",
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}

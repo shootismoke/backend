@@ -37,6 +37,7 @@ export default async function usersUserId(
 			case 'PATCH': {
 				const user = await User.findById(req.query.userId);
 
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				assignDeep(user, req.body);
 
 				const newUser = await user.save({ validateBeforeSave: true });
@@ -47,16 +48,18 @@ export default async function usersUserId(
 					userId: user._id,
 				});
 
+				res.status(200).json(newUser);
+
 				break;
 			}
 
 			default:
-				res.status(400).json({
+				res.status(405).json({
 					error: `Unknown request method: ${req.method}`,
 				});
 		}
 	} catch (err) {
 		logger.error(err);
-		res.status(500).json({ error: err });
+		res.status(500).json({ error: (err as Error).message });
 	}
 }

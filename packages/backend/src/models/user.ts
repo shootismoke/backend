@@ -119,4 +119,4 @@ const UserSchema = new Schema(
 	{ strict: 'throw', timestamps: true }
 );
 
-export const User = model<IUser & Document>('User', UserSchema);
+export const User = model<Document<IUser>>('User', UserSchema);

@@ -69,7 +69,7 @@ const PushTicketSchema = new Schema(
 	{ strict: 'throw', timestamps: true }
 );
 
-export const PushTicket = model<IPushTicket & Document>(
+export const PushTicket = model<Document<IPushTicket>>(
 	'PushTicket',
 	PushTicketSchema
 );
