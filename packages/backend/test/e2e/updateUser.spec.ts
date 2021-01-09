@@ -1,5 +1,4 @@
-import { IUser } from '@shootismoke/types';
-import { BackendError } from '@shootismoke/types';
+import { BackendError, IUser } from '@shootismoke/types';
 import axios, { AxiosError } from 'axios';
 import { connection } from 'mongoose';
 
@@ -37,6 +36,8 @@ function testGoodInput<T>(name: string, input: T) {
 
 describe('users::updateUser', () => {
 	beforeAll(async (done) => {
+		jest.setTimeout(30000);
+
 		await connectToDatabase();
 		await connection.dropDatabase();
 
@@ -133,4 +134,5 @@ describe('users::updateUser', () => {
 	);
 
 	afterAll(() => connection.close());
+	afterAll(() => jest.setTimeout(5000));
 });
