@@ -1,8 +1,14 @@
 {
-	"extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig",
+	"extends": "./tsconfig.settings.json",
 	"compilerOptions": {
-		"lib": ["esnext"],
-		"moduleResolution": "node",
-		"skipLibCheck": true
-	},
+		"baseUrl": ".",
+		"paths": {
+			"@shootismoke/convert": ["./packages/convert/src/index.ts"],
+			"@shootismoke/dataproviders": [
+				"./packages/dataproviders/src/index.ts"
+			],
+			"@shootismoke/graphql": ["./packages/graphql/src/index.ts"],
+			"@shootismoke/ui": ["./packages/ui/src/index.ts"]
+		}
+	}
 }

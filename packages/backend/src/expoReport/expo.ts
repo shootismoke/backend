@@ -1,4 +1,4 @@
-import { pm25ToCigarettes, round } from '@shootismoke/ui';
+import { Frequency, IExpoReport, IUser } from '@shootismoke/types';
 import {
 	Expo,
 	ExpoPushMessage,
@@ -7,7 +7,7 @@ import {
 	ExpoPushTicket,
 } from 'expo-server-sdk';
 
-import { IExpoReport, IUser } from '../models';
+import { pm25ToCigarettes, round } from '../../../ui/src';
 import { logger } from '../util';
 
 /**

@@ -1,20 +1,19 @@
 {
 	"name": "@shootismoke/dataproviders",
 	"version": "0.6.2",
-	"author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+	"author": "Amaury M <amaury@shootismoke.app>",
 	"description": "Helpers to fetch data from air quality data providers",
 	"files": [
 		"lib/"
 	],
 	"license": "GPL-3.0",
-	"main": "lib/index.js",
+	"main": "lib",
 	"publishConfig": {
 		"access": "public"
 	},
 	"repository": "https://github.com/shootismoke/common",
 	"scripts": {
-		"prebuild": "rimraf lib",
-		"build": "tsc -p tsconfig.settings.json",
+		"build": "rimraf lib && tsc -p tsconfig.settings.json",
 		"docs": "rimraf docs && typedoc src"
 	},
 	"dependencies": {

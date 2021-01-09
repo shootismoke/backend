@@ -1,14 +1,9 @@
-import { AllProviders } from '../../../dataproviders/src';
+import { AllProviders } from '@shootismoke/dataproviders';
+import { MongoUser } from '@shootismoke/types';
 import { timeZonesNames } from '@vvo/tzdb';
-import { Document, model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-export type Frequency = 'never' | 'daily' | 'weekly' | 'monthly';
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'];
-
-export interface IEmailReport {
-	email: string;
-	frequency: Frequency;
-}
 
 const EmailReportSchema = new Schema({
 	/**
@@ -37,11 +32,6 @@ const EmailReportSchema = new Schema({
 	},
 });
 
-export interface IExpoReport {
-	expoPushToken: string;
-	frequency: Frequency;
-}
-
 const ExpoReportSchema = new Schema({
 	/**
 	 * Token to send the push notification to.
@@ -64,14 +54,6 @@ const ExpoReportSchema = new Schema({
 		type: Schema.Types.String,
 	},
 });
-
-export interface IUser extends Document {
-	_id: string;
-	emailReport?: IEmailReport;
-	expoReport?: IExpoReport;
-	lastStationId: string;
-	timezone: string;
-}
 
 const UserSchema = new Schema(
 	{
@@ -118,4 +100,4 @@ const UserSchema = new Schema(
 	{ strict: 'throw', timestamps: true }
 );
 
-export const User = model<IUser>('User', UserSchema);
+export const User = model<MongoUser>('User', UserSchema);

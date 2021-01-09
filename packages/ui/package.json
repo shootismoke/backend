@@ -1,21 +1,20 @@
 {
 	"name": "@shootismoke/ui",
 	"version": "0.6.2",
-	"author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+	"author": "Amaury M <amaury@shootismoke.app>",
 	"description": "UI components shared across Web & React Native projects",
 	"files": [
 		"assets/",
 		"lib/"
 	],
 	"license": "GPL-3.0",
-	"main": "lib/index.js",
+	"main": "lib",
 	"publishConfig": {
 		"access": "public"
 	},
 	"repository": "https://github.com/shootismoke/common",
 	"scripts": {
-		"prebuild": "rimraf lib",
-		"build": "tsc -p tsconfig.settings.json",
+		"build": "rimraf lib && tsc -p tsconfig.settings.json",
 		"docs": "rimraf docs && typedoc src"
 	},
 	"dependencies": {

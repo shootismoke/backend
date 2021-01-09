@@ -1,6 +1,6 @@
+import { IUser } from '@shootismoke/types';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
-import { IUser } from '../models';
 import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
 
 describe('constructExpoMessage', () => {
@@ -31,7 +31,7 @@ describe('constructExpoMessage', () => {
 						...user.notifications,
 						expoPushToken: 'foo',
 					},
-				} as unknown) as User & Document,
+				} as unknown) as IUser,
 				42
 			)
 		).toThrowError(new Error('Invalid ExpoPushToken: foo'));
@@ -55,7 +55,7 @@ describe('constructExpoMessage', () => {
 						...user.notifications,
 						frequency: 'weekly',
 					},
-				} as unknown) as User & Document,
+				} as unknown) as IUser,
 				42
 			)
 		).toEqual({
@@ -75,7 +75,7 @@ describe('constructExpoMessage', () => {
 						...user.notifications,
 						frequency: 'monthly',
 					},
-				} as unknown) as User & Document,
+				} as unknown) as IUser,
 				42
 			)
 		).toEqual({

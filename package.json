@@ -10,9 +10,11 @@
 		"packages/*"
 	],
 	"scripts": {
+		"build": "lerna run build --stream",
 		"lint": "tsc --noEmit && eslint --ext ts .",
 		"start": "cd packages/backend && yarn start",
-		"test": "jest"
+		"test": "jest",
+		"test:unit": "jest --testPathIgnorePatterns e2e"
 	},
 	"devDependencies": {
 		"@amaurymartiny/config": "^1.3.3",

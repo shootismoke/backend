@@ -1,13 +1,17 @@
 {
 	"name": "@shootismoke/types",
-	"version": "0.3.0",
+	"version": "0.6.2",
 	"author": "Amaury M <amaury@shootismoke.app>",
 	"description": "Backend for Sh**t! I Smoke",
+	"files": [
+		"lib/"
+	],
 	"license": "GPL-3.0",
+	"main": "lib",
 	"private": true,
 	"repository": "https://github.com/shootismoke/backend",
 	"scripts": {
-		"build": "tsc"
+		"build": "rimraf lib && tsc -p tsconfig.settings.json"
 	},
 	"dependencies": {},
 	"devDependencies": {}

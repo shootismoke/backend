@@ -1,4 +1,3 @@
-import { chain } from '@amaurymartiny/now-middleware';
 import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushSuccessTicket } from 'expo-server-sdk';
 
