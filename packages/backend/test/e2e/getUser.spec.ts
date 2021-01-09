@@ -1,10 +1,10 @@
+import { BackendError } from '@shootismoke/types';
+import { IUser } from '@shootismoke/types';
 import axios, { AxiosError } from 'axios';
 import { connection } from 'mongoose';
 
-import { BackendError } from '@shootismoke/types/src/types';
-import { IUser } from '@shootismoke/types';
 import { connectToDatabase } from '../../src/util';
-import { alice, BACKEND_URL } from './util/testdata';
+import { alice, BACKEND_URL } from '../util/testdata';
 
 let dbAlice: IUser;
 

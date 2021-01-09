@@ -17,7 +17,7 @@ module.exports = {
 		'@shootismoke/types$': '<rootDir>/packages/types/src/index.ts',
 		'@shootismoke/ui$': '<rootDir>/packages/ui/src/index.ts',
 	},
-	setupFiles: ['./packages/backend/test/e2e/util/setup.ts'],
+	setupFiles: ['./packages/backend/test/util/setup.ts'],
 	testEnvironment: 'node',
 	testMatch: ['**/*.spec.ts'],
 };
