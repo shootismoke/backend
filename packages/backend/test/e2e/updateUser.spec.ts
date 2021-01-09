@@ -22,7 +22,7 @@ function testBadInput<T>(name: string, input: T, expErr: string) {
 }
 
 function testGoodInput<T>(name: string, input: T) {
-	it(`should be correct input: ${name}`, async (done) => {
+	it(`should be successful: ${name}`, async (done) => {
 		const { data } = await axios.patch<IUser>(
 			`${BACKEND_URL}/api/users/${dbAlice._id}`,
 			input
