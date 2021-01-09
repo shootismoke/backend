@@ -2,10 +2,10 @@ import * as t from 'io-ts';
 
 import {
 	latLngCodec,
-	unitCodec,
-	pollutantCodec,
 	OpenAQCodec,
 	OpenAQCodecOptional,
+	pollutantCodec,
+	unitCodec,
 } from '../../util';
 
 const OpenAQMetaCodec = t.type({

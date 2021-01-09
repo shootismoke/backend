@@ -1,7 +1,7 @@
 import { Provider } from '../../types';
 import { fetchByGps, fetchByStation, OpenAQOptions } from './fetchBy';
 import { normalizeByGps, normalizeByStation } from './normalize';
-import { OpenAQMeasurements, OpenAQLatest } from './validation';
+import { OpenAQLatest, OpenAQMeasurements } from './validation';
 
 export const openaq: Provider<
 	OpenAQLatest,

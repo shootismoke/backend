@@ -2,7 +2,7 @@ import * as E from 'fp-ts/lib/Either';
 
 import { Normalized } from '../../types';
 import { providerError } from '../../util';
-import { OpenAQMeasurements, OpenAQLatest } from './validation';
+import { OpenAQLatest, OpenAQMeasurements } from './validation';
 
 /**
  * Normalize aqicn byGps data

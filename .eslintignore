@@ -1,5 +1,7 @@
 .eslintrc.js
 .expo
 bin
+lib
 coverage
 node_modules
+packages/*/typedoc.js

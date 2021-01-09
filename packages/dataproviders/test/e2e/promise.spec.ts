@@ -3,7 +3,7 @@ import { aqicn, openaq } from '../../src/promise';
 describe('promise', () => {
 	describe('e2e', () => {
 		it('should resolve correctly', async (done) => {
-			const data = await openaq.fetchByStation('Coyhaique');
+			const data = await openaq.fetchByStation('Beijing');
 			expect(data.results.length).toBeGreaterThanOrEqual(1);
 
 			const results = openaq.normalizeByStation(data);

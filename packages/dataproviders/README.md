@@ -27,8 +27,8 @@ yarn install @shootismoke/dataproviders
 
 The package exposes a couple of data providers (see list above), and for each data provider, there are two main functions:
 
-- `fetchByGps({ latitude, longitude }, options?)` - Fetch air quality data by GPS coordinates
-- `fetchByStation(stationId, options?)` - Fetch air quality data by station ID
+-   `fetchByGps({ latitude, longitude }, options?)` - Fetch air quality data by GPS coordinates
+-   `fetchByStation(stationId, options?)` - Fetch air quality data by station ID
 
 ### Usage with `fp-ts`
 
@@ -46,26 +46,26 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 pipe(
-  // Fetch data from station 'Coyhaique' on the OpenAQ platform
-  openaq.fetchByStation('Coyhaique'),
-  // Normalize the data
-  TE.chain(response => TE.fromEither(normalize(response))),
-  // Depending on error/result case, do different stuff
-  TE.fold(
-    // Do on error:
-    error => {
-      console.error(error);
+	// Fetch data from station 'Beijing' on the OpenAQ platform
+	openaq.fetchByStation('Beijing'),
+	// Normalize the data
+	TE.chain((response) => TE.fromEither(normalize(response))),
+	// Depending on error/result case, do different stuff
+	TE.fold(
+		// Do on error:
+		(error) => {
+			console.error(error);
 
-      // ...snip...
-    },
-    // Do on success:
-    results => {
-      const normalized = results[0]; // `results` is an array of normalized OpenAQ objects
-      console.log(`${normalized.value} ${normalized.unit}`); // Logs "34.5 µg/m³"
+			// ...snip...
+		},
+		// Do on success:
+		(results) => {
+			const normalized = results[0]; // `results` is an array of normalized OpenAQ objects
+			console.log(`${normalized.value} ${normalized.unit}`); // Logs "34.5 µg/m³"
 
-      // ...snip...
-    }
-  )
+			// ...snip...
+		}
+	)
 );
 ```
 
@@ -78,12 +78,12 @@ If you don't want to use `fp-ts`, the package also exports the data providers as
 import { aqicn } from '@shootismoke/dataproviders/lib/promise';
 
 async function main() {
-  const data = await aqicn.fetchByStation(1045);
-  console.log(data.dominentpol); // Logs "pm25"
+	const data = await aqicn.fetchByStation(1045);
+	console.log(data.dominentpol); // Logs "pm25"
 
-  const results = aqicn.normalizeByStation(data); // `results` is an array of normalized OpenAQ objects
-  const normalized = results[0];
-  console.log(`${normalized.value} ${normalized.unit}`); // Logs "34.5 µg/m³"
+	const results = aqicn.normalizeByStation(data); // `results` is an array of normalized OpenAQ objects
+	const normalized = results[0];
+	console.log(`${normalized.value} ${normalized.unit}`); // Logs "34.5 µg/m³"
 }
 ```
 
@@ -97,47 +97,47 @@ If you use the `.normalizeByGps` or `.normalizeByStation` functions, the output 
  * measurement
  */
 interface OpenAQFormat {
-  /**
-   * City (or regional approximation) containing location
-   */
-  city: string;
-  /**
-   * Coordinates where the measurement took place. Note that in the
-   * openaq-data-format, this field is optional. Using this library, this field
-   * will **always** be populated
-   */
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  /**
-   * Country containing location in two letter ISO format
-   */
-  country: string;
-  /**
-   * Time of measurement including both local time and UTC time.
-   */
-  date: {
-    local: string;
-    utc: string;
-  };
-  /**
-   * A unique ID representing the location of a measurement (can be a station
-   * ID, a place...)
-   */
-  location: string;
-  /**
-   * The pollutant id (pm25, pm10, o3...)
-   */
-  parameter: Pollutant;
-  /**
-   * The value of the measurement
-   */
-  value: number;
-  /**
-   * The unit the value is measured in (µg/m³, ppm)
-   */
-  unit: Unit;
+	/**
+	 * City (or regional approximation) containing location
+	 */
+	city: string;
+	/**
+	 * Coordinates where the measurement took place. Note that in the
+	 * openaq-data-format, this field is optional. Using this library, this field
+	 * will **always** be populated
+	 */
+	coordinates: {
+		latitude: number;
+		longitude: number;
+	};
+	/**
+	 * Country containing location in two letter ISO format
+	 */
+	country: string;
+	/**
+	 * Time of measurement including both local time and UTC time.
+	 */
+	date: {
+		local: string;
+		utc: string;
+	};
+	/**
+	 * A unique ID representing the location of a measurement (can be a station
+	 * ID, a place...)
+	 */
+	location: string;
+	/**
+	 * The pollutant id (pm25, pm10, o3...)
+	 */
+	parameter: Pollutant;
+	/**
+	 * The value of the measurement
+	 */
+	value: number;
+	/**
+	 * The unit the value is measured in (µg/m³, ppm)
+	 */
+	unit: Unit;
 }
 
 /**

@@ -105,7 +105,7 @@ export function testProviderE2E<DataByGps, DataByStation, Options>(
 
 	if (!skip.includes('fetchByGps')) {
 		describe('fetchByGps', () => {
-			[...Array(2)].map(generateRandomLatLng).forEach((gps) => {
+			[0, 0].map(generateRandomLatLng).forEach((gps) => {
 				it(`should fetch ${provider.id} by gps: ${JSON.stringify(
 					gps
 				)}`, (done) =>
@@ -120,7 +120,7 @@ export function testProviderE2E<DataByGps, DataByStation, Options>(
 
 	if (!skip.includes('fetchByStation')) {
 		describe('fetchByStation', () => {
-			[...Array(2)].map(generateRandomStationId).forEach((stationId) => {
+			[0, 0].map(generateRandomStationId).forEach((stationId) => {
 				it(`should fetch ${provider.id} by station: ${stationId}`, (done) =>
 					testTE(
 						provider.fetchByStation(stationId, options),

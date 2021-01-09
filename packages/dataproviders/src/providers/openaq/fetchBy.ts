@@ -5,8 +5,8 @@ import { LatLng } from '../../types';
 import { ACCURATE_RADIUS, fetchAndDecode } from '../../util';
 import {
 	OpenAQError,
-	OpenAQLatestCodec,
 	OpenAQLatest,
+	OpenAQLatestCodec,
 	OpenAQMeasurements,
 	OpenAQMeasurementsCodec,
 } from './validation';
