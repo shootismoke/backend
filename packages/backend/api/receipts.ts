@@ -72,10 +72,6 @@ export default async function receipts(
 		}
 	} catch (error) {
 		logger.error(error);
-
-		res.status(500);
-		res.send({
-			error: (error as Error).message,
-		});
+		res.status(500).send({ error: (error as Error).message });
 	}
 }

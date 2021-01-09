@@ -1,4 +1,4 @@
-import { AllProviders } from '@shootismoke/dataproviders';
+import { AllProviders } from '../../../dataproviders/src';
 import { timeZonesNames } from '@vvo/tzdb';
 import { Document, model, Schema } from 'mongoose';
 
@@ -6,7 +6,6 @@ export type Frequency = 'never' | 'daily' | 'weekly' | 'monthly';
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'];
 
 export interface IEmailReport {
-	_id: string;
 	email: string;
 	frequency: Frequency;
 }
@@ -39,7 +38,6 @@ const EmailReportSchema = new Schema({
 });
 
 export interface IExpoReport {
-	_id: string;
 	expoPushToken: string;
 	frequency: Frequency;
 }
@@ -68,6 +66,7 @@ const ExpoReportSchema = new Schema({
 });
 
 export interface IUser extends Document {
+	_id: string;
 	emailReport?: IEmailReport;
 	expoReport?: IExpoReport;
 	lastStationId: string;

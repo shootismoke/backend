@@ -8,17 +8,6 @@ import { constructExpoMessage, UserExpoMessage } from './expo';
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
 /**
- * Convert raw pm25 level to number of cigarettes. 1 cigarette is equivalent of
- * a PM2.5 level of 22ug/m3.
- *
- * @see http://berkeleyearth.org/air-pollution-and-cigarette-equivalence/
- * @param rawPm25 - The raw PM2.5 level, in ug/m3
- */
-export function pm25ToCigarettes(rawPm25: number): number {
-	return rawPm25 / 22;
-}
-
-/**
  * Given some normalized data points, filter out the first one that contains
  * pm25 data. Returns a TaskEither left is none is found, or format the data
  * into the Api interface
@@ -93,22 +82,20 @@ export async function expoMessageForUser(
 				},
 				{ retries: 5 }
 			),
-			// Timeout after 5s, because the whole Now function only runs 10s
+			// Timeout after 9s, because the whole Vercel Now function only runs 10s
 			new Promise<number>((_resolve, reject) =>
 				setTimeout(
 					() => reject(new Error('universalFetch timed out')),
-					5000
+					9000
 				)
 			),
 		]);
 
 		return {
-			userId: user._id as string,
+			userId: user._id,
 			pushMessage: constructExpoMessage(user, pm25),
 		};
 	} catch (error) {
-		throw new Error(
-			`User ${user._id as string}: ${(error as Error).message}`
-		);
+		throw new Error(`User ${user._id}: ${(error as Error).message}`);
 	}
 }

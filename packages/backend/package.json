@@ -11,9 +11,6 @@
 	},
 	"dependencies": {
 		"@sentry/node": "^5.29.2",
-		"@shootismoke/convert": "^0.6.1",
-		"@shootismoke/dataproviders": "^0.6.2",
-		"@shootismoke/graphql": "^0.6.1",
 		"@types/async-retry": "^1.4.2",
 		"@types/mongodb": "^3.6.3",
 		"@vercel/node": "^1.8.5",
@@ -23,7 +20,6 @@
 		"expo-server-sdk": "^3.6.0",
 		"mongodb": "^3.6.3",
 		"mongoose": "^5.11.10",
-		"reflect-metadata": "^0.1.13",
 		"vercel": "^21.0.1"
 	},
 	"devDependencies": {

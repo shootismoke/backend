@@ -61,9 +61,7 @@ export default async function push(
 				});
 				await pushTicket.save();
 
-				res.send({
-					details: `Successfully sent push notification to Expo server, with receiptId ${ticket.receiptId}`,
-				});
+				res.status(200).send(pushTicket);
 
 				break;
 			}
@@ -78,10 +76,6 @@ export default async function push(
 		}
 	} catch (error) {
 		logger.error(error);
-
-		res.status(500);
-		res.send({
-			error: (error as Error).message,
-		});
+		res.status(500).send({ error: (error as Error).message });
 	}
 }

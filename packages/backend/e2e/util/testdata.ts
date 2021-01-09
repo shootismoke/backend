@@ -19,7 +19,7 @@ export const bob = {
 		frequency: 'daily',
 	},
 	expoReport: {
-		expoPushToken: 'expo_token_bob',
+		expoPushToken: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused',
 		frequency: 'weekly',
 	},
 	lastStationId: 'openaq|FR04143',

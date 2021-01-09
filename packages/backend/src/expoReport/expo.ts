@@ -1,4 +1,4 @@
-import { Frequency } from '@shootismoke/graphql';
+import { pm25ToCigarettes, round } from '@shootismoke/ui';
 import {
 	Expo,
 	ExpoPushMessage,
@@ -9,7 +9,6 @@ import {
 
 import { IExpoReport, IUser } from '../models';
 import { logger } from '../util';
-import { pm25ToCigarettes } from './provider';
 
 /**
  * An Expo message associated with the user.
@@ -20,27 +19,16 @@ export interface UserExpoMessage {
 }
 
 /**
- * Round a number to 1 decimal.
- *
- * @param n - The number to round.
- */
-function roundTo1Decimal(n: number): number {
-	return Math.round(n * 10) / 10;
-}
-
-/**
  * Generate the body of the push notification message.
  */
 function getMessageBody(pm25: number, frequency: Frequency): string {
 	const dailyCigarettes = pm25ToCigarettes(pm25);
 
 	if (frequency === 'daily') {
-		return `Shoot! You'll smoke ${roundTo1Decimal(
-			dailyCigarettes
-		)} cigarettes today`;
+		return `Shoot! You'll smoke ${round(dailyCigarettes)} cigarettes today`;
 	}
 
-	return `Shoot! You smoked ${roundTo1Decimal(
+	return `Shoot! You smoked ${round(
 		frequency === 'monthly' ? dailyCigarettes * 30 : dailyCigarettes * 7
 	)} cigarettes in the past ${frequency === 'monthly' ? 'month' : 'week'}.`;
 }
@@ -62,9 +50,7 @@ function assertUserWithExpoReport(
 ): asserts user is UserWithExpoReport {
 	if (!user.expoReport) {
 		throw new Error(
-			`User ${
-				user._id as string
-			} has notifications, as per our db query. qed.`
+			`User ${user._id} has notifications, as per our db query. qed.`
 		);
 	}
 }

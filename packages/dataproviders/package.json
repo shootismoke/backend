@@ -1,0 +1,31 @@
+{
+	"name": "@shootismoke/dataproviders",
+	"version": "0.6.2",
+	"author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+	"description": "Helpers to fetch data from air quality data providers",
+	"files": [
+		"lib/"
+	],
+	"license": "GPL-3.0",
+	"main": "lib/index.js",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": "https://github.com/shootismoke/common",
+	"scripts": {
+		"prebuild": "rimraf lib",
+		"build": "tsc -p tsconfig.settings.json",
+		"docs": "rimraf docs && typedoc src"
+	},
+	"dependencies": {
+		"@shootismoke/convert": "^0.6.1",
+		"axios": "^0.21.0",
+		"date-fns": "^2.8.1",
+		"date-fns-tz": "^1.0.9",
+		"fp-ts": "^2.1.1",
+		"io-ts": "^2.0.1"
+	},
+	"devDependencies": {
+		"dotenv": "^8.2.0"
+	}
+}

@@ -39,10 +39,7 @@ export default async function usersUserId(
 
 				// Everytime we update user, we also delete all the pushTickets he/she
 				// might have.
-				await PushTicket.deleteMany({
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					userId: user._id,
-				}).exec();
+				await PushTicket.deleteMany({ userId: user._id }).exec();
 
 				res.status(200).json(newUser);
 

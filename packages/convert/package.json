@@ -1,0 +1,24 @@
+{
+	"name": "@shootismoke/convert",
+	"version": "0.6.1",
+	"author": "Amaury Martiny <amaury.martiny@protonmail.com>",
+	"description": "Easily convert between AQIs (US, CN...) and raw values (ug/m3, ppm)",
+	"files": [
+		"lib/"
+	],
+	"license": "GPL-3.0",
+	"main": "lib/index.js",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": "https://github.com/shootismoke/common",
+	"scripts": {
+		"prebuild": "rimraf lib",
+		"build": "tsc -p tsconfig.settings.json",
+		"docs": "rimraf docs && typedoc src"
+	},
+	"dependencies": {
+		"@types/debug": "^4.1.5",
+		"debug": "^4.1.1"
+	}
+}

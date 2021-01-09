@@ -42,7 +42,7 @@ describe('users::updateUser', () => {
 	}
 
 	function testGoodInput<T>(name: string, input: T) {
-		it(`should require correct input: ${name}`, async (done) => {
+		it(`should be correct input: ${name}`, async (done) => {
 			const { data } = await axios.patch<IUser>(
 				`${BACKEND_URL}/api/users/${dbAlice._id}`,
 				input

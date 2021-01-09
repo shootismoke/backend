@@ -1,54 +1,22 @@
-import { User } from '@shootismoke/graphql';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
-import { Document } from 'mongoose';
 
-import {
-	constructExpoMessage,
-	handleReceipts,
-	isPromiseFulfilled,
-	isPromiseRejected,
-	sendBatchToExpo,
-} from './expo';
-
-describe('Promise.allSettled', () => {
-	it('should work with a fulfilled Promise', () => {
-		const p = {
-			status: 'fulfilled' as const,
-			value: 2,
-		};
-		expect(isPromiseFulfilled(p)).toBe(true);
-		expect(isPromiseRejected(p)).toBe(false);
-	});
-
-	it('should work with a rejected Promise', () => {
-		const p = {
-			status: 'rejected' as const,
-			reason: 'foo',
-		};
-		expect(isPromiseFulfilled(p)).toBe(false);
-		expect(isPromiseRejected(p)).toBe(true);
-	});
-});
+import { IUser } from '../models';
+import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
 
 describe('constructExpoMessage', () => {
-	const user = ({
+	const user = {
 		_id: 'alice',
-		expoInstallationId: 'id_alice',
-		notifications: {
+		expoReport: {
 			expoPushToken: 'ExponentPushToken[0zK3-xM3PgLEfe31-AafjB]', // real one, unused
 			frequency: 'daily',
-			timezone: 'Europe/Berlin',
-			universalId: 'openaq|FR04143',
 		},
-	} as unknown) as User & Document;
+		timezone: 'Europe/Berlin',
+		universalId: 'openaq|FR04143',
+	};
 
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
-			constructExpoMessage(
-				({ ...user, notifications: undefined } as unknown) as User &
-					Document,
-				42
-			)
+			constructExpoMessage({ ...user, notifications: undefined }, 42)
 		).toThrowError(
 			new Error('User alice has notifications, as per our db query. qed.')
 		);
