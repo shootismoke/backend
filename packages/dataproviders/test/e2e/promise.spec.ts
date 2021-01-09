@@ -1,4 +1,4 @@
-import { aqicn, openaq } from './promise';
+import { aqicn, openaq } from '../../src/promise';
 
 describe('promise', () => {
 	describe('e2e', () => {

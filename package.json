@@ -13,7 +13,7 @@
 		"build": "lerna run build --stream",
 		"lint": "tsc --noEmit && eslint --ext ts .",
 		"start": "cd packages/backend && yarn start",
-		"test": "jest",
+		"test": "jest --runInBand",
 		"test:unit": "jest --testPathIgnorePatterns e2e"
 	},
 	"devDependencies": {

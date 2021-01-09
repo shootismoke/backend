@@ -1,5 +1,5 @@
-import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 import { IUser } from '@shootismoke/types';
+import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
 import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
 

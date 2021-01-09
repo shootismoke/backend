@@ -6,25 +6,27 @@ import { connection } from 'mongoose';
 import { connectToDatabase } from '../../src/util';
 import { alice, BACKEND_URL } from '../util/testdata';
 
+function testBadInput<T>(name: string, input: T, expErr: string) {
+	it(`should require correct input: ${name}`, async (done) => {
+		try {
+			await axios.post(`${BACKEND_URL}/api/users`, input);
+			done.fail();
+		} catch (err) {
+			const e = err as AxiosError<BackendError>;
+			expect(e.response?.status).toBe(400);
+			expect(e.response?.data.error).toContain(expErr);
+			done();
+		}
+	});
+}
+
 describe('users::createUser', () => {
-	beforeAll(async () => {
+	beforeAll(async (done) => {
 		await connectToDatabase();
 		await connection.dropDatabase();
-	});
 
-	function testBadInput<T>(name: string, input: T, expErr: string) {
-		it(`should require correct input: ${name}`, async (done) => {
-			try {
-				await axios.post(`${BACKEND_URL}/api/users`, input);
-				done.fail();
-			} catch (err) {
-				const e = err as AxiosError<BackendError>;
-				expect(e.response?.status).toBe(400);
-				expect(e.response?.data.error).toContain(expErr);
-				done();
-			}
-		});
-	}
+		done();
+	});
 
 	testBadInput('empty input', {}, 'User validation failed');
 	testBadInput(

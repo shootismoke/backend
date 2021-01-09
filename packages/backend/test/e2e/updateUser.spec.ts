@@ -8,6 +8,33 @@ import { alice, BACKEND_URL, bob } from '../util/testdata';
 
 let dbAlice: IUser;
 
+function testBadInput<T>(name: string, input: T, expErr: string) {
+	it(`should require correct input: ${name}`, async (done) => {
+		try {
+			await axios.patch(`${BACKEND_URL}/api/users/${dbAlice._id}`, input);
+			done.fail();
+		} catch (err) {
+			const e = err as AxiosError<BackendError>;
+			expect(e.response?.status).toBe(500);
+			expect(e.response?.data.error).toContain(expErr);
+			done();
+		}
+	});
+}
+
+function testGoodInput<T>(name: string, input: T) {
+	it(`should be correct input: ${name}`, async (done) => {
+		const { data } = await axios.patch<IUser>(
+			`${BACKEND_URL}/api/users/${dbAlice._id}`,
+			input
+		);
+
+		expect(data).toMatchObject(input);
+
+		done();
+	});
+}
+
 describe('users::updateUser', () => {
 	beforeAll(async (done) => {
 		await connectToDatabase();
@@ -23,36 +50,6 @@ describe('users::updateUser', () => {
 
 		done();
 	});
-
-	function testBadInput<T>(name: string, input: T, expErr: string) {
-		it(`should require correct input: ${name}`, async (done) => {
-			try {
-				await axios.patch(
-					`${BACKEND_URL}/api/users/${dbAlice._id}`,
-					input
-				);
-				done.fail();
-			} catch (err) {
-				const e = err as AxiosError<BackendError>;
-				expect(e.response?.status).toBe(500);
-				expect(e.response?.data.error).toContain(expErr);
-				done();
-			}
-		});
-	}
-
-	function testGoodInput<T>(name: string, input: T) {
-		it(`should be correct input: ${name}`, async (done) => {
-			const { data } = await axios.patch<IUser>(
-				`${BACKEND_URL}/api/users/${dbAlice._id}`,
-				input
-			);
-
-			expect(data).toMatchObject(input);
-
-			done();
-		});
-	}
 
 	testGoodInput('empty input', {});
 	testBadInput(
