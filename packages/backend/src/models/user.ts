@@ -2,6 +2,7 @@ import { AllProviders } from '@shootismoke/dataproviders';
 import { MongoUser } from '@shootismoke/types';
 import { timeZonesNames } from '@vvo/tzdb';
 import { model, Schema } from 'mongoose';
+import { v4 } from 'node-uuid';
 
 const FREQUENCY = ['never', 'daily', 'weekly', 'monthly'];
 
@@ -57,6 +58,10 @@ const ExpoReportSchema = new Schema({
 
 const UserSchema = new Schema(
 	{
+		_id: {
+			type: Schema.Types.String,
+			default: v4, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+		},
 		/**
 		 * User's timezone.
 		 */
@@ -88,12 +93,24 @@ const UserSchema = new Schema(
 		 * User's Expo repots preferences.
 		 */
 		expoReport: {
+			required: (): boolean => {
+				// At least one of expoReport/emailReport is required.
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore Using this syntax from mongoose docs.
+				return !this.emailReport;
+			},
 			type: ExpoReportSchema,
 		},
 		/**
 		 * User's email repots preferences.
 		 */
 		emailReport: {
+			required: (): boolean => {
+				// At least one of expoReport/emailReport is required.
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore Using this syntax from mongoose docs.
+				return !this.expoReport;
+			},
 			type: EmailReportSchema,
 		},
 	},

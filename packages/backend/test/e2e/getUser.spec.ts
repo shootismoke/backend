@@ -10,6 +10,8 @@ let dbAlice: IUser;
 
 describe('users::getUser', () => {
 	beforeAll(async (done) => {
+		jest.setTimeout(30000);
+
 		await connectToDatabase();
 		await connection.dropDatabase();
 
@@ -59,4 +61,5 @@ describe('users::getUser', () => {
 	});
 
 	afterAll(() => connection.close());
+	afterAll(() => jest.setTimeout(5000));
 });

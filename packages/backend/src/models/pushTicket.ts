@@ -1,5 +1,6 @@
 import { MongoPushTicket } from '@shootismoke/types';
 import { model, Schema } from 'mongoose';
+import { v4 } from 'node-uuid';
 
 const PushTicketErrorDetailsSchema = new Schema({
 	error: {
@@ -18,6 +19,10 @@ const PushTicketErrorDetailsSchema = new Schema({
  */
 const PushTicketSchema = new Schema(
 	{
+		_id: {
+			type: Schema.Types.String,
+			default: v4, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+		},
 		/**
 		 * Error details.
 		 */

@@ -22,6 +22,8 @@ function testBadInput<T>(name: string, input: T, expErr: string) {
 
 describe('users::createUser', () => {
 	beforeAll(async (done) => {
+		jest.setTimeout(30000);
+
 		await connectToDatabase();
 		await connection.dropDatabase();
 
@@ -48,6 +50,11 @@ describe('users::createUser', () => {
 		'invalid timezone',
 		{ ...alice, timezone: 'foo' },
 		'timezone: `foo` is not a valid enum value for path `timezone`'
+	);
+	testBadInput(
+		'no emailReport nor expoReport',
+		{ ...alice, emailReport: undefined, expoReport: undefined },
+		'ABC'
 	);
 	testBadInput(
 		'no email',
@@ -100,4 +107,5 @@ describe('users::createUser', () => {
 	);
 
 	afterAll(() => connection.close());
+	afterAll(() => jest.setTimeout(5000));
 });
