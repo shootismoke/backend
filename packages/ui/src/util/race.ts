@@ -44,7 +44,7 @@ const NORMALIZED_WITHIN_HOURS = 6;
  *
  * @param normalized - The normalized data to process
  */
-function createApi(gps: LatLng, normalized: Normalized): Api {
+export function createApi(gps: LatLng, normalized: Normalized): Api {
 	const now = new Date();
 	const sanitizedNormalized = normalized
 		// From the normalized data, remove the entries that are too old.

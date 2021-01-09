@@ -17,7 +17,8 @@ export interface IExpoReport {
 	frequency: Frequency;
 }
 
-export interface IUser extends Document {
+export interface IUser {
+	_id: string;
 	emailReport?: IEmailReport;
 	expoReport?: IExpoReport;
 	lastStationId: string;
@@ -36,4 +37,6 @@ export type IPushTicket = Omit<
 	'id'
 >;
 
-export interface MongoPushTicket extends IPushTicket, Document {}
+export interface MongoPushTicket extends IPushTicket, Document {
+	_id: string;
+}
