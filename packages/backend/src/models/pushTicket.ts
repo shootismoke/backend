@@ -36,13 +36,13 @@ const PushTicketSchema = new Schema(
 			type: Schema.Types.String,
 		},
 		/**
-		 * Receipt id.
+		 * Receipt id, only present with an 'ok' ticket.
 		 */
 		receiptId: {
 			type: Schema.Types.String,
 		},
 		/**
-		 * Ticket status
+		 * Ticket status.
 		 */
 		status: {
 			enum: ['ok', 'error'],

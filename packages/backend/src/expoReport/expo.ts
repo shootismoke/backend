@@ -12,14 +12,6 @@ import {
 import { logger } from '../util';
 
 /**
- * An Expo message associated with the user.
- */
-export interface UserExpoMessage {
-	userId: string;
-	pushMessage: ExpoPushMessage;
-}
-
-/**
  * Generate the body of the push notification message.
  */
 function getMessageBody(pm25: number, frequency: Frequency): string {
@@ -37,7 +29,7 @@ function getMessageBody(pm25: number, frequency: Frequency): string {
 /**
  * A user that has notifications.
  */
-interface UserWithExpoReport extends IUser {
+interface IUserWithExpoReport extends IUser {
 	expoReport: IExpoReport;
 }
 
@@ -48,7 +40,7 @@ interface UserWithExpoReport extends IUser {
  */
 function assertUserWithExpoReport(
 	user: IUser
-): asserts user is UserWithExpoReport {
+): asserts user is IUserWithExpoReport {
 	if (!user.expoReport) {
 		throw new Error(
 			`User ${user._id} has notifications, as per our db query. qed.`
@@ -61,7 +53,7 @@ function assertUserWithExpoReport(
  *
  * @param user - The user to construct the message for
  */
-export function constructExpoMessage(
+export function constructExpoPushMessage(
 	user: IUser,
 	pm25: number
 ): ExpoPushMessage {
@@ -90,6 +82,7 @@ export function constructExpoMessage(
  * Send a batch of messages (push notifications) to Expo's servers.
  *
  * @see https://github.com/expo/expo-server-sdk-node
+ * @param expo - An instance of the Expo class.
  * @param messages - The messages to send.
  */
 export async function sendBatchToExpo(

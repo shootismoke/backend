@@ -2,7 +2,7 @@ import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushSuccessTicket } from 'expo-server-sdk';
 
 import {
-	expoMessageForUser,
+	expoPushMessageForUser,
 	isWhitelisted,
 	sendBatchToExpo,
 } from '../src/expoReport';
@@ -43,21 +43,26 @@ export default async function push(
 				// current time of execution of this function matches the cron
 				// expression in the DB for this user?
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-				const user = await User.findById(req.body.userId).exec();
-				assertUser(user, req.query.userId as string);
+				const user = await User.findById(req.body?.userId).exec();
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+				assertUser(user, req.body?.userId as string);
 
 				// Craft a push notification message for each user
-				const message = await expoMessageForUser(user);
+				const message = await expoPushMessageForUser(user);
 
 				// We use the sendBatch function, but we actually only send one push
 				// notification.
-				const [ticket] = await sendBatchToExpo(new Expo(), [
-					message.pushMessage,
-				]);
+				const [ticket] = await sendBatchToExpo(new Expo(), [message]);
+				if (!ticket) {
+					throw new Error(
+						`User ${user._id}: Error sending push message to Expo servers`
+					);
+				}
+
 				const pushTicket = new PushTicket({
 					...ticket,
 					receiptId: (ticket as ExpoPushSuccessTicket).id,
-					userId: message.pushMessage,
+					userId: message,
 				});
 				await pushTicket.save();
 

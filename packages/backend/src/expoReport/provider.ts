@@ -3,8 +3,9 @@ import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
 import { IUser } from '@shootismoke/types';
 import { Api, createApi } from '@shootismoke/ui';
 import retry from 'async-retry';
+import { ExpoPushMessage } from 'expo-server-sdk';
 
-import { constructExpoMessage, UserExpoMessage } from './expo';
+import { constructExpoPushMessage } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 
@@ -39,6 +40,17 @@ async function providerFetch(
 	return createApi({ latitude: 0, longitude: 0 }, normalized);
 }
 
+function assertKnownProvider(
+	provider: string,
+	universalId: string
+): asserts provider is AllProviders {
+	if (!AllProviders.includes(provider)) {
+		throw new Error(
+			`universalFetch: Unrecognized universalId "${universalId}".`
+		);
+	}
+}
+
 /**
  * Fetch data from correct provider, based on universalId.
  *
@@ -46,14 +58,9 @@ async function providerFetch(
  */
 async function universalFetch(universalId: string): Promise<Api> {
 	const [provider, station] = universalId.split('|');
+	assertKnownProvider(provider, universalId);
 
-	if (!AllProviders.includes(provider)) {
-		throw new Error(
-			`universalFetch: Unrecognized universalId "${universalId}".`
-		);
-	}
-
-	return await providerFetch(provider as AllProviders, station);
+	return providerFetch(provider, station);
 }
 
 /**
@@ -61,36 +68,24 @@ async function universalFetch(universalId: string): Promise<Api> {
  *
  * @param user - User in our DB.
  */
-export async function expoMessageForUser(
+export async function expoPushMessageForUser(
 	user: IUser
-): Promise<UserExpoMessage> {
+): Promise<ExpoPushMessage> {
 	try {
 		// Find the PM2.5 value at the user's last known station (universalId)
-		const pm25 = await Promise.race([
-			// If anything throws, we retry
-			retry(
-				async () => {
-					const {
-						pm25: { value },
-					} = await universalFetch(user.lastStationId);
+		// If anything throws, we retry
+		const pm25 = await retry(
+			async () => {
+				const {
+					pm25: { value },
+				} = await universalFetch(user.lastStationId);
 
-					return value;
-				},
-				{ retries: 5 }
-			),
-			// Timeout after 9s, because the whole Vercel Now function only runs 10s
-			new Promise<number>((_resolve, reject) =>
-				setTimeout(
-					() => reject(new Error('universalFetch timed out')),
-					9000
-				)
-			),
-		]);
+				return value;
+			},
+			{ retries: 5 }
+		);
 
-		return {
-			userId: user._id,
-			pushMessage: constructExpoMessage(user, pm25),
-		};
+		return constructExpoPushMessage(user, pm25);
 	} catch (error) {
 		throw new Error(`User ${user._id}: ${(error as Error).message}`);
 	}
