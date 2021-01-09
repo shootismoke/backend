@@ -19,8 +19,8 @@
  * a PM2.5 level of 22ug/m3.
  *
  * @see https://berkeleyearth.org/air-pollution-and-cigarette-equivalence/
- * @param rawPm25 - The raw PM2.5 level, in ug/m3.
+ * @param pm25 - The raw PM2.5 level, in ug/m3.
  */
-export function pm25ToCigarettes(rawPm25: number): number {
-	return rawPm25 / 22;
+export function pm25ToCigarettes(pm25: number): number {
+	return pm25 / 22;
 }

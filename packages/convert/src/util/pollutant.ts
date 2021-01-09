@@ -165,7 +165,7 @@ export function getPollutantMeta(pollutant: Pollutant): PollutantMeta {
 
 /**
  * Check if the input pollutant is a recognized pollutant which we can convert
- * AQI to/from raw concentrations.
+ * AQI to/from concentrations.
  *
  * @param pollutant - The pollutant to test.
  */

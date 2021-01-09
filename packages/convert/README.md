@@ -32,28 +32,28 @@ The package mainly exports the `convert` function.
 
 The function can convert, for any pollutant:
 
--   from a raw concentration to a supported AQI
--   from a supported AQI to a raw concentration
+-   from a concentration (e.g. `ugm3`) to a supported AQI
+-   from a supported AQI to a concentration (e.g. `ugm3`)
 -   from a supported AQI to another AQI
 
 Arguments:
 
 -   `pollutant: Pollutant`: One of the supported pollutants, [see them](#supported-pollutants).
--   `from: AqiCode | 'raw'`: An AQI code or the `'raw'` string
--   `to: AqiCode | 'raw'`: An AQI code or the `'raw'` string
+-   `from: AqiCode | 'ugm3'`: An AQI code or the `'ugm3'` string
+-   `to: AqiCode | 'ugm3'`: An AQI code or the `'ugm3'` string
 -   `value: number`: The value to convert
 
 ```typescript
 import { convert, getPollutantMeta } from '@shootismoke/convert';
 
-// Convert PM2.5 from usaEpa AQI to raw concentration
-const raw = convert('pm25', 'usaEpa', 'raw', 57);
-console.log(raw); // 15
+// Convert PM2.5 from usaEpa AQI to ugm3 concentration
+const ugm3 = convert('pm25', 'usaEpa', 'ugm3', 57);
+console.log(ugm3); // 15
 
 console.log(getPollutantMeta('pm25').preferredUnit); // "µg/m³", which is the unit of the value 15 above
 
-// Convert PM2.5 from raw concentration to usaEPA AQI
-const aqi = convert('pm25', 'raw', 'usaEpa', 15);
+// Convert PM2.5 from ugm3 concentration to usaEPA AQI
+const aqi = convert('pm25', 'ugm3', 'usaEpa', 15);
 console.log(aqi); // 57
 ```
 

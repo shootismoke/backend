@@ -80,7 +80,7 @@ export function normalize(data: ByStation): E.Either<Error, Normalized> {
 			)
 		);
 	}
-	const countryRaw = sanitizeCountry(
+	const countryUgm3 = sanitizeCountry(
 		data.city.url.split(AQICN_DOMAIN)[1].split('/')[0]
 	);
 
@@ -92,9 +92,12 @@ export function normalize(data: ByStation): E.Either<Error, Normalized> {
 	);
 
 	return pipe(
-		getCountryCode(countryRaw),
+		getCountryCode(countryUgm3),
 		E.fromOption(() =>
-			providerError('aqicn', `Cannot get code from country ${countryRaw}`)
+			providerError(
+				'aqicn',
+				`Cannot get code from country ${countryUgm3}`
+			)
 		),
 		E.map(
 			(country) =>
@@ -125,7 +128,7 @@ export function normalize(data: ByStation): E.Either<Error, Normalized> {
 						parameter: pollutant,
 						sourceName: 'aqicn',
 						sourceType: 'other',
-						value: convert(pollutant, 'usaEpa', 'raw', v),
+						value: convert(pollutant, 'usaEpa', 'ugm3', v),
 						unit: getPollutantMeta(pollutant).preferredUnit,
 					};
 				}) as Normalized

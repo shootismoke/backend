@@ -2,7 +2,7 @@
 	"name": "@shootismoke/convert",
 	"version": "0.6.1",
 	"author": "Amaury M <amaury@shootismoke.app>",
-	"description": "Easily convert between AQIs (US, CN...) and raw values (ug/m3, ppm)",
+	"description": "Easily convert between AQIs (US, CN...) and concentration values (ug/m3, ppm)",
 	"files": [
 		"lib/"
 	],

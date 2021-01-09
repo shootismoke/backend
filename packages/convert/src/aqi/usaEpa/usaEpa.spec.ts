@@ -34,7 +34,7 @@ describe('Convert pm25', () => {
 	});
 
 	it('should throw an error on unknown pollutant', () => {
-		expect(() => convert('nmhc', 'usaEpa', 'raw', 23)).toThrowError(
+		expect(() => convert('nmhc', 'usaEpa', 'ugm3', 23)).toThrowError(
 			'usaEpa does not apply to pollutant nmhc'
 		);
 	});

@@ -33,8 +33,8 @@ function getSortedNormalized(normalized: Normalized): OpenAQFormat[] {
 	// Sort the array by AQI.
 	unsorted.sort(
 		(a, b) =>
-			convert(b.parameter, 'raw', 'usaEpa', b.value) -
-			convert(a.parameter, 'raw', 'usaEpa', a.value)
+			convert(b.parameter, 'ugm3', 'usaEpa', b.value) -
+			convert(a.parameter, 'ugm3', 'usaEpa', a.value)
 	);
 
 	return unsorted;
@@ -50,7 +50,7 @@ export function getAQI(normalized: Normalized): number {
 	const sorted = getSortedNormalized(normalized);
 
 	if (sorted[0]) {
-		return convert(sorted[0].parameter, 'raw', 'usaEpa', sorted[0].value);
+		return convert(sorted[0].parameter, 'ugm3', 'usaEpa', sorted[0].value);
 	} else {
 		// If the `unsorted` array doesn't contain any pollutants, then we just
 		// fallback to taking the 1st element's value. This is often not even

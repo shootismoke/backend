@@ -38,14 +38,14 @@ function getRange(breakpoints: Piecewise): [number, number] {
 }
 
 /**
- * Convert an AQI to raw concentration using breakpoints
+ * Convert an AQI to ugm3 concentration using breakpoints
  *
  * @param value - AQI value to convert
  * @param breakpoints - Breakpoints defining the AQI
  */
-function toRaw(
+function toUgm3(
 	aqiPiecewise: Piecewise,
-	rawPiecewise: Piecewise,
+	ugm3Piecewise: Piecewise,
 	value: number
 ): number {
 	// Find the segment in which the `aqi` is
@@ -64,29 +64,30 @@ function toRaw(
 	}
 
 	const [aqiLow, aqiHigh] = aqiPiecewise[segment];
-	const [rawLow, rawHigh] = rawPiecewise[segment];
+	const [ugm3Low, ugm3High] = ugm3Piecewise[segment];
 
 	// Round to closest 0.1
 	return round(
-		((value - aqiLow) / (aqiHigh - aqiLow)) * (rawHigh - rawLow) + rawLow,
+		((value - aqiLow) / (aqiHigh - aqiLow)) * (ugm3High - ugm3Low) +
+			ugm3Low,
 		1
 	);
 }
 
 /**
- * Convert raw concentration to AQI using breakpoints
+ * Convert ugm3 concentration to AQI using breakpoints
  *
- * @param raw - The raw value to convert
+ * @param ugm3 - The ugm3 value to convert
  * @param breakpoints - Breakpoints defining the AQI
  */
-function fromRaw(
+function fromUgm3(
 	aqiPiecewise: Piecewise,
-	rawPiecewise: Piecewise,
-	raw: number
+	ugm3Piecewise: Piecewise,
+	ugm3: number
 ): number {
 	// Find the segment in which the `aqi` is
-	const segment = rawPiecewise.findIndex(
-		([rawLow, rawHigh]) => rawLow <= raw && raw <= rawHigh
+	const segment = ugm3Piecewise.findIndex(
+		([ugm3Low, ugm3High]) => ugm3Low <= ugm3 && ugm3 <= ugm3High
 	);
 
 	if (segment === -1) {
@@ -96,15 +97,15 @@ function fromRaw(
 		// micrograms per cubic meter) or the AQI is simply set at 500.
 		// We take the 1st convention here.
 		// We also do the same for other pollutants
-		return raw;
+		return ugm3;
 	}
 
 	const [aqiLow, aqiHigh] = aqiPiecewise[segment];
-	const [rawLow, rawHigh] = rawPiecewise[segment];
+	const [ugm3Low, ugm3High] = ugm3Piecewise[segment];
 
 	// Round to closest integer
 	return round(
-		((aqiHigh - aqiLow) / (rawHigh - rawLow)) * (raw - rawLow) + aqiLow
+		((aqiHigh - aqiLow) / (ugm3High - ugm3Low)) * (ugm3 - ugm3Low) + aqiLow
 	);
 }
 
@@ -136,16 +137,16 @@ export function createAqiFromBreakpoints(
 ): Omit<Aqi, 'displayName'> {
 	return {
 		pollutants: Object.keys(breakpoints) as Pollutant[],
-		fromRaw(pollutant: Pollutant, raw: number): number {
+		fromUgm3(pollutant: Pollutant, ugm3: number): number {
 			assertTracked(aqiCode, pollutant, breakpoints);
 
-			return fromRaw(breakpoints.aqi, breakpoints[pollutant], raw);
+			return fromUgm3(breakpoints.aqi, breakpoints[pollutant], ugm3);
 		},
 		range: getRange(breakpoints.aqi),
-		toRaw(pollutant: Pollutant, value: number): number {
+		toUgm3(pollutant: Pollutant, value: number): number {
 			assertTracked(aqiCode, pollutant, breakpoints);
 
-			return toRaw(breakpoints.aqi, breakpoints[pollutant], value);
+			return toUgm3(breakpoints.aqi, breakpoints[pollutant], value);
 		},
 	};
 }

@@ -33,8 +33,8 @@ export function normalize({
 	}
 
 	const aqiUS = +data.v;
-	// Calculate pm25 raw value to get cigarettes value
-	const raw = convert('pm25', 'usaEpa', 'raw', aqiUS);
+	// Calculate pm25 ugm3 value to get cigarettes value
+	const ugm3 = convert('pm25', 'usaEpa', 'ugm3', aqiUS);
 
 	if (!data.u.includes('/')) {
 		return E.left(
@@ -44,15 +44,15 @@ export function normalize({
 			)
 		);
 	}
-	const [countryRaw, city] = data.u.split('/');
+	const [countryUgm3, city] = data.u.split('/');
 
 	// Get UTC time
 	const utc = new Date(+data.t * 1000).toISOString();
 
 	return pipe(
-		getCountryCode(countryRaw),
+		getCountryCode(countryUgm3),
 		E.fromOption(() =>
-			providerError('waqi', `Cannot get code from country ${countryRaw}`)
+			providerError('waqi', `Cannot get code from country ${countryUgm3}`)
 		),
 		E.map((country) => [
 			{
@@ -77,7 +77,7 @@ export function normalize({
 				sourceName: 'waqi',
 				sourceType: 'other',
 				unit: getPollutantMeta(data.pol as Pollutant).preferredUnit,
-				value: raw,
+				value: ugm3,
 			},
 		])
 	);
