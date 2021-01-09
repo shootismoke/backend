@@ -1,5 +1,5 @@
-import { IUser } from '@shootismoke/types';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
+import { IUser } from '@shootismoke/types';
 
 import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
 
@@ -11,12 +11,12 @@ describe('constructExpoMessage', () => {
 			frequency: 'daily',
 		},
 		timezone: 'Europe/Berlin',
-		universalId: 'openaq|FR04143',
-	};
+		lastStationId: 'openaq|FR04143',
+	} as IUser;
 
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
-			constructExpoMessage({ ...user, notifications: undefined }, 42)
+			constructExpoMessage({ ...user, expoReport: undefined }, 42)
 		).toThrowError(
 			new Error('User alice has notifications, as per our db query. qed.')
 		);
@@ -25,13 +25,13 @@ describe('constructExpoMessage', () => {
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
 			constructExpoMessage(
-				({
+				{
 					...user,
-					notifications: {
-						...user.notifications,
+					expoReport: {
+						...user.expoReport,
 						expoPushToken: 'foo',
 					},
-				} as unknown) as IUser,
+				} as IUser,
 				42
 			)
 		).toThrowError(new Error('Invalid ExpoPushToken: foo'));
@@ -49,13 +49,13 @@ describe('constructExpoMessage', () => {
 	it('should work for weekly', () => {
 		expect(
 			constructExpoMessage(
-				({
+				{
 					...user,
-					notifications: {
-						...user.notifications,
+					expoReport: {
+						...user.expoReport,
 						frequency: 'weekly',
 					},
-				} as unknown) as IUser,
+				} as IUser,
 				42
 			)
 		).toEqual({
@@ -69,13 +69,13 @@ describe('constructExpoMessage', () => {
 	it('should work for monthly', () => {
 		expect(
 			constructExpoMessage(
-				({
+				{
 					...user,
-					notifications: {
-						...user.notifications,
+					expoReport: {
+						...user.expoReport,
 						frequency: 'monthly',
 					},
-				} as unknown) as IUser,
+				} as IUser,
 				42
 			)
 		).toEqual({

@@ -1,8 +1,9 @@
-import { AllProviders, OpenAQFormat } from '@shootismoke/dataproviders';
+import { AllProviders } from '@shootismoke/dataproviders';
 import { aqicn, openaq, waqi } from '@shootismoke/dataproviders/lib/promise';
+import { IUser } from '@shootismoke/types';
+import { Api, createApi } from '@shootismoke/ui';
 import retry from 'async-retry';
 
-import { IUser } from '../models';
 import { constructExpoMessage, UserExpoMessage } from './expo';
 
 type AllProviders = 'aqicn' | 'openaq' | 'waqi';
@@ -17,7 +18,7 @@ type AllProviders = 'aqicn' | 'openaq' | 'waqi';
 async function providerFetch(
 	provider: AllProviders,
 	station: string
-): Promise<OpenAQFormat> {
+): Promise<Api> {
 	const normalized =
 		provider === 'aqicn'
 			? aqicn.normalizeByStation(
@@ -34,15 +35,8 @@ async function providerFetch(
 					})
 			  );
 
-	const pm25 = normalized.filter(({ parameter }) => parameter === 'pm25');
-
-	if (pm25.length) {
-		return pm25[0];
-	} else {
-		throw new Error(
-			`PM2.5 has not been measured by station ${normalized[0].location} right now`
-		);
-	}
+	// Gps coordinates are irrelevant for expo report.
+	return createApi({ latitude: 0, longitude: 0 }, normalized);
 }
 
 /**
@@ -50,7 +44,7 @@ async function providerFetch(
  *
  * @param universalId - The universalId of the station
  */
-async function universalFetch(universalId: string): Promise<OpenAQFormat> {
+async function universalFetch(universalId: string): Promise<Api> {
 	const [provider, station] = universalId.split('|');
 
 	if (!AllProviders.includes(provider)) {
@@ -76,7 +70,9 @@ export async function expoMessageForUser(
 			// If anything throws, we retry
 			retry(
 				async () => {
-					const { value } = await universalFetch(user.lastStationId);
+					const {
+						pm25: { value },
+					} = await universalFetch(user.lastStationId);
 
 					return value;
 				},

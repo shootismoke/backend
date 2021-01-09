@@ -1,8 +1,9 @@
+import { IPushTicket } from '@shootismoke/types';
 import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushReceiptId } from 'expo-server-sdk';
 
 import { handleReceipts } from '../src/expoReport';
-import { IPushTicket, PushTicket } from '../src/models';
+import { PushTicket } from '../src/models';
 import { connectToDatabase, logger, sentrySetup } from '../src/util';
 
 sentrySetup();

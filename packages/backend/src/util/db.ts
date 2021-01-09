@@ -1,6 +1,6 @@
 import { connect, connection } from 'mongoose';
 
-import { IUser } from '../models';
+import { IUser } from '@shootismoke/types';
 import { logger } from './logger';
 
 /**

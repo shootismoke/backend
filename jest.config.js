@@ -10,7 +10,14 @@ module.exports = {
 		'!**/index.ts', // index.ts only re-exports stuff
 		'!**/testUtil.ts', // These files are used in tests
 	],
-	setupFiles: ['./packages/backend/e2e/util/setup.ts'],
+	moduleNameMapper: {
+		'@shootismoke/convert$': '<rootDir>/packages/convert/src/index.ts',
+		'@shootismoke/dataproviders$':
+			'<rootDir>/packages/dataproviders/src/index.ts',
+		'@shootismoke/types$': '<rootDir>/packages/types/src/index.ts',
+		'@shootismoke/ui$': '<rootDir>/packages/ui/src/index.ts',
+	},
+	setupFiles: ['./packages/backend/test/e2e/util/setup.ts'],
 	testEnvironment: 'node',
 	testMatch: ['**/*.spec.ts'],
 };
