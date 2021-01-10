@@ -7,9 +7,7 @@ import { openaq } from '../../src/providers/openaq';
 import { testProviderE2E } from '../../src/util';
 
 describe('openaq e2e', () => {
-	beforeAll(() => {
-		jest.setTimeout(30000); // Some requests might take a bit longer
-	});
+	beforeAll(() => jest.setTimeout(30000));
 
 	testProviderE2E(openaq, {
 		skip: ['fetchByStation'],
@@ -73,7 +71,5 @@ describe('openaq e2e', () => {
 		)().catch(console.error);
 	});
 
-	afterAll(() => {
-		jest.setTimeout(5000);
-	});
+	afterAll(() => jest.setTimeout(5000));
 });

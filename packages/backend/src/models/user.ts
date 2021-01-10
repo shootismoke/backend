@@ -56,7 +56,7 @@ const ExpoReportSchema = new Schema({
 	},
 });
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<MongoUser>(
 	{
 		_id: {
 			type: Schema.Types.String,
@@ -93,28 +93,19 @@ const UserSchema = new Schema(
 		 * User's Expo repots preferences.
 		 */
 		expoReport: {
-			required: (): boolean => {
-				// At least one of expoReport/emailReport is required.
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore Using this syntax from mongoose docs.
-				return !this.emailReport;
-			},
 			type: ExpoReportSchema,
 		},
 		/**
 		 * User's email repots preferences.
 		 */
 		emailReport: {
-			required: (): boolean => {
-				// At least one of expoReport/emailReport is required.
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore Using this syntax from mongoose docs.
-				return !this.expoReport;
-			},
 			type: EmailReportSchema,
 		},
 	},
 	{ strict: 'throw', timestamps: true }
 );
+
+// Send an API call to EasyCron to set up cron jobs for this user.
+UserSchema.pre('save', async () => {});
 
 export const User = model<MongoUser>('User', UserSchema);

@@ -1,24 +1,26 @@
 import { aqicn, openaq } from '../../src/promise';
 
 describe('promise', () => {
-	describe('e2e', () => {
-		it('should resolve correctly', async (done) => {
-			const data = await openaq.fetchByStation('Beijing');
-			expect(data.results.length).toBeGreaterThanOrEqual(1);
+	beforeAll(() => jest.setTimeout(30000));
 
-			const results = openaq.normalizeByStation(data);
-			expect(results[0].value).toBeDefined();
+	it('should resolve correctly', async (done) => {
+		const data = await openaq.fetchByStation('Beijing');
+		expect(data.results.length).toBeGreaterThanOrEqual(1);
 
-			done();
-		});
+		const results = openaq.normalizeByStation(data);
+		expect(results[0].value).toBeDefined();
 
-		it('should reject on missing token', async (done) => {
-			try {
-				await aqicn.fetchByGps({ latitude: 1, longitude: 1 });
-			} catch (error) {
-				expect(error).toEqual(new Error('AqiCN requires a token'));
-				done();
-			}
-		});
+		done();
 	});
+
+	it('should reject on missing token', async (done) => {
+		try {
+			await aqicn.fetchByGps({ latitude: 1, longitude: 1 });
+		} catch (error) {
+			expect(error).toEqual(new Error('AqiCN requires a token'));
+			done();
+		}
+	});
+
+	afterAll(() => jest.setTimeout(5000));
 });

@@ -60,7 +60,7 @@ const PushTicketSchema = new Schema(
 		userId: {
 			ref: 'User',
 			required: true,
-			type: Schema.Types.ObjectId,
+			type: Schema.Types.String,
 		},
 	},
 	{ strict: 'throw', timestamps: true }

@@ -35,7 +35,7 @@ export default async function usersUserId(
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				assignDeep(user, req.body);
 
-				const newUser = await user.save({ validateBeforeSave: true });
+				const newUser = await user.save();
 
 				// Everytime we update user, we also delete all the pushTickets he/she
 				// might have.

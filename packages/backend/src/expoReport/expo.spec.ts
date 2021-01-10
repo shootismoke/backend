@@ -1,9 +1,13 @@
 import { IUser } from '@shootismoke/types';
 import Expo, { ExpoPushMessage } from 'expo-server-sdk';
 
-import { constructExpoMessage, handleReceipts, sendBatchToExpo } from './expo';
+import {
+	constructExpoPushMessage,
+	handleReceipts,
+	sendBatchToExpo,
+} from './expo';
 
-describe('constructExpoMessage', () => {
+describe('constructExpoPushMessage', () => {
 	const user = {
 		_id: 'alice',
 		expoReport: {
@@ -16,7 +20,7 @@ describe('constructExpoMessage', () => {
 
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
-			constructExpoMessage({ ...user, expoReport: undefined }, 42)
+			constructExpoPushMessage({ ...user, expoReport: undefined }, 42)
 		).toThrowError(
 			new Error('User alice has notifications, as per our db query. qed.')
 		);
@@ -24,7 +28,7 @@ describe('constructExpoMessage', () => {
 
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
-			constructExpoMessage(
+			constructExpoPushMessage(
 				{
 					...user,
 					expoReport: {
@@ -38,7 +42,7 @@ describe('constructExpoMessage', () => {
 	});
 
 	it('should work for daily', () => {
-		expect(constructExpoMessage(user, 42)).toEqual({
+		expect(constructExpoPushMessage(user, 42)).toEqual({
 			body: "Shoot! You'll smoke 1.9 cigarettes today",
 			sound: 'default',
 			title: 'Daily forecast',
@@ -48,7 +52,7 @@ describe('constructExpoMessage', () => {
 
 	it('should work for weekly', () => {
 		expect(
-			constructExpoMessage(
+			constructExpoPushMessage(
 				{
 					...user,
 					expoReport: {
@@ -68,7 +72,7 @@ describe('constructExpoMessage', () => {
 
 	it('should work for monthly', () => {
 		expect(
-			constructExpoMessage(
+			constructExpoPushMessage(
 				{
 					...user,
 					expoReport: {

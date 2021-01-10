@@ -43,7 +43,7 @@ describe('users::getUser', () => {
 			const e = err as AxiosError<BackendError>;
 			expect(e.response?.status).toBe(500);
 			expect(e.response?.data.error).toContain(
-				'Cast to ObjectId failed for value'
+				'No user with userId "foo" found'
 			);
 			done();
 		}

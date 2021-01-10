@@ -8,6 +8,8 @@ const options = {
 };
 
 describe('aqicn e2e', () => {
+	beforeAll(() => jest.setTimeout(30000));
+
 	it('should return an error with an unknown station', async (done) => {
 		expect(await aqicn.fetchByStation('foo', options)()).toEqual(
 			E.left(new Error('Unknown station'))
@@ -29,4 +31,6 @@ describe('aqicn e2e', () => {
 	});
 
 	testProviderE2E(aqicn, { options });
+
+	afterAll(() => jest.setTimeout(5000));
 });

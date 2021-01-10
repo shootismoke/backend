@@ -52,11 +52,6 @@ describe('users::createUser', () => {
 		'timezone: `foo` is not a valid enum value for path `timezone`'
 	);
 	testBadInput(
-		'no emailReport nor expoReport',
-		{ ...alice, emailReport: undefined, expoReport: undefined },
-		'ABC'
-	);
-	testBadInput(
 		'no email',
 		{ ...alice, emailReport: { ...alice.emailReport, email: undefined } },
 		'emailReport.email: Path `email` is required'

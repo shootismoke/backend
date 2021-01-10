@@ -1,24 +1,18 @@
 import { NowRequest, NowResponse } from '@vercel/node';
 import { Expo, ExpoPushSuccessTicket } from 'expo-server-sdk';
 
-import {
-	expoPushMessageForUser,
-	isWhitelisted,
-	sendBatchToExpo,
-} from '../src/expoReport';
+import { expoPushMessageForUser, sendBatchToExpo } from '../src/expoReport';
 import { PushTicket, User } from '../src/models';
 import {
 	assertUser,
 	connectToDatabase,
+	isWhitelisted,
 	logger,
 	sentrySetup,
 } from '../src/util';
 
 sentrySetup();
 
-/**
- * Send push notifications to a particular user.
- */
 export default async function push(
 	req: NowRequest,
 	res: NowResponse
@@ -35,6 +29,9 @@ export default async function push(
 		}
 
 		switch (req.method) {
+			/**
+			 * Send push notifications to one user.
+			 */
 			case 'POST': {
 				await connectToDatabase();
 
