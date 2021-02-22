@@ -5033,10 +5033,10 @@ expect@^25.5.0:
     jest-message-util "^25.5.0"
     jest-regex-util "^25.2.6"
 
-expo-server-sdk@^3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/expo-server-sdk/-/expo-server-sdk-3.5.1.tgz#33a3317a406e4bb8882d3799acb6eead70d509ce"
-  integrity sha512-U8iyR23d7KqBmuRp2kKydxg1lp0VcUg9LLaCMIccfAbJqrlYcrQ5RYeQ+lYkQT7Y+a9hRB+A1G9v/JKNYXg2ag==
+expo-server-sdk@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/expo-server-sdk/-/expo-server-sdk-3.6.0.tgz#b13e5e77f622d11009bdd533df857b08225a4d00"
+  integrity sha512-GyA0BTcFBKk/5gTEO4WOScP9hEttR+GitrcOIl7XwXwE1FHFvbluKiUc9yEjsfEYMgyd78+XhSpGVGQnutGOdA==
   dependencies:
     node-fetch "^2.6.0"
     promise-limit "^2.7.0"
