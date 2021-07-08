@@ -31,7 +31,7 @@ describe('Promise.allSettled', () => {
 });
 
 describe('constructExpoMessage', () => {
-	const user = ({
+	const user = {
 		_id: 'alice',
 		expoInstallationId: 'id_alice',
 		notifications: {
@@ -40,12 +40,12 @@ describe('constructExpoMessage', () => {
 			timezone: 'Europe/Berlin',
 			universalId: 'openaq|FR04143',
 		},
-	} as unknown) as User & Document;
+	} as unknown as User & Document;
 
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
 			constructExpoMessage(
-				({ ...user, notifications: undefined } as unknown) as User &
+				{ ...user, notifications: undefined } as unknown as User &
 					Document,
 				42
 			)
@@ -57,13 +57,13 @@ describe('constructExpoMessage', () => {
 	it('should return Error on wrong notifications', () => {
 		expect(() =>
 			constructExpoMessage(
-				({
+				{
 					...user,
 					notifications: {
 						...user.notifications,
 						expoPushToken: 'foo',
 					},
-				} as unknown) as User & Document,
+				} as unknown as User & Document,
 				42
 			)
 		).toThrowError(new Error('Invalid ExpoPushToken: foo'));
@@ -81,13 +81,13 @@ describe('constructExpoMessage', () => {
 	it('should work for weekly', () => {
 		expect(
 			constructExpoMessage(
-				({
+				{
 					...user,
 					notifications: {
 						...user.notifications,
 						frequency: 'weekly',
 					},
-				} as unknown) as User & Document,
+				} as unknown as User & Document,
 				42
 			)
 		).toEqual({
@@ -101,13 +101,13 @@ describe('constructExpoMessage', () => {
 	it('should work for monthly', () => {
 		expect(
 			constructExpoMessage(
-				({
+				{
 					...user,
 					notifications: {
 						...user.notifications,
 						frequency: 'monthly',
 					},
-				} as unknown) as User & Document,
+				} as unknown as User & Document,
 				42
 			)
 		).toEqual({
@@ -121,12 +121,12 @@ describe('constructExpoMessage', () => {
 
 describe('sendBatchToExpo', () => {
 	it('should call sendPushNotificationsAsync', async (done) => {
-		const expo = ({
+		const expo = {
 			chunkPushNotifications: jest.fn(<T>(a: T[]) =>
 				a.map((value) => [value])
 			),
 			sendPushNotificationsAsync: jest.fn(() => Promise.resolve([])),
-		} as unknown) as Expo;
+		} as unknown as Expo;
 
 		const messages: ExpoPushMessage[] = [{ to: 'foo' }, { to: 'bar' }];
 		await sendBatchToExpo(expo, messages);
@@ -143,14 +143,14 @@ describe('handleReceipts', () => {
 			receiptA: { status: 'ok' },
 			receiptB: { status: 'error', message: 'foo' },
 		};
-		const expo = ({
+		const expo = {
 			chunkPushNotificationReceiptIds: jest.fn(() => [
 				Object.keys(receipts),
 			]),
 			getPushNotificationReceiptsAsync: jest.fn(() =>
 				Promise.resolve(receipts)
 			),
-		} as unknown) as Expo;
+		} as unknown as Expo;
 		const onOk = jest.fn();
 		const onError = jest.fn();
 

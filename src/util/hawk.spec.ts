@@ -27,7 +27,7 @@ function createReq({
 		}
 	);
 
-	return ({
+	return {
 		headers: {
 			host: 'example.com',
 			authorization: header,
@@ -36,7 +36,7 @@ function createReq({
 		nonce: 'Ygvqdz',
 		port: 80,
 		url: '/resource/4?filter=a',
-	} as unknown) as Request;
+	} as unknown as Request;
 }
 
 describe('hawk', () => {
