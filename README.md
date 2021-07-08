@@ -4,6 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/dfeff2fb9de150607af9/maintainability)](https://codeclimate.com/github/shootismoke/backend/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/dfeff2fb9de150607af9/test_coverage)](https://codeclimate.com/github/shootismoke/backend/test_coverage)
 
+# ⚠️ This repo is deprecated in favor of https://github.com/shootismoke/webapp
+
 # @shootismoke/backend
 
 Backend for the [Sh\*\*t! I Smoke](https://shootismoke.github.io) mobile app.
