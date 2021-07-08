@@ -1,6 +1,7 @@
 {
 	"extends": "./node_modules/@amaurym/tsconfig/tsconfig",
 	"compilerOptions": {
-		"lib": ["es2020.promise"]
+		"lib": ["es2019", "es2020.promise"],
+		"skipLibCheck": true
 	}
 }
