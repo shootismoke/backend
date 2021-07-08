@@ -41,8 +41,8 @@ const NotificationsSchema = new Schema({
 		required: true,
 		type: Schema.Types.String,
 		validate: {
-			message: ({ value }): string =>
-				`${value as string} is not a valid universalId`,
+			message: ({ value }: { value: string }): string =>
+				`${value} is not a valid universalId`,
 			validator: (universalId: string): boolean => {
 				const [provider, station] = universalId.split('|');
 

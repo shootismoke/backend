@@ -1,55 +1,55 @@
 {
-  "name": "@shootismoke/backend",
-  "version": "0.2.0",
-  "author": "Amaury Martiny <amaury.martiny@protonmail.com>",
-  "description": "Backend for Sh**t! I Smoke",
-  "engines": {
-    "node": ">=12"
-  },
-  "license": "GPL-3.0",
-  "private": true,
-  "repository": "https://github.com/shootismoke/backend",
-  "scripts": {
-    "graphql:schema": "ts-node ./scripts/generateSchema > scripts/backend.graphql",
-    "graphql:manager": "apollo service:push --localSchemaFile ./scripts/backend.graphql",
-    "lint": "tsc --noEmit && eslint --ext ts .",
-    "start": "vercel dev",
-    "test": "jest",
-    "vercel:prod": "vercel -A vercel.prod.json"
-  },
-  "dependencies": {
-    "@amaurymartiny/now-middleware": "^0.2.0",
-    "@hapi/hawk": "^8.0.0",
-    "@sentry/node": "^5.27.1",
-    "@shootismoke/convert": "^0.2.28",
-    "@shootismoke/dataproviders": "^0.2.28",
-    "@shootismoke/graphql": "^0.2.29",
-    "@types/async-retry": "^1.4.2",
-    "@types/mongodb": "^3.6.8",
-    "@types/mongoose": "^5.7.21",
-    "@vercel/node": "^1.8.1",
-    "apollo-server-micro": "^2.17.0",
-    "assign-deep": "^1.0.1",
-    "async-retry": "^1.3.1",
-    "expo-server-sdk": "^3.6.0",
-    "graphql": "^14.6.0",
-    "mongodb": "^3.6.1",
-    "mongoose": "^5.10.6",
-    "timezones.json": "^1.5.2",
-    "vercel": "^20.1.1"
-  },
-  "devDependencies": {
-    "@amaurymartiny/config": "^1.3.1",
-    "@shelf/jest-mongodb": "^1.1.5",
-    "@types/jest": "^26.0.20",
-    "apollo": "^2.31.0",
-    "apollo-server-testing": "^2.21.0",
-    "dotenv": "^8.2.0",
-    "jest": "^25.5.4",
-    "lerna": "^3.22.1",
-    "p-memoize": "^4.0.0",
-    "ts-jest": "^25.5.1",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
-  }
+	"name": "@shootismoke/backend",
+	"version": "0.2.0",
+	"author": "Amaury M <amaurym10@protonmail.com>",
+	"description": "Backend for Sh**t! I Smoke",
+	"engines": {
+		"node": ">=12"
+	},
+	"license": "GPL-3.0",
+	"private": true,
+	"repository": "https://github.com/shootismoke/backend",
+	"scripts": {
+		"graphql:schema": "ts-node ./scripts/generateSchema > scripts/backend.graphql",
+		"graphql:manager": "apollo service:push --localSchemaFile ./scripts/backend.graphql",
+		"lint": "tsc --noEmit && eslint --ext ts .",
+		"start": "vercel dev",
+		"test": "jest",
+		"vercel:prod": "vercel -A vercel.prod.json"
+	},
+	"dependencies": {
+		"@amaurym/now-middleware": "^0.2.2",
+		"@hapi/hawk": "^8.0.0",
+		"@sentry/node": "^5.27.1",
+		"@shootismoke/convert": "^0.2.28",
+		"@shootismoke/dataproviders": "^0.2.28",
+		"@shootismoke/graphql": "^0.2.29",
+		"@types/async-retry": "^1.4.2",
+		"@types/mongodb": "^3.6.8",
+		"@types/mongoose": "^5.7.21",
+		"@vercel/node": "^1.8.1",
+		"apollo-server-micro": "^2.17.0",
+		"assign-deep": "^1.0.1",
+		"async-retry": "^1.3.1",
+		"expo-server-sdk": "^3.6.0",
+		"graphql": "^14.6.0",
+		"mongodb": "^3.6.1",
+		"mongoose": "^5.10.6",
+		"timezones.json": "^1.5.2",
+		"vercel": "^20.1.1"
+	},
+	"devDependencies": {
+		"@amaurym/config": "^1.3.2",
+		"@shelf/jest-mongodb": "^1.1.5",
+		"@types/jest": "^26.0.20",
+		"apollo": "^2.31.0",
+		"apollo-server-testing": "^2.21.0",
+		"dotenv": "^8.2.0",
+		"jest": "^25.5.4",
+		"lerna": "^3.22.1",
+		"p-memoize": "^4.0.0",
+		"ts-jest": "^25.5.1",
+		"ts-node": "^8.10.2",
+		"typescript": "^3.9.7"
+	}
 }

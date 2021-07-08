@@ -1,7 +1,7 @@
 import { gql } from 'apollo-server-micro';
 
 export const CREATE_USER = gql`
-	mutation($input: CreateUserInput!) {
+	mutation ($input: CreateUserInput!) {
 		createUser(input: $input) {
 			_id
 			expoInstallationId
@@ -17,7 +17,7 @@ export const CREATE_USER = gql`
 `;
 
 export const GET_USER = gql`
-	query($expoInstallationId: ID!) {
+	query ($expoInstallationId: ID!) {
 		getUser(expoInstallationId: $expoInstallationId) {
 			_id
 			expoInstallationId
@@ -33,7 +33,7 @@ export const GET_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-	mutation($expoInstallationId: ID!, $input: UpdateUserInput!) {
+	mutation ($expoInstallationId: ID!, $input: UpdateUserInput!) {
 		updateUser(expoInstallationId: $expoInstallationId, input: $input) {
 			_id
 			expoInstallationId
