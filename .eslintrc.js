@@ -1,5 +1,5 @@
 module.exports = {
-	...require('@amaurymartiny/eslintrc'),
+	...require('@amaurym/eslintrc'),
 	env: { node: true },
 	// FIXME Turn these rules on again.
 	rules: {
